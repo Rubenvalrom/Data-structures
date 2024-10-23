@@ -1,3 +1,77 @@
-h3, ul, a {
+a {
     color: navy;
+    font-weight: normal;
+    font-size: 1em;
 }
+
+#TOC ul a{
+    color: #040040;
+    font-weight: bolder;
+    font-size: 1.3em;  
+}
+
+#TOC ul ul a{
+    color: #003662;
+    font-weight: 500; 
+    font-size: 1.1em;
+}
+
+#TOCul ul ul a{
+    color: #003f72;
+    font-weight: normal;
+    font-size: 1em;
+}
+
+#TOC ul ul ul ul a{
+    color: #004d8d;
+    font-weight: lighter;
+    font-size: 0.9em; 
+}
+
+h1 {
+    color: #000000; /* Black */
+}
+h2 {
+    color: #000000; /* Black */
+}
+
+h3 {
+    color: #1a1a1a; /* Very Dark Gray */
+}
+
+h4 {
+    color: #333333; /* Dark Gray */
+}
+
+h5 {
+    color: #4d4d4d; /* Medium Dark Gray */
+}
+
+h6 {
+    color: #666666; /* Gray */
+}
+ p {
+    color: #1a1a1a; /* Very Dark Gray */
+ }
+ li {
+    color: #1a1a1a; /* Very Dark Gray */
+ }
+ ul {
+    color: #1a1a1a; /* Very Dark Gray */
+ }
+ ol a {
+    color: #0f0f0f; /* Very Dark Gray */
+ }
+ 
+ ol ol a {
+    color: #1a1a1a; /* Very Dark Gray */
+ }
+
+ ol ol ol a {
+    color: #272727; /* Very Dark Gray */
+ }
+ .ref {
+    color: navy; /* Black */
+    font-size: 1em;
+    font-weight: normal;
+ }

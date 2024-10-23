@@ -47,7 +47,7 @@ En este proyecto se han utilizado diversas herramientas y lenguajes de programac
     -   **Generación de Citas y Referencias**: Scribbr Citation Generator es una herramienta en línea que facilita la creación de citas y referencias, en este caso Harvard.
 9.  **RStudio**:
     -   **Exportación**: Permite la creación de documentos `HTML` con tabla de contenidos de manera que el usuario puede navegar por el documento con facilidad. Además permite exportarlo a PDF aunque esto empeora la experiencia del usuario.
-    
+
 ## Tipos de datos básicos empleados en el proyecto
 
 1.  lista: Representa una secuencia de nodos o vértices del grafo.
@@ -121,6 +121,42 @@ except ImportError:
     from scipy.sparse import csr_matrix
 ```
 
+plt.figure(figsize=(11, 6))
+
+\# Número de nodos
+
+num_nodos = len(G.nodes)
+
+\# Calcular las posiciones en forma de elipse
+
+pos = {}
+
+for i in range(num_nodos):
+
+angle = 2 \* np.pi \* i / num_nodos
+
+x = np.cos(angle)
+
+y = np.sin(angle)
+
+pos[i] = (x, y)
+
+\# Dibujar nodos y aristas
+
+nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=1500, font_size=20)
+
+\# Obtener los pesos de las aristas
+
+edge_labels = nx.get_edge_attributes(G, 'weight')
+
+\# Dibujar los pesos de las aristas
+
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='darkblue', font_size=7)
+
+plt.gca().set_facecolor('#606060')
+
+plt.show()
+
 ```{python}
 np.random.seed(2706)
 
@@ -166,12 +202,33 @@ matriz_adyacencia = csr_matrix(matriz_adyacencia)
 # Crear un grafo desde la matriz de adyacencia
 G = nx.from_numpy_array(matriz_adyacencia.toarray())
 
+import matplotlib.style as style
+import matplotlib.colors as mcolors
+
+# Definir las opciones del estilo
+style_params = {
+    'axes.facecolor': '#E5E5E5',  # Color de fondo para los ejes
+    'figure.facecolor': '#E5E5E5',  # Color de fondo para la figura
+}
+
+# Aplicar el estilo personalizado
+plt.style.use('fivethirtyeight')  # Establecer un estilo base
+style_params.update({
+    'axes.edgecolor': '#AAAAAA',  # Color del borde de los ejes
+    'grid.color': '#AAAAAA',  # Color del grid
+    'grid.linestyle': '--',  # Estilo del grid
+    'grid.linewidth': 0.5,  # Ancho del grid
+})
+
+# Aplicar el estilo personalizado
+
+
 # Dibujar el grafo con nodos en forma de elipse
+
 plt.figure(figsize=(11, 6))
 
 # Número de nodos
 num_nodos = len(G.nodes)
-
 # Calcular las posiciones en forma de elipse
 pos = {}
 for i in range(num_nodos):
@@ -332,6 +389,16 @@ print("Shortest path:", shortest_path)
 
 4.  **Propiedad de Fibonacci**: La propiedad clave del montículo de Fibonacci es que para cualquier nodo, la cantidad de nodos en su subárbol izquierdo es igual a la cantidad de nodos en su subárbol derecho, o uno menos.
 
+5.  **Organización de los pesos**: El peso más pequeños se pone a la izquierda y el mayor a la derecha.
+
+    -   **Ejemplo**:
+
+| Peso 1 | Peso 2 | Peso que va a la izquierda |
+|--------|--------|----------------------------|
+| 2      | 5      | 2                          |
+| 1      | -4     | -4                         |
+| -7     | -2     | -7                         |
+
 <img src="./imagenes/Fibonacci_heap.svg" alt="Montículo de Fibonacci" width="900"/>
 
 Fuente: [Growingwiththeweb](https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/)
@@ -376,18 +443,18 @@ Supongamos que tenemos un montículo de Fibonacci vacío y queremos insertar los
 ```
 
 1.  **Insertar 5:**
-    -   Crea un nuevo nodo con valor 5 y lo establece como la raíz del árbol.\
+    -   Crea un nuevo nodo con valor 5 y lo establece como la raíz del árbol.
 2.  **Insertar 3:**
-    -   Identifica el lugar correcto para insertar 3 (izquierda de 5).\
-    -   Crea un nuevo nodo con valor 3 y lo coloca en ese lugar.\
-    -   Reorganiza el árbol: no es necesario porque 3 tiene solo un hijo izquierdo.\
+    -   Identifica el lugar correcto para insertar 3 (izquierda de 5).
+    -   Crea un nuevo nodo con valor 3 y lo coloca en ese lugar.
+    -   Reorganiza el árbol: no es necesario porque 3 tiene solo un hijo izquierdo.
 3.  **Insertar 7:**
-    -   Identifica el lugar correcto para insertar 7 (derecha de 5).\
-    -   Crea un nuevo nodo con valor 7 y lo coloca en ese lugar.\
-    -   Reorganiza el árbol: no es necesario porque 7 tiene solo un hijo derecho.\
+    -   Identifica el lugar correcto para insertar 7 (derecha de 5).
+    -   Crea un nuevo nodo con valor 7 y lo coloca en ese lugar.
+    -   Reorganiza el árbol: no es necesario porque 7 tiene solo un hijo derecho.
 4.  **Insertar 2:**
-    -   Identifica el lugar correcto para insertar 2 (izquierda de 3).\
-    -   Crea un nuevo nodo con valor 2 y lo coloca en ese lugar.\
+    -   Identifica el lugar correcto para insertar 2 (izquierda de 3).
+    -   Crea un nuevo nodo con valor 2 y lo coloca en ese lugar.
     -   Reorganiza el árbol: no es necesario porque 2 tiene solo un hijo izquierdo.
 
 El resultado final es:
@@ -462,43 +529,6 @@ El resultado final es:
 
 En resumen, la eliminación de un elemento en un montículo de Fibonacci implica reemplazar el nodo a eliminar con su hijo derecho o izquierdo y luego reorganizar el árbol para mantener la propiedad de Fibonacci.
 
-##### Buscar
-
-**Paso 1: Comenzar en la raíz**
-
--   Comienza buscando el elemento en la raíz del árbol.
-
-**Paso 2: Comparar el valor del nodo actual con el elemento a buscar**
-
--   Si el valor del nodo actual es igual al elemento a buscar, has encontrado el elemento y puedes detener la búsqueda.
--   Si el valor del nodo actual es mayor que el elemento a buscar, sigue hacia la izquierda (hacia el hijo izquierdo).
--   Si el valor del nodo actual es menor que el elemento a buscar, sigue hacia la derecha (hacia el hijo derecho).
-
-**Paso 3: Repetir los pasos 1 y 2 hasta encontrar el elemento o llegar a una hoja**
-
--   Sigue comparando el valor del nodo actual con el elemento a buscar y moviéndote hacia la izquierda o derecha según sea necesario.
--   Si llegas a una hoja (un nodo sin hijos), significa que el elemento no está en el árbol.
-
-**Paso 4: Devolver el resultado**
-
--   Si encontraste el elemento, devuelve su valor.
--   Si no encontraste el elemento y llegaste a una hoja, devuelve un mensaje indicando que el elemento no se encuentra en el árbol.
-
-**Ejemplo:**
-
-Supongamos que tenemos un montículo de Fibonacci con los nodos 5, 3, 7 y 2 en ese orden y queremos buscar el elemento 7.
-
-1.  **Comenzar en la raíz:** El valor del nodo actual es 5.
-2.  **Comparar el valor del nodo actual con el elemento a buscar**: 5 \> 7 (no), así que sigue hacia la izquierda.
-3.  **Repetir los pasos 1 y 2:** El valor del nodo actual es 3, pero 3 \< 7, así que sigue hacia la derecha.
-4.  **Repetir los pasos 1 y 2:** El valor del nodo actual es 7, busqueda finalizada.
-
-**Resultado final:**
-
--   Devuelve el valor del elemento encontrado (en este caso, 7).
-
-En resumen, la búsqueda de un elemento en un montículo de Fibonacci implica comparar el valor del nodo actual con el elemento a buscar y moviéndote hacia la izquierda o derecha según sea necesario. Si llegas a una hoja, significa que el elemento no está en el árbol.
-
 **Complejidad temporal**
 
 $O(log n)$, donde $n$ es el número de nodos en el árbol. Esto se debe a que el árbol está ordenado, lo que hace que la búsqueda sea muy eficiente.
@@ -518,7 +548,7 @@ $O(1)$, ya que solo necesitamos acceder a los nodos del árbol para realizar la 
 1.  **Complejidad de implementación**: Puede ser más costoso de implementar que otros tipos de árboles binarios.
 2.  **Requerimientos de mantenimiento**: Requiere un mantenimiento constante para asegurarse de que está correctamente ordenado.
 
-##### Referencias
+**Referencias**
 
 -   Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
 -   Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
@@ -537,9 +567,124 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 print('Tiempo medio de ejecución: 363 microsegundos')
 ```
 
+#### Dijkstra en Montículos de Fibonacci
+
+##### Caracteristicas
+
+**Pesos negativos:** Utilizar esta estructura de datos con Dijkstra permite el uso de este algoritmo en grafos con pesos negativos al mantener una estructura ordenada.
+
+Complejidad temporal: Pasa de $O(N^2)$ a $O[N(N*k + N\log(N))]$
+
+-   $N$ es el número de nodos en el grafo
+
+-   $k$ es el número promedio de aristas conectadas por nodo
+
+Explicación complejidad temporal:
+
+-   La operación de insertar un nuevo nodo en el montículo de Fibonacci tiene una complejidad temporal de $O(log N)$
+
+-   La operación de extraer el nodo con la distancia más corta del montículo de Fibonacci también tiene una complejidad temporal de $O(log N)$
+
+-   El algoritmo de Dijkstra necesita realizar estas operaciones para cada uno de los N nodos, lo que da como resultado una complejidad temporal total de $O[N log N]$
+
+Sin embargo, en el peor caso, la operación de insertar un nuevo nodo en el montículo de Fibonacci puede requerir actualizar la distancia de todos los nodos adyacentes, lo que da como resultado una complejidad temporal adicional de $O(N*k)$
+
+Por lo tanto, la complejidad temporal total es $O[N(N*k + N log(N))]$
+
+**Paso 1: Inicialización**
+
+-   Se inicializa un montículo de Fibonacci con todos los nodos del grafo y sus respectivos pesos.
+-   Se selecciona el nodo de partida (el nodo desde el que se desea encontrar la ruta más corta).
+-   Se establece el peso del nodo de partida como 0, ya que es el punto de partida.
+
+**Paso 2: Buscar el nodo con el peso más bajo**
+
+-   Se busca el nodo con el peso más bajo en el montículo de Fibonacci.
+-   Si se encuentra un nodo con un peso menor que el peso actual del nodo de partida, se actualiza el peso del nodo de partida y se selecciona como nuevo nodo de partida.
+
+**Paso 3: Actualizar los pesos**
+
+-   Se actualizan los pesos de los nodos adyacentes al nodo de partida.
+-   Si un nodo tiene un peso menor que el peso actual del nodo de partida, se actualiza el peso del nodo y se selecciona como nuevo nodo de partida.
+
+**Paso 4: Repetir**
+
+-   Se repite el proceso de buscar el nodo con el peso más bajo y actualizar los pesos hasta que se haya visitado todos los nodos del grafo.
+-   Cuando se ha visitado todos los nodos, se ha encontrado la ruta más corta desde el nodo de partida hasta cada uno de los demás nodos.
+
+**Paso 5: Recuperar la ruta**
+
+-   Se recupera la ruta más corta desde el nodo de partida hasta cada uno de los demás nodos.
+-   La ruta más corta se encuentra siguiendo los nodos que tienen un peso menor que el peso del nodo anterior.
+
+**Ejemplo**
+
+Ruta más corta del Nodo A al C
+
+|       | A   | B   | C   | D   | E   | F   |
+|-------|-----|-----|-----|-----|-----|-----|
+| **A** | 0   | -2  | 2   | 0   | 5   | 0   |
+| **B** | 5   | 0   | 0   | 3   | 0   | -1  |
+| **C** | 0   | 0   | 0   | 0   | 6   | 0   |
+| **D** | 0   | -2  | 0   | 0   | 0   | 0   |
+| **E** | 0   | 0   | 0   | 0   | 0   | 0   |
+| **F** | 1   | 0   | 0   | 0   | 0   | 0   |
+
+**Paso 1: Inicialización**
+
+-   Se selecciona el nodo A como punto de partida y se establece su peso como 0.
+-   Los pesos iniciales de cada nodo son:
+    -   **A**: 0
+    -   **B**: -2
+    -   **C**: 2
+    -   **D**: 0
+    -   **E**: 5
+    -   **F**: 1
+
+**Paso 2: Buscar el nodo con el peso más bajo**
+
+-   Se busca el nodo con el peso más bajo en el montículo de Fibonacci.
+-   En este caso, el nodo **A** tiene un peso de **0**, que es el más bajo.
+
+**Paso 3: Actualizar los pesos**
+
+-   Se actualizan los pesos de los nodos adyacentes al nodo **A** (**B** y **C**).
+-   El peso del nodo **B** se actualiza a **-2 + 5 = 3**.
+-   El peso del nodo **C** se actualiza a **0**.
+
+**Paso 4: Repetir**
+
+-   Se repite el proceso de buscar el nodo con el peso más bajo y actualizar los pesos hasta que se haya visitado todos los nodos del grafo.
+-   En este caso, el nodo **A** ya ha sido visitado, así que pasamos al siguiente paso.
+
+**Paso 5: Buscar el nodo con el peso más bajo**
+
+-   Se busca el nodo con el peso más bajo en el montículo de Fibonacci.
+-   En este caso, el nodo **C** tiene un peso de **0**, que es el más bajo.
+
+**Paso 6: Actualizar los pesos**
+
+-   No hay nodos adyacentes al nodo **C** que necesiten ser actualizados.
+
+**Paso 7: Repetir**
+
+-   Se repite el proceso de buscar el nodo con el peso más bajo y actualizar los pesos hasta que se haya visitado todos los nodos del grafo.
+-   En este caso, el nodo **C** ya ha sido visitado, así que pasamos al siguiente paso.
+
+**Paso 8: Buscar el nodo con el peso más bajo**
+
+-   No hay nodos adyacentes al nodo **C** que necesiten ser actualizados.
+
+**Paso 9: Recuperar la ruta**
+
+-   La ruta más corta desde el nodo **A** hasta el nodo **C** es:
+    -   **A** → **B** → **C** (peso total: -2 + 3 = **1**)
+
+La ruta más corta desde el nodo **A** hasta el nodo **C** es **A** → **B** → **C** con un peso total de **1**.
+
 ### Bellman Ford
 
-#### Características:
+Características:
 
 1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
 2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
@@ -699,7 +844,8 @@ Opciones del parametro `method` y un breve resumen de los algoritmos ya vistos p
 
 `J` – Algoritmo de Johnson. Al igual que el algoritmo de Bellman-Ford, el algoritmo de Johnson está diseñado para usarse cuando los pesos son negativos. Combina el algoritmo de Bellman-Ford con el algoritmo de Dijkstra para una computación más rápida.
 
-**Referencias** - shortest_path — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.shortest_path.html#scipy.sparse.csgraph.shortest_path>.
+**Referencias**\
+- shortest_path — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.shortest_path.html#scipy.sparse.csgraph.shortest_path>.
 
 ```{python}
 #%%timeit
