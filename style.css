@@ -4,6 +4,7 @@ a {
     font-size: 1em;
 }
 
+
 #TOC ul a{
     color: #040040;
     font-weight: bolder;
@@ -70,8 +71,15 @@ h6 {
  ol ol ol a {
     color: #272727; /* Very Dark Gray */
  }
- .ref {
-    color: navy; /* Black */
-    font-size: 1em;
-    font-weight: normal;
- }
+
+ a:hover{
+    color:firebrick
+}
+#TOC a:hover{
+    color:firebrick
+}
+.header th {
+    background-color:firebrick;
+    color: #ffffff;
+    text-shadow: none;
+}

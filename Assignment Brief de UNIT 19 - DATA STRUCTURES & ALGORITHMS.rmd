@@ -50,31 +50,31 @@ En este proyecto se han utilizado diversas herramientas y lenguajes de programac
 
 ## Tipos de datos básicos empleados en el proyecto
 
-1.  lista: Representa una secuencia de nodos o vértices del grafo.
+1.  **lista**: Representa una secuencia de nodos o vértices del grafo.
 
     -   Ejemplo: vertices = ['A', 'B', 'C']
 
-2.  diccionario: Representa un mapa de adyacencia entre los nodos del grafo.
+2.  **diccionario**: Representa un mapa de adyacencia entre los nodos del grafo.
 
     -   Ejemplo: grafo = {'A': ['B', 'C'], 'B': ['A', 'D'], 'C': ['A', 'F'], 'D': ['B'], 'E': ['F'], 'F': ['C', 'E']}
 
-3.  set: Representa un conjunto de nodos o vértices del grafo.
+3.  **set:** Representa un conjunto de nodos o vértices del grafo.
 
     -   Ejemplo: vertices = {'A', 'B', 'C'}
 
-4.  tupla: Similar a la lista, pero inmutable.
+4.  **tupla:** Similar a la lista, pero inmutable.
 
     -   Ejemplo: vertices = ('A', 'B', 'C')
 
-5.  numpy.ndarray: Representa una matriz de adyacencia entre los nodos del grafo. Tienen la misma función que los arrays normales pero son más veloces y facilitan los calculos con diversas funciones.
+5.  **numpy.ndarray**: Representa una matriz de adyacencia entre los nodos del grafo. Tienen la misma función que los arrays normales pero son más veloces y facilitan los calculos con diversas funciones.
 
     -   Ejemplo: grafo = np.array([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
-6.  scipy.sparse.csr_matrix: Representa una matriz dispersa en formato CSR (Compressed Sparse Row), que es eficiente para operaciones aritméticas y de almacenamiento.
+6.  **scipy.sparse.csr_matrix:** Representa una matriz dispersa en formato CSR (Compressed Sparse Row), que es eficiente para operaciones aritméticas y de almacenamiento.
 
     -   Ejemplo: matriz_adyacencia = csr_matrix([[0, 1, 0], [1, 0, 1], [0, 1, 0]])
 
-7.  int: Representa un número entero.
+7.  **int:** Representa un número entero.
 
     -   Ejemplo: num_nodos = 14
 
@@ -121,42 +121,6 @@ except ImportError:
     from scipy.sparse import csr_matrix
 ```
 
-plt.figure(figsize=(11, 6))
-
-\# Número de nodos
-
-num_nodos = len(G.nodes)
-
-\# Calcular las posiciones en forma de elipse
-
-pos = {}
-
-for i in range(num_nodos):
-
-angle = 2 \* np.pi \* i / num_nodos
-
-x = np.cos(angle)
-
-y = np.sin(angle)
-
-pos[i] = (x, y)
-
-\# Dibujar nodos y aristas
-
-nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=1500, font_size=20)
-
-\# Obtener los pesos de las aristas
-
-edge_labels = nx.get_edge_attributes(G, 'weight')
-
-\# Dibujar los pesos de las aristas
-
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='darkblue', font_size=7)
-
-plt.gca().set_facecolor('#606060')
-
-plt.show()
-
 ```{python}
 np.random.seed(2706)
 
@@ -202,30 +166,11 @@ matriz_adyacencia = csr_matrix(matriz_adyacencia)
 # Crear un grafo desde la matriz de adyacencia
 G = nx.from_numpy_array(matriz_adyacencia.toarray())
 
-import matplotlib.style as style
-import matplotlib.colors as mcolors
-
-# Definir las opciones del estilo
-style_params = {
-    'axes.facecolor': '#E5E5E5',  # Color de fondo para los ejes
-    'figure.facecolor': '#E5E5E5',  # Color de fondo para la figura
-}
-
-# Aplicar el estilo personalizado
-plt.style.use('fivethirtyeight')  # Establecer un estilo base
-style_params.update({
-    'axes.edgecolor': '#AAAAAA',  # Color del borde de los ejes
-    'grid.color': '#AAAAAA',  # Color del grid
-    'grid.linestyle': '--',  # Estilo del grid
-    'grid.linewidth': 0.5,  # Ancho del grid
-})
-
-# Aplicar el estilo personalizado
-
-
 # Dibujar el grafo con nodos en forma de elipse
 
-plt.figure(figsize=(11, 6))
+fig = plt.figure(figsize=(9, 5))
+
+
 
 # Número de nodos
 num_nodos = len(G.nodes)
@@ -236,16 +181,15 @@ for i in range(num_nodos):
     x = np.cos(angle)  
     y = np.sin(angle)
     pos[i] = (x, y)
-
+    
 # Dibujar nodos y aristas
 nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=1500, font_size=20)
-
+fig.set_facecolor('#e5e5e5')
 # Obtener los pesos de las aristas
 edge_labels = nx.get_edge_attributes(G, 'weight')
 
 # Dibujar los pesos de las aristas
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='darkblue', font_size=7)
-
 plt.show()
 ```
 
@@ -265,6 +209,152 @@ def trazar_camino(predecesores, nodo_inicio, nodo_fin):
 ```
 
 ## Algoritmos de ruta más corta
+
+### Bellman Ford
+
+#### Características:
+
+1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
+2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
+3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O[N(N^2 k)]$, donde $k$ es el número promedio de aristas conectadas por nodo.
+4.  **Detección de Ciclos Negativos**: Puede detectar la presencia potencial de ciclos de peso negativo en el grafo.
+5.  **Distancias Mínimas**: Calcula las distancias mínimas desde un nodo origen a todos los demás nodos, siempre y cuando no haya ciclos de peso negativo.
+
+#### Pasos:
+
+**1: Inicialización**
+
+-   Se selecciona un nodo origen en el grafo.
+-   Se establece la distancia al nodo origen como $0$, y se establecen las distancias a todos los demás nodos como infinito (representado por un valor muy grande).
+
+**2: Relajación de aristas**
+
+-   El algoritmo repite el siguiente proceso $V-1$ veces, donde $V$ es el número de vértices en el grafo.
+-   Para cada vértice $v$:
+    -   Se revisan todas las aristas incidentes en $v$, es decir, aquellas que comienzan o terminan en $v$.
+    -   Para cada arista $(u,v)$ con peso $w$:
+        -   Si la distancia actual a $u$ más el peso de la arista $w$ es menor que la distancia actual a $v$, se actualiza la distancia a $v$.
+
+**3: Detección de ciclos negativos**
+
+-   Después de $V-1$ iteraciones de relaxación de aristas, se revisan todas las aristas una vez más.
+-   Para cada arista $(u,v)$ con peso $w$:
+    -   Si la distancia actual a u más el peso de la arista w es menor que la distancia actual a $v$, significa que hay un ciclo negativo en el grafo.
+    -   En este caso, el algoritmo indica la presencia de un ciclo negativo y no puede garantizar la corrección de las distancias mínimas.
+
+**4: Resultado**
+
+-   Si no se detecta ningún ciclo negativo después de $V-1$ iteraciones de relaxación de aristas más una última revisión, el algoritmo ha encontrado las distancias mínimas desde el nodo origen a todos los demás nodos en el grafo.
+-   Las distancias mínimas están almacenadas en la matriz de distancias, que es una tabla que contiene la distancia mínima desde el nodo origen a cada vértice en el grafo.
+
+**Referencias:** - Jariasf (2013) CAMINO MAS CORTO: ALGORITMO DE BELLMAN-FORD. <https://jariasf.wordpress.com/2013/01/01/camino-mas-corto-algoritmo-de-bellman-ford/>.
+
+-   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
+
+-   bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
+
+```{python}
+#%%timeit
+from scipy.sparse.csgraph import bellman_ford
+
+# Utiliza el algoritmo de Bellman-Ford a través de scipy
+dist_matrix, predecessors = bellman_ford(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
+
+# Ruta del nodo 0 al 13
+camino = trazar_camino(predecessors, 0, 13)
+
+print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
+print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
+print('Tiempo de ejecución: 163 microsegundos')
+```
+
+### Johnson
+
+#### Características:
+
+1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos y no dirigidos.
+2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
+3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(V^2 \log V + VE)$, donde $V$ es el número de vértices y $E$ es el número de aristas.
+4.  **Distancias Mínimas**: Calcula las distancias mínimas entre todos los pares de nodos en el grafo.
+5.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas.
+
+#### Pasos:
+
+1.  **Añadir nuevo nodo** Primero se añade un nuevo nodo q al grafo, conectado a cada uno de los nodos del grafo por una arista de peso cero.
+
+2.  **Ejecutar Bellman-Ford** En segundo lugar, se utiliza el algoritmo de Bellman-Ford, empezando por el nuevo vértice q, para determinar para cada vértice v el peso mínimo $h(v)$ del camino de q a v. Si en este paso se detecta un ciclo negativo, el algoritmo concluye.
+
+3.  **Modificar pesos** Seguidamente, a las aristas del grafo original se les cambia el peso usando los valores calculados por el algoritmo de Bellman-Ford: una arista de u a v con tamaño $w(u, v)$, da el nuevo tamaño $w(u, v) + h(u) - h(v)$.
+
+4.  **Ejecutar Dijkstra** Por último, para cada nodo s se usa el algoritmo de Dijkstra (tambien con monticulos de Fibonacci) para determinar el camino más corto entre s y los otros nodos, usando el grafo con pesos modificados.
+
+![Johnson Algorithm](./imagenes/AlgJohnsonImg.png)\
+Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
+
+**Referencias:**
+
+-   colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
+-   johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
+
+```{python}
+#%%timeit
+from scipy.sparse.csgraph import johnson
+
+#Utiliza el algoritmo de Johnson a través de scipy
+dist_matrix, predecessors = johnson(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
+
+# Ruta del nodo 0 al 13
+camino = trazar_camino(predecessors, 0, 13)
+
+print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
+print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
+print('Tiempo de ejecución: 435 microsegundos')
+```
+
+### Floyd-Warshall
+
+#### Características:
+
+1.  **Aplicabilidad**: El algoritmo de Floyd-Warshall se aplica a grafos dirigidos y no dirigidos.
+2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
+3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(V^3)$, donde $V$ es el número de vértices.
+4.  **Distancias Mínimas**: Calcula las distancias mínimas entre todos los pares de nodos en el grafo.
+5.  **Simplicidad**: Es un algoritmo sencillo de implementar y entender.
+
+#### Pasos:
+
+1.  **Inicialización**
+    -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`. Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si existe, de lo contrario es infinito. La distancia de un nodo a sí mismo es 0.
+2.  **Iteración**
+    -   Para cada nodo `k`, actualizar la matriz de distancias considerando `k` como un nodo intermedio. Para cada par de nodos `(i, j)`, actualizar `dist[i][j]` como el mínimo entre `dist[i][j]` y `dist[i][k] + dist[k][j]`.
+3.  **Resultado**
+    -   Después de completar las iteraciones, la matriz `dist` contendrá las distancias mínimas entre todos los pares de nodos.
+
+<img src="./imagenes/Floyd-Warshall-Algorithm-Problem.png" width="700"/>
+
+Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall)
+
+**Referencias:**
+
+-   colaboradores de Wikipedia (2020) Algoritmo de Floyd-Warshall. <https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall>.
+-   floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
+
+```{python}
+#%%timeit
+from scipy.sparse.csgraph import floyd_warshall
+
+#Utiliza el algoritmo de Floyd-Warshall a través de scipy
+#Nota: Este algoritmo no permite calcular la distancia eligiendo un nodo de inicio
+
+dist_matrix, predecessors = floyd_warshall(matriz_adyacencia, directed=False, return_predecessors=True)
+
+# Ruta del nodo 0 al 13
+camino = trazar_camino(predecessors[0], 0, 13)
+
+print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
+print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13])
+print('Tiempo de ejecución: 85 microsegundos')
+```
 
 ### Dijkstra con Montículos de Fibonacci
 
@@ -317,6 +407,119 @@ Para esta variante del algoritmo primero se explicará el algoritmo base de `Dij
         ![Dijkstra Animation](imagenes/Dijkstra_Animation.gif)\
         Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra)
 
+##### Pseudocódigo
+
+```         
+FUNCIÓN Dijkstra(Grafo G, Nodo s, Nodo t)
+  
+// Verificar si el grafo es conexo
+  SI NoEsConexo(G) Entonces
+    RETORNAR "Error: El grafo no es conexo"
+  FIN SI
+
+// Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
+  SI NoExisteCaminoDesdeS(HastaT, G) Entonces
+    RETORNAR "No existe ruta entre los nodos s y t"
+  FIN SI
+
+// Inicializar la distancia desde el nodo origen s hasta cada nodo en el grafo
+  Para cada nodo v en G hacer
+    d[v] = INFINITO
+
+// Inicializar la distancia desde el nodo origen s hasta el nodo s
+  d[s] = 0
+
+// Inicializar el predecesor de cada nodo en el camino más corto
+  π[s] = NULL
+
+  // Para cada nodo v en el grafo:
+  Para cada nodo v en G hacer
+    Si d[v] != INFINITO Entonces
+      // Actualizar la distancia y predecesor del nodo v según sea necesario
+      Para cada arista (u, v) en E hacer
+        Si d[u] + peso(u, v) < d[v] Entonces
+          d[v] = d[u] + peso(u, v)
+          π[v] = u
+        FIN SI
+    FIN SI
+
+// Verificar si la distancia desde el nodo s hasta el nodo t es infinita
+  Si d[t] == INFINITO Entonces
+    RETORNAR "La distancia entre los nodos s y t es infinita"
+  FIN SI
+
+// Construir el camino más corto desde el nodo origen s hasta el nodo destino t
+  camino = []
+  v = t
+  Mientras π[v] != NULL Hacer
+    camino.insertar al principio(π[v])
+    v = π[v]
+  FIN MIENTRAS
+
+// Devolver el camino más corto y la distancia entre los nodos s y t
+  RETORNAR (camino, d[t])
+
+FUNCIÓN NoEsConexo(Grafo G)
+// Verificar si el grafo es conexo
+  SI ExisteCicloEnG(G) Entonces
+    RETORNAR Verdadero
+  FIN SI
+
+  RETORNAR Falso
+
+FUNCIÓN NoExisteCaminoDesdeS(HastaT, Grafo G)
+// Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
+  Para cada arista (u, v) en E hacer
+    Si u == s y v == t Entonces
+      RETORNAR Verdadero
+    FIN SI
+  FIN PARA
+
+  RETORNAR Falso
+
+FUNCIÓN peso(u, v)
+// Devolver el peso de la arista entre los nodos u y v
+  RETORNAR pesoDeLaArista(u, v)
+
+FUNCIÓN ExisteCicloEnG(Grafo G)
+// Verificar si existe un ciclo en el grafo
+  Para cada nodo v en G hacer
+    Si d[v] != INFINITO Entonces
+    // Buscar un ciclo utilizando la función de búsqueda Depth First Search (DFS)
+      SI HayCiclo(v, G) Entonces
+        RETORNAR Verdadero
+      FIN SI
+    FIN SI
+  FIN PARA
+
+  RETORNAR Falso
+
+FUNCIÓN HayCiclo(nodo v, Grafo G)
+// Buscar un ciclo utilizando la función de búsqueda DFS
+  visited[v] = Verdadero
+  Para cada arista (u, v) en E hacer
+    Si u == v Entonces
+      RETORNAR Verdadero
+    FIN SI
+    Si !visited[u] Entonces
+      SI HayCiclo(u, G) Entonces
+        RETORNAR Verdadero
+      FIN SI
+  FIN PARA
+
+  RETORNAR Falso
+```
+
+-   La función `NoEsConexo` verifica si el grafo es conexo.
+
+-   La función `NoExisteCaminoDesdeS` verifica si existe un camino desde el nodo origen hasta el nodo destino.
+
+-   La función `peso` devuelve el peso de la arista entre dos nodos.
+
+-   Las funciones `ExisteCicloEnG`, `HayCiclo` y `visited` se utilizan para verificar si existe un ciclo en el grafo utilizando la función de búsqueda `DFS`.
+
+    -   `DFS` :Su funcionamiento consiste en ir expandiendo todos y cada uno de los nodos que va localizando, de forma recurrente, en un camino concreto. Cuando ya no quedan más nodos que visitar en dicho camino, regresa de modo que repite el mismo proceso con cada uno de los hermanos del nodo ya procesado.
+
 **Referencias:**
 
 -   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
@@ -324,6 +527,8 @@ Para esta variante del algoritmo primero se explicará el algoritmo base de `Dij
 -   colaboradores de Wikipedia (2024) Algoritmo de Dijkstra. <https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra>.
 
 -   Tuychiev, B. (2024) Implementing the Dijkstra Algorithm in Python: A Step-by-Step Tutorial. <https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python>.
+
+-   colaboradores de Wikipedia (2021) Búsqueda en profundidad. <https://es.wikipedia.org/wiki/B%C3%BAsqueda_en_profundidad>.
 
 ```{python}
 def dijkstra_algorithm(graph, start_node):
@@ -394,10 +599,10 @@ print("Shortest path:", shortest_path)
     -   **Ejemplo**:
 
 | Peso 1 | Peso 2 | Peso que va a la izquierda |
-|--------|--------|----------------------------|
-| 2      | 5      | 2                          |
-| 1      | -4     | -4                         |
-| -7     | -2     | -7                         |
+|:------:|:------:|:--------------------------:|
+|   2    |   5    |             2              |
+|   1    |   -4   |             -4             |
+|   -7   |   -2   |             -7             |
 
 <img src="./imagenes/Fibonacci_heap.svg" alt="Montículo de Fibonacci" width="900"/>
 
@@ -548,10 +753,152 @@ $O(1)$, ya que solo necesitamos acceder a los nodos del árbol para realizar la 
 1.  **Complejidad de implementación**: Puede ser más costoso de implementar que otros tipos de árboles binarios.
 2.  **Requerimientos de mantenimiento**: Requiere un mantenimiento constante para asegurarse de que está correctamente ordenado.
 
+##### Pseudocódigo
+
+```         
+FUNCIÓN TransformarGrafoAMontículoFibonacci(Grafo G)
+// Verificar si la matriz de adyacencia es cuadrada
+  SI NoEsCuadrada(G) Entonces
+    RETORNAR "Error: La matriz de adyacencia no es cuadrada"
+  FIN SI
+
+// Obtener el tamaño del grafo (número de nodos)
+  n = TamañoDeGrafo(G)
+
+// Inicializar la secuencia de Fibonacci
+  F[0] = 0
+  F[1] = 1
+  Para i desde 2 hasta n+1 hacer
+    F[i] = F[i-1] + F[i-2]
+
+// Crear un montículo de Fibonacci vacío
+  MontículoFibonacci M
+
+// Recorrer los nodos del grafo y agregarlos al montículo de Fibonacci
+  Para cada nodo i en G hacer
+    Si GradoDeConexión(i) > 0 Entonces
+      AgregarNodoAlMontículo(M, i, F[GradoDeConexión(i)])
+    FIN SI
+
+// Devolver el montículo de Fibonacci construido
+  RETORNAR M
+
+FUNCIÓN NoEsCuadrada(Grafo G)
+// Verificar si la matriz de adyacencia es cuadrada
+  SI TamañoDeGrafo(G) ≠ TamañoDeMatrizDeAdyacencia(G) Entonces
+    RETORNAR Verdadero
+  FIN SI
+
+  RETORNAR Falso
+
+FUNCIÓN AgregarNodoAlMontículo(MontículoFibonacci M, Nodo i, Altura h)
+// Agregar el nodo i al montículo de Fibonacci con altura h
+  InsertarNodoEnMontículo(M, i, h)
+
+FUNCIÓN InsertarNodoEnMontículo(MontículoFibonacci M, Nodo i, Altura h)
+// Insertar el nodo i en el lugar correcto del montículo de Fibonacci
+  SI MontículoVacio(M) Entonces
+    AgregarNodoAlRaíz(M, i, h)
+  SINO
+    BuscarLugarParaInsertar(M, i, h)
+  FIN SI
+
+FUNCIÓN BuscarLugarParaInsertar(MontículoFibonacci M, Nodo i, Altura h)
+// Buscar el lugar donde insertar el nodo i en el montículo de Fibonacci
+  Raíz = RaízDelMontículo(M)
+  Si Raíz es NULL Entonces
+    AgregarNodoAlRaíz(M, i, h)
+  SINO
+    Si Altura(h) < Altura(Raíz) Entonces
+      InsertarNodoEnHijoIzquierdo(M, i, h)
+    SINO
+      InsertarNodoEnHijoDerecho(M, i, h)
+    FIN SI
+  FIN SI
+
+FUNCIÓN AgregarNodoAlRaíz(MontículoFibonacci M, Nodo i, Altura h)
+// Agregar el nodo i como raíz del montículo de Fibonacci
+  Raíz = NuevoNodo(i, h)
+  MontículoDelMontículo(M) = Raíz
+
+FUNCIÓN InsertarNodoEnHijoIzquierdo(MontículoFibonacci M, Nodo i, Altura h)
+// Insertar el nodo i en el hijo izquierdo del raíz
+  HijoIzquierdo = HijoIzquierdoDeRaíz(M)
+  Si HijoIzquierdo es NULL Entonces
+    AgregarNodoAlHijoIzquierdo(M, i, h)
+  SINO
+    BuscarLugarParaInsertarEnHijoIzquierdo(M, i, h)
+  FIN SI
+
+FUNCIÓN InsertarNodoEnHijoDerecho(MontículoFibonacci M, Nodo i, Altura h)
+// Insertar el nodo i en el hijo derecho del raíz
+  HijoDerecho = HijoDerechoDeRaíz(M)
+  Si HijoDerecho es NULL Entonces
+    AgregarNodoAlHijoDerecho(M, i, h)
+  SINO
+    BuscarLugarParaInsertarEnHijoDerecho(M, i, h)
+  FIN SI
+
+FUNCIÓN AgregarNodoAlHijoIzquierdo(MontículoFibonacci M, Nodo i, Altura h)
+// Agregar el nodo i como hijo izquierdo del raíz
+  HijoIzquierdo = NuevoNodo(i, h)
+  HijosDelMontículo(M) = HijoIzquierdo
+
+FUNCIÓN AgregarNodoAlHijoDerecho(MontículoFibonacci M, Nodo i, Altura h)
+// Agregar el nodo i como hijo derecho del raíz
+  HijoDerecho = NuevoNodo(i, h)
+  HijosDelMontículo(M) = HijoDerecho
+
+FUNCIÓN BuscarLugarParaInsertarEnHijoIzquierdo(MontículoFibonacci M, Nodo i, Altura h)
+// Buscar el lugar donde insertar el nodo i en el hijo izquierdo del raíz
+  HijoIzquierdo = HijoIzquierdoDeRaíz(M)
+  Si HijoIzquierdo es NULL Entonces
+    AgregarNodoAlHijoIzquierdo(M, i, h)
+  SINO
+    BuscarLugarParaInsertarEnHijoIzquierdo(M, i, h)
+  FIN SI
+
+FUNCIÓN BuscarLugarParaInsertarEnHijoDerecho(MontículoFibonacci M, Nodo i, Altura h)
+// Buscar el lugar donde insertar el nodo i en el hijo derecho del raíz
+  HijoDerecho = HijoDerechoDeRaíz(M)
+  Si HijoDerecho es NULL Entonces
+    AgregarNodoAlHijoDerecho(M, i, h)
+  SINO
+    BuscarLugarParaInsertarEnHijoDerecho(M, i, h)
+  FIN SI
+
+FUNCIÓN NuevoNodo(Nodo i, Altura h)
+// Crear un nuevo nodo con el valor i y la altura h
+  RETORNAR Nuevo Nodo(i, h)
+
+FUNCIÓN RaízDelMontículo(MontículoFibonacci M)
+// Devolver la raíz del montículo de Fibonacci
+  RETORNAR MontículoDelMontículo(M)
+
+FUNCIÓN HijoIzquierdoDeRaíz(MontículoFibonacci M)
+// Devolver el hijo izquierdo de la raíz del montículo de Fibonacci
+  RETORNAR HijosDelMontículo(M)[0]
+
+FUNCIÓN HijoDerechoDeRaíz(MontículoFibonacci M)
+// Devolver el hijo derecho de la raíz del montículo de Fibonacci
+  RETORNAR HijosDelMontículo(M)[1]
+```
+
+-   La función `NoEsCuadrada` verifica si la matriz de adyacencia del grafo es cuadrada, y si no lo es, rellena con 0 las filas/columnas restantes.
+
+-   La función `AgregarNodoAlMontículo` agrega un nodo al montículo de Fibonacci con una altura determinada.
+
+-   La función `InsertarNodoEnMontículo` inserta un nodo en el lugar correcto del montículo de Fibonacci.
+
+-   Las funciones `BuscarLugarParaInsertar`, `AgregarNodoAlRaíz`, `InsertarNodoEnHijoIzquierdo` e `InsertarNodoEnHijoDerecho` se utilizan para encontrar el lugar donde insertar un nodo en el montículo de Fibonacci.
+
+-   Las funciones `NuevoNodo`, `RaízDelMontículo`, `HijoIzquierdoDeRaíz` y `HijoDerechoDeRaíz` crean nuevos nodos y devuelven la raíz, hijo izquierdo o hijo derecho del montículo de Fibonacci.
+
 **Referencias**
 
 -   Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
 -   Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
+-   Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
 
 ```{python}
 #%%timeit
@@ -567,29 +914,167 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 print('Tiempo medio de ejecución: 363 microsegundos')
 ```
 
-#### Dijkstra en Montículos de Fibonacci
+#### Combinación
 
 ##### Caracteristicas
 
-**Pesos negativos:** Utilizar esta estructura de datos con Dijkstra permite el uso de este algoritmo en grafos con pesos negativos al mantener una estructura ordenada.
+-   **Pesos negativos:** Utilizar esta estructura de datos con Dijkstra permite el uso de este algoritmo en grafos con pesos negativos al mantener una estructura ordenada.
 
-Complejidad temporal: Pasa de $O(N^2)$ a $O[N(N*k + N\log(N))]$
+-   **Menor complejidad temporal**: $O(V^2)$ → $O(V \log V + E)$.
 
--   $N$ es el número de nodos en el grafo
+    -   $V$ es el número de vértices en el grafo.
 
--   $k$ es el número promedio de aristas conectadas por nodo
+    -   $E$ es el número de aristas en el grafo.
 
-Explicación complejidad temporal:
+##### Pseudocódigo con Complejidad Temporal
 
--   La operación de insertar un nuevo nodo en el montículo de Fibonacci tiene una complejidad temporal de $O(log N)$
+```         
+FUNCIÓN DijkstraFibo(Grafo G, Nodo s, Nodo t)
+  // Verificar si el grafo es conexo
+  SI NoEsConexo(G) Entonces
+    RETORNAR "Error: El grafo no es conexo"
+  FIN SI
 
--   La operación de extraer el nodo con la distancia más corta del montículo de Fibonacci también tiene una complejidad temporal de $O(log N)$
+  // Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
+  SI NoExisteCaminoDesdeS(HastaT, G) Entonces
+    RETORNAR "No existe ruta entre los nodos s y t"
+  FIN SI
 
--   El algoritmo de Dijkstra necesita realizar estas operaciones para cada uno de los N nodos, lo que da como resultado una complejidad temporal total de $O[N log N]$
+  // Inicializar la distancia desde el nodo origen s hasta cada nodo en el grafo
+  Para cada nodo v en G hacer
+    d[v] = INFINITO
 
-Sin embargo, en el peor caso, la operación de insertar un nuevo nodo en el montículo de Fibonacci puede requerir actualizar la distancia de todos los nodos adyacentes, lo que da como resultado una complejidad temporal adicional de $O(N*k)$
+  // Crear un montículo de Fibonacci para almacenar las distancias
+  MontículoFibonacci M
+  AgregarNodoAlMontículo(M, s, 0)
 
-Por lo tanto, la complejidad temporal total es $O[N(N*k + N log(N))]$
+  // Iterar sobre los nodos en el montículo de Fibonacci (O(V log V))
+  Mientras M no esté vacío Hacer
+    // Extraer el nodo con la distancia más pequeña del montículo (O(log V))
+    v = ExtraerMinimoDeMontículo(M)
+    d[v] = Distancia(v, s)
+
+    // Para cada arista incidente al nodo extraído (O(E))
+    Para cada arista (u, v) en E hacer
+      Si u != v Entonces
+        // Actualizar la distancia y predecesor del nodo destino según sea necesario (O(1))
+        d[u] = Distancia(u, s) + peso(u, v)
+        AgregarNodoAlMontículo(M, u, d[u])
+      FIN SI
+    FIN PARA
+
+  // Verificar si la distancia desde el nodo s hasta el nodo t es infinita (O(V))
+  Si d[t] == INFINITO Entonces
+    RETORNAR "La distancia entre los nodos s y t es infinita"
+  FIN SI
+
+  // Construir el camino más corto desde el nodo s hasta el nodo t utilizando el predecesor de cada nodo (O(V))
+  camino = []
+  v = t
+  Mientras v != s Hacer
+    camino.insertar al principio(v)
+    v = Predecesor(v, s)
+  FIN MIENTRAS
+
+  // Devolver el camino más corto y la distancia entre los nodos s y t (O(1))
+  RETORNAR (camino, d[t])
+
+FUNCIÓN NoEsConexo(Grafo G) // O(V + E)
+  // Verificar si el grafo es conexo
+  SI ExisteCicloEnG(G) Entonces
+    RETORNAR Verdadero
+  FIN SI
+
+  RETORNAR Falso
+
+FUNCIÓN NoExisteCaminoDesdeS(HastaT, Grafo G) // O(E)
+  // Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
+  Para cada arista (u, v) en E hacer
+    Si u == s y v == t Entonces
+      RETORNAR Verdadero
+    FIN SI
+  FIN PARA
+
+  RETORNAR Falso
+
+FUNCIÓN Distancia(v, s) // O(1)
+  // Devolver la distancia desde el nodo origen s hasta el nodo v
+  RETORNAR d[v]
+
+FUNCIÓN peso(u, v) // O(1)
+  // Devolver el peso de la arista entre los nodos u y v
+  RETORNAR pesoDeLaArista(u, v)
+
+FUNCIÓN ExisteCicloEnG(Grafo G) // O(V + E)
+  // Verificar si existe un ciclo en el grafo
+  Para cada nodo v en G hacer
+    Si d[v] != INFINITO Entonces
+      // Buscar un ciclo utilizando la función de búsqueda DFS (O(V + E))
+      SI HayCiclo(v, G) Entonces
+        RETORNAR Verdadero
+      FIN SI
+    FIN SI
+  FIN PARA
+
+  RETORNAR Falso
+
+FUNCIÓN HayCiclo(nodo v, Grafo G) // O(V + E)
+  // Buscar un ciclo utilizando la función de búsqueda DFS
+  visited[v] = Verdadero
+  Para cada arista (u, v) en E hacer
+    Si u == v Entonces
+      RETORNAR Verdadero
+    FIN SI
+    Si !visited[u] Entonces
+      SI HayCiclo(u, G) Entonces
+        RETORNAR Verdadero
+      FIN SI
+  FIN PARA
+
+  RETORNAR Falso
+
+FUNCIÓN AgregarNodoAlMontículo(MontículoFibonacci M, Nodo v, Distancia d) // O(log V)
+  // Agregar un nodo al montículo de Fibonacci
+  InsertarNodoEnMontículo(M, v, d)
+
+FUNCIÓN ExtraerMinimoDeMontículo(MontículoFibonacci M) // O(log V)
+  // Extraer el nodo con la distancia más pequeña del montículo
+  RETORNAR MinimoDelMontículo(M)
+
+FUNCIÓN InsertarNodoEnMontículo(MontículoFibonacci M, Nodo v, Distancia d) // O(log V)
+  // Insertar un nodo en el montículo de Fibonacci
+  InsertarNodoEnPosiciónCorrecta(M, v, d)
+```
+
+###### Explicación del pseudocódigo
+
+1.  **Verificar si el grafo es conexo**: La función `NoEsConexo(G)` verifica si el grafo es conexo utilizando la función `ExisteCicloEnG(G)`, que busca un ciclo en el grafo mediante una búsqueda DFS. Si se encuentra un ciclo, el grafo no es conexo y la función devuelve un error.
+
+2.  **Verificar si existe un camino desde el nodo origen s hasta el nodo destino t**: La función `NoExisteCaminoDesdeS(HastaT, G)` recorre todas las aristas del grafo para verificar si existe un camino desde el nodo origen s hasta el nodo destino t. Si no existe un camino, la función devuelve un mensaje de error.
+
+3.  **Inicializar distancias y crear montículo de Fibonacci**: La función inicializa las distancias desde el nodo origen s hasta cada nodo en el grafo con valor infinito, excepto para el nodo s que se establece en 0. Luego, crea un montículo de Fibonacci y agrega el nodo s con distancia 0 al montículo.
+
+4.  **Iterar sobre los nodos del montículo**: La función itera sobre los nodos en el montículo de Fibonacci utilizando la función `ExtraerMinimoDeMontículo(M)` para extraer el nodo con la distancia más pequeña. Este proceso se repite hasta que el montículo esté vacío.
+
+5.  **Actualizar distancias y predecesores**: Para cada arista incidente al nodo extraído, la función actualiza la distancia y predecesor del nodo destino según sea necesario.
+
+6.  **Construir camino más corto**: Finalmente, la función verifica si la distancia desde el nodo s hasta el nodo t es infinita y devuelve un mensaje de error si es así. De lo contrario, construye el camino más corto desde el nodo s hasta el nodo t utilizando el predecesor de cada nodo.
+
+7.  **Devolver camino más corto y distancia**: La función devuelve el camino más corto y la distancia entre los nodos s y t.
+
+###### Análisis de la complejidad temporal:
+
+-   La función `NoEsConexo(G)` tiene una complejidad temporal de $O(V + E)$ porque utiliza la función `ExisteCicloEnG(G)`, que busca un ciclo en el grafo mediante una búsqueda DFS.
+-   La función `NoExisteCaminoDesdeS(HastaT, G)` tiene una complejidad temporal de $O(E)$ porque recorre todas las aristas del grafo para verificar si existe un camino desde el nodo origen s hasta el nodo destino t.
+-   Las funciones `Distancia(v, s)` y `peso(u, v)` tienen ambas una complejidad temporal de $O(1)$ porque solo devuelven valores precalculados.
+-   La función `ExisteCicloEnG(G)` tiene una complejidad temporal de $O(V + E)$ porque utiliza la función de búsqueda DFS para buscar un ciclo en el grafo.
+-   La función `HayCiclo(nodo v, Grafo G)` tiene una complejidad temporal de $O(V + E)$ porque utiliza la función de búsqueda DFS para buscar un ciclo en el subgrafo inducido por el nodo v.
+-   Las funciones `AgregarNodoAlMontículo(MontículoFibonacci M, Nodo v, Distancia d)` y `ExtraerMinimoDeMontículo(MontículoFibonacci M)` tienen ambas una complejidad temporal de $O(\log V)$ porque utilizan el montículo de Fibonacci para insertar y extraer nodos.
+-   La función `InsertarNodoEnPosiciónCorrecta(M, v, d)` tiene una complejidad temporal de $O(\log V)$ porque utiliza el montículo de Fibonacci para insertar un nodo en la posición correcta.
+
+En conclusión, la complejidad temporal del algoritmo es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo, lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
+
+##### Pasos
 
 **Paso 1: Inicialización**
 
@@ -621,14 +1106,14 @@ Por lo tanto, la complejidad temporal total es $O[N(N*k + N log(N))]$
 
 Ruta más corta del Nodo A al C
 
-|       | A   | B   | C   | D   | E   | F   |
-|-------|-----|-----|-----|-----|-----|-----|
-| **A** | 0   | -2  | 2   | 0   | 5   | 0   |
-| **B** | 5   | 0   | 0   | 3   | 0   | -1  |
-| **C** | 0   | 0   | 0   | 0   | 6   | 0   |
-| **D** | 0   | -2  | 0   | 0   | 0   | 0   |
-| **E** | 0   | 0   | 0   | 0   | 0   | 0   |
-| **F** | 1   | 0   | 0   | 0   | 0   | 0   |
+|       |  A  |  B  |  C  |  D  |  E  |  F  |
+|:-----:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **A** |  0  | -2  |  2  |  0  |  5  |  0  |
+| **B** |  5  |  0  |  0  |  3  |  0  | -1  |
+| **C** |  0  |  0  |  0  |  0  |  6  |  0  |
+| **D** |  0  | -2  |  0  |  0  |  0  |  0  |
+| **E** |  0  |  0  |  0  |  0  |  0  |  0  |
+| **F** |  1  |  0  |  0  |  0  |  0  |  0  |
 
 **Paso 1: Inicialización**
 
@@ -682,183 +1167,4 @@ Ruta más corta del Nodo A al C
 
 La ruta más corta desde el nodo **A** hasta el nodo **C** es **A** → **B** → **C** con un peso total de **1**.
 
-### Bellman Ford
-
-Características:
-
-1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
-2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O[N(N^2 k)]$, donde $k$ es el número promedio de aristas conectadas por nodo.
-4.  **Detección de Ciclos Negativos**: Puede detectar la presencia potencial de ciclos de peso negativo en el grafo.
-5.  **Distancias Mínimas**: Calcula las distancias mínimas desde un nodo origen a todos los demás nodos, siempre y cuando no haya ciclos de peso negativo.
-
-#### Pasos:
-
-**1: Inicialización**
-
--   Se selecciona un nodo origen en el grafo.
--   Se establece la distancia al nodo origen como $0$, y se establecen las distancias a todos los demás nodos como infinito (representado por un valor muy grande).
-
-**2: Relajación de aristas**
-
--   El algoritmo repite el siguiente proceso $V-1$ veces, donde $V$ es el número de vértices en el grafo.
--   Para cada vértice $v$:
-    -   Se revisan todas las aristas incidentes en $v$, es decir, aquellas que comienzan o terminan en $v$.
-    -   Para cada arista $(u,v)$ con peso $w$:
-        -   Si la distancia actual a $u$ más el peso de la arista $w$ es menor que la distancia actual a $v$, se actualiza la distancia a $v$.
-
-**3: Detección de ciclos negativos**
-
--   Después de $V-1$ iteraciones de relaxación de aristas, se revisan todas las aristas una vez más.
--   Para cada arista $(u,v)$ con peso $w$:
-    -   Si la distancia actual a u más el peso de la arista w es menor que la distancia actual a $v$, significa que hay un ciclo negativo en el grafo.
-    -   En este caso, el algoritmo indica la presencia de un ciclo negativo y no puede garantizar la corrección de las distancias mínimas.
-
-**4: Resultado**
-
--   Si no se detecta ningún ciclo negativo después de $V-1$ iteraciones de relaxación de aristas más una última revisión, el algoritmo ha encontrado las distancias mínimas desde el nodo origen a todos los demás nodos en el grafo.
--   Las distancias mínimas están almacenadas en la matriz de distancias, que es una tabla que contiene la distancia mínima desde el nodo origen a cada vértice en el grafo.
-
-**Referencias:** - Jariasf (2013) CAMINO MAS CORTO: ALGORITMO DE BELLMAN-FORD. <https://jariasf.wordpress.com/2013/01/01/camino-mas-corto-algoritmo-de-bellman-ford/>.
-
--   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
-
--   bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
-
-```{python}
-#%%timeit
-from scipy.sparse.csgraph import bellman_ford
-
-# Utiliza el algoritmo de Bellman-Ford a través de scipy
-dist_matrix, predecessors = bellman_ford(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
-
-# Ruta del nodo 0 al 13
-camino = trazar_camino(predecessors, 0, 13)
-
-print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
-print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo de ejecución: 163 microsegundos')
-```
-
-### Johnson
-
-#### Características:
-
-1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos y no dirigidos.
-2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(V^2 \log V + VE)$, donde $V$ es el número de vértices y $E$ es el número de aristas.
-4.  **Distancias Mínimas**: Calcula las distancias mínimas entre todos los pares de nodos en el grafo.
-5.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas.
-
-#### Pasos:
-
-1.  **Añadir nuevo nodo** Primero se añade un nuevo nodo q al grafo, conectado a cada uno de los nodos del grafo por una arista de peso cero.
-
-2.  **Ejecutar Bellman-Ford** En segundo lugar, se utiliza el algoritmo de Bellman-Ford, empezando por el nuevo vértice q, para determinar para cada vértice v el peso mínimo $h(v)$ del camino de q a v. Si en este paso se detecta un ciclo negativo, el algoritmo concluye.
-
-3.  **Modificar pesos** Seguidamente, a las aristas del grafo original se les cambia el peso usando los valores calculados por el algoritmo de Bellman-Ford: una arista de u a v con tamaño $w(u, v)$, da el nuevo tamaño $w(u, v) + h(u) - h(v)$.
-
-4.  **Ejecutar Dijkstra** Por último, para cada nodo s se usa el algoritmo de Dijkstra (tambien con monticulos de Fibonacci) para determinar el camino más corto entre s y los otros nodos, usando el grafo con pesos modificados.
-
-![Johnson Algorithm](./imagenes/AlgJohnsonImg.png)\
-Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
-
-**Referencias:**
-
--   colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
--   johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
-
-```{python}
-#%%timeit
-from scipy.sparse.csgraph import johnson
-
-#Utiliza el algoritmo de Johnson a través de scipy
-dist_matrix, predecessors = johnson(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
-
-# Ruta del nodo 0 al 13
-camino = trazar_camino(predecessors, 0, 13)
-
-print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
-print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo de ejecución: 435 microsegundos')
-```
-
-### Floyd-Warshall
-
-#### Características:
-
-1.  **Aplicabilidad**: El algoritmo de Floyd-Warshall se aplica a grafos dirigidos y no dirigidos.
-2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(V^3)$, donde $V$ es el número de vértices.
-4.  **Distancias Mínimas**: Calcula las distancias mínimas entre todos los pares de nodos en el grafo.
-5.  **Simplicidad**: Es un algoritmo sencillo de implementar y entender.
-
-#### Pasos:
-
-1.  **Inicialización**
-    -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`. Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si existe, de lo contrario es infinito. La distancia de un nodo a sí mismo es 0.
-2.  **Iteración**
-    -   Para cada nodo `k`, actualizar la matriz de distancias considerando `k` como un nodo intermedio. Para cada par de nodos `(i, j)`, actualizar `dist[i][j]` como el mínimo entre `dist[i][j]` y `dist[i][k] + dist[k][j]`.
-3.  **Resultado**
-    -   Después de completar las iteraciones, la matriz `dist` contendrá las distancias mínimas entre todos los pares de nodos.
-
-<img src="./imagenes/Floyd-Warshall-Algorithm-Problem.png" width="700"/></img>
-
-Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall)
-
-**Referencias:**
-
--   colaboradores de Wikipedia (2020) Algoritmo de Floyd-Warshall. <https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall>.
--   floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
-
-```{python}
-#%%timeit
-from scipy.sparse.csgraph import floyd_warshall
-
-#Utiliza el algoritmo de Floyd-Warshall a través de scipy
-#Nota: Este algoritmo no permite calcular la distancia eligiendo un nodo de inicio
-
-dist_matrix, predecessors = floyd_warshall(matriz_adyacencia, directed=False, return_predecessors=True)
-
-# Ruta del nodo 0 al 13
-camino = trazar_camino(predecessors[0], 0, 13)
-
-print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
-print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13])
-print('Tiempo de ejecución: 85 microsegundos')
-```
-
 ## Elección final de Algoritmo de camino más corto
-
-Pues no he elegido ninguno, en su lugar una función de scipy, La función `scipy.sparse.csgraph.shortest_path` elige automáticamente el mejor algoritmo para encontrar las rutas más cortas dependiendo de las características del grafo de entrada.
-
-Opciones del parametro `method` y un breve resumen de los algoritmos ya vistos previamente:
-
-`auto` – (por defecto) selecciona la mejor opción entre ‘FW’, ‘D’, ‘BF’ o ‘J’ basado en los datos de entrada.
-
-`FW` – Algoritmo de Floyd-Warshall. El costo computacional es aproximadamente $O[N^3]$.
-
-`D` – Algoritmo de Dijkstra con pilas de Fibonacci. El costo computacional es aproximadamente $O[N(N*k + N\log(N))]$, donde $k$ es el número promedio de aristas conectadas por nodo.
-
-`BF` – Algoritmo de Bellman-Ford. Este algoritmo puede usarse cuando los pesos son negativos. Si se encuentra un ciclo negativo, se levantará una excepción. El costo computacional es aproximadamente $O[N(N^2 k)]$, donde $k$ es el número promedio de aristas conectadas por nodo.
-
-`J` – Algoritmo de Johnson. Al igual que el algoritmo de Bellman-Ford, el algoritmo de Johnson está diseñado para usarse cuando los pesos son negativos. Combina el algoritmo de Bellman-Ford con el algoritmo de Dijkstra para una computación más rápida.
-
-**Referencias**\
-- shortest_path — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.shortest_path.html#scipy.sparse.csgraph.shortest_path>.
-
-```{python}
-#%%timeit
-
-from scipy.sparse.csgraph import shortest_path
-
-# Utiliza la función shortest_path para encontrar la ruta más rápida desde el nodo 0 al 13
-dist_matrix, predecessors = shortest_path(matriz_adyacencia, method='auto', directed=False, indices=0, return_predecessors=True)
-
-# Ruta del nodo 0 al 13
-camino = trazar_camino(predecessors, 0, 13)
-
-print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
-print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo de ejecución: 228 microsegundos')
-```
