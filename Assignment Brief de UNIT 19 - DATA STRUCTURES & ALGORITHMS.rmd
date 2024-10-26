@@ -926,6 +926,10 @@ print('Tiempo medio de ejecución: 363 microsegundos')
 
     -   $E$ es el número de aristas en el grafo.
 
+##### Diagrama de Flujo
+
+![](imagenes/Diagrama de flujo Dijkstra Fibo.png)
+
 ##### Pseudocódigo con Complejidad Temporal
 
 ```         
