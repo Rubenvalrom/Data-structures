@@ -1,9 +1,11 @@
+body {
+line-height: 2;
+}
 a {
     color: navy;
     font-weight: normal;
     font-size: 1em;
 }
-
 
 #TOC ul a{
     color: #040040;
