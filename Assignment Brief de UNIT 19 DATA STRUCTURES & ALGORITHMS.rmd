@@ -495,7 +495,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 -   La distancia del nodo C desde el nodo A no se puede calcular directamente a partir de las distancias conocidas.
 -   La distancia del nodo D desde el nodo A es la suma de la distancia del nodo B a sí mismo y la distancia del nodo B al nodo D, que es 2 + 3 = 5.
--   La distancia del nodo E desde el nodo A sigue siendo infinita, ya que no hay arista directa entre los nodos B y E.
+-   La distancia del nodo E desde el nodo A es 5 ya que hay arista directa
 
 | Nodo | Distancia |
 |------|-----------|
@@ -503,7 +503,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 | B    | 2         |
 | C    | ∞         |
 | D    | 5         |
-| E    | ∞         |
+| E    | 5         |
 
 **Paso 4: Selección del nodo con la distancia más pequeña**
 
@@ -513,7 +513,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 **Paso 5: Actualización de distancias**
 
 -   La distancia del nodo C desde el nodo A es la suma de la distancia del nodo D a sí mismo y la distancia del nodo D al nodo C, que es ∞ + 2 = 2.
--   La distancia del nodo E desde el nodo A sigue siendo infinita.
+-   La distancia del nodo E desde el nodo A sigue siendo 5.
 
 | Nodo | Distancia |
 |------|-----------|
@@ -521,7 +521,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 | B    | 2         |
 | C    | 2         |
 | D    | 5         |
-| E    | ∞         |
+| E    | 5         |
 
 **Paso 6: Selección del nodo con la distancia más pequeña**
 
@@ -582,7 +582,7 @@ La distancia total es 2 + 3 + 2 = 7.
 ###### Implementación en Python
 
 ```{python}
-# Definir la matriz de adyacencia
+# Defino la matriz de adyacenncia utilizada en el ejemplo
 matriz = [ 
 [0, 2, 0, 0, 5], 
 [2, 0, 0, 3, 0], 
@@ -602,24 +602,20 @@ for i in range(len(matriz)):
     for j in range(i+1, len(matriz[i])):
         if matriz[i][j] != 0:
             G.add_edge(nodos[i], nodos[j], peso=matriz[i][j])
-
-# Imprimir información del grafo
-print("Nodos:", list(G.nodes()))
-print("Aristas con pesos:")
-for u, v, d in G.edges(data=True):
-    print(f"{u} - {v}: {d['peso']}")
 ```
 
 ```{python}
-nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra')
-nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra')
+print("Camino más corto: ",nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra'))
+
+print("Distancia: ",nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra'))
 
 ```
 
-**Referencias:**\
-- Klochay, A. (2022) Implementing Dijkstra’s algorithm in Python. <https://www.udacity.com/blog/2021/10/implementing-dijkstras-algorithm-in-python.html>
+**Referencias:**
 
-*Nota: tuve que cambiar la función original para obtener los nodos por la que utiliza `NetworkX` actualmente*
+-   *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
+
+-   *shortest_path_length — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path_length.html#networkx.algorithms.shortest_paths.generic.shortest_path_length.>
 
 #### Implementación de Dijkstra en Montículos de Fibonacci
 
