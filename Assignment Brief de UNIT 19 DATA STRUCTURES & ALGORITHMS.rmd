@@ -462,21 +462,21 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 **Ejemplo**
 
-Ruta más corta del Nodo **A** al **C**
+**Encontrar la ruta más corta entre nodos A y C utilizando el Algoritmo Dijkstra**
 
 |       |  A  |  B  |  C  |  D  |  E  |
 |:-----:|:---:|:---:|:---:|:---:|:---:|
-| **A** | \-  |  2  | \-  | \-  |  3  |
+| **A** | \-  |  2  | \-  | \-  |  5  |
 | **B** |  2  | \-  | \-  |  3  | \-  |
 | **C** | \-  | \-  | \-  |  2  |  4  |
-| **D** | \-  | \-  |  2  | \-  | \-  |
-| **E** |  3  | \-  |  4  | \-  | \-  |
+| **D** | \-  |  3  |  2  | \-  | \-  |
+| **E** |  5  | \-  |  4  | \-  | \-  |
 
 **Paso 1: Inicialización**
 
--   Creamos un conjunto de nodos visitados vacío (`V = ∅`).
--   Creamos una tabla de distancias desde el nodo **A**, donde la distancia del nodo **A** a sí mismo es 0 y todas las demás distancias son infinitas.
--   Creamos una tabla de nodos previos, que contendrá la ruta más corta desde el nodo **A** hasta cada nodo.
+-   Creamos un conjunto de nodos visitados vacío, llamado V.
+-   Creamos una tabla de distancias desde el nodo A, donde la distancia del nodo A a sí mismo es 0 y todas las demás distancias son infinitas.
+-   Creamos una tabla de nodos previos, que contendrá la ruta más corta desde el nodo A hasta cada nodo.
 
 | Nodo | Distancia |
 |------|-----------|
@@ -488,14 +488,14 @@ Ruta más corta del Nodo **A** al **C**
 
 **Paso 2: Selección del nodo con la distancia más pequeña**
 
--   El nodo con la distancia más pequeña desde el nodo **A** es el nodo **B**, que tiene una distancia de 2.
--   Agregamos el nodo **B** al conjunto de nodos visitados (`V = {B}`).
+-   El nodo con la distancia más pequeña desde el nodo A es el nodo B, con una distancia de 2.
+-   Agregamos el nodo B al conjunto de nodos visitados (V = {B}).
 
 **Paso 3: Actualización de distancias**
 
--   La distancia del nodo **C** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **C**, que es ∞ + ∞ = ∞.
--   La distancia del nodo **D** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **D**, que es 2 + 3 = 5.
--   La distancia del nodo **E** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **E**, que es ∞, ya que no hay arista entre los nodos **B** y **E**.
+-   La distancia del nodo C desde el nodo A no se puede calcular directamente a partir de las distancias conocidas.
+-   La distancia del nodo D desde el nodo A es la suma de la distancia del nodo B a sí mismo y la distancia del nodo B al nodo D, que es 2 + 3 = 5.
+-   La distancia del nodo E desde el nodo A sigue siendo infinita, ya que no hay arista directa entre los nodos B y E.
 
 | Nodo | Distancia |
 |------|-----------|
@@ -507,13 +507,13 @@ Ruta más corta del Nodo **A** al **C**
 
 **Paso 4: Selección del nodo con la distancia más pequeña**
 
--   El nodo con la distancia más pequeña desde el nodo **A** es el nodo **B**, que tiene una distancia de 2.
--   Agregamos el nodo **B** al conjunto de nodos visitados (`V = {B}`).
+-   El nodo con la distancia más pequeña desde el nodo A sigue siendo el nodo B, con una distancia de 2.
+-   Agregamos el nodo B al conjunto de nodos visitados (V = {B}).
 
 **Paso 5: Actualización de distancias**
 
--   La distancia del nodo **C** desde el nodo **A** es la suma de la distancia del nodo **D** a sí mismo y la distancia del nodo **D** al nodo **C**, que es ∞ + 2 = 2.
--   La distancia del nodo **E** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **E**, que es 2 + ∞ = ∞.
+-   La distancia del nodo C desde el nodo A es la suma de la distancia del nodo D a sí mismo y la distancia del nodo D al nodo C, que es ∞ + 2 = 2.
+-   La distancia del nodo E desde el nodo A sigue siendo infinita.
 
 | Nodo | Distancia |
 |------|-----------|
@@ -525,16 +525,16 @@ Ruta más corta del Nodo **A** al **C**
 
 **Paso 6: Selección del nodo con la distancia más pequeña**
 
--   El nodo con la distancia más pequeña desde el nodo **A** es el nodo **C**, que tiene una distancia de 2.
--   Agregamos el nodo **C** al conjunto de nodos visitados (`V = {B, C}`).
+-   El nodo con la distancia más pequeña desde el nodo A ahora es el nodo C, con una distancia de 2.
+-   Agregamos el nodo C al conjunto de nodos visitados (V = {B, C}).
 
-La ruta más corta del Nodo **A** al **C** con el Algoritmo Dijkstra es:
+La ruta más corta del Nodo A al C utilizando el Algoritmo Dijkstra es:
 
 1.  A → B
 2.  B → D
 3.  D → C
 
-La distancia total es 2 + 3 = 5.
+La distancia total es 2 + 3 + 2 = 7.
 
 ##### Pseudocódigo
 
@@ -584,11 +584,11 @@ La distancia total es 2 + 3 = 5.
 ```{python}
 # Definir la matriz de adyacencia
 matriz = [ 
-[0, 2, 0, 0, 3], 
+[0, 2, 0, 0, 5], 
 [2, 0, 0, 3, 0], 
 [0, 0, 0, 2, 4], 
 [0, 0, 2, 0, 0], 
-[3, 0, 4, 0, 0]]
+[5, 0, 4, 0, 0]]
 
 # Crear un grafo vacío
 G = nx.Graph()
@@ -611,9 +611,9 @@ for u, v, d in G.edges(data=True):
 ```
 
 ```{python}
-pred, dist = nx.dijkstra_predecessor_and_distance(G,'C',weight = d['peso'])
-print(pred)
-print(dist)
+nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra')
+nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra')
+
 ```
 
 **Referencias:**\
