@@ -212,23 +212,19 @@ def trazar_camino(predecesores, nodo_inicio, nodo_fin):
 
 ### Dijkstra con Montículos de Fibonacci
 
-Para esta variante del algoritmo primero se explicará:
-  - La estructura de datos de `Montículos de Fibonacci`
-  - El algoritmo base de `Dijkstra`
-  - La implementación de `Dijkstra con Montículos de Fibonacci`
-
+Para esta variante del algoritmo primero se explicará: - La estructura de datos de `Montículos de Fibonacci`, El algoritmo base de `Dijkstra` y finalmente La implementación de `Dijkstra con Montículos de Fibonacci`
 
 #### Montículos de Fibonacci
 
 ##### Características
 
-1.  **Completo**: Es un árbol binario completo, lo que significa que todos sus niveles están completamente llenos, excepto el último nivel, que está lleno desde la izquierda a la derecha.
+1.  **Árbol binario**: Cada nodo tiene como máximo dos hijos (izquierdo y derecho).
 
-2.  **Árbol binario**: Cada nodo tiene como máximo dos hijos (izquierdo y derecho).
+2.  **Completo**: Es un árbol binario completo, lo que significa que todos sus niveles están completamente llenos, excepto el último nivel, que está lleno desde la izquierda a la derecha.
 
 3.  **Raíz**: El nodo raíz es el elemento más grande del montículo.
 
-4.  **Propiedad de Fibonacci**: La propiedad clave del montículo de Fibonacci es que para cualquier nodo, la cantidad de nodos en su subárbol izquierdo es igual a la cantidad de nodos en su subárbol derecho, o uno menos.
+4.  **Propiedad de Fibonacci**: Para cualquier nodo, la cantidad de nodos en su subárbol izquierdo es igual a la cantidad de nodos en su subárbol derecho, o uno menos.
 
 5.  **Organización de los pesos**: El peso más pequeños se pone a la izquierda y el mayor a la derecha.
 
@@ -270,6 +266,10 @@ Fuente: [Growingwiththeweb](https://www.growingwiththeweb.com/data-structures/fi
 **Paso 5: Actualizar la raíz si es necesario**
 
 -   Si el nuevo nodo se convirtió en la nueva raíz del árbol (es decir, se movió hacia arriba), actualiza la raíz del árbol con el nuevo nodo.
+
+**Complejidad Temporal**
+
+-   $O(1)$, constante.
 
 **Ejemplo:**
 
@@ -334,17 +334,35 @@ El resultado final es:
 
 -   Si el nuevo nodo se convirtió en la nueva raíz del árbol (es decir, se movió hacia arriba), actualiza la raíz del árbol con el nuevo nodo.
 
-Aquí hay un ejemplo para ilustrar estos pasos:
+**Complejidad temporal**
+
+$O(log V)$, donde $V$ es el número de nodos en el árbol. Esto se debe a que el árbol está ordenado, lo que hace que la búsqueda sea muy eficiente.
+
+**Ejemplo**
 
 Supongamos que tenemos un montículo de Fibonacci con los nodos 5, 3, 7 y 2 en ese orden y queremos eliminar el elemento 3.
 
-1.  **Identificar el nodo a eliminar**: El nodo 3 es el que se desea eliminar.
-2.  **Verificar si el nodo tiene hijos**: El nodo 3 tiene un hijo izquierdo (el nodo 2).
-3.  **Reemplazar el nodo a eliminar con su hijo derecho**: No hay un hijo derecho para el nodo 3, pero sí un hijo izquierdo (el nodo 2). Sin embargo, no se reemplaza el nodo 3 con el nodo 2 porque el nodo 2 tiene un hijo izquierdo. En lugar de eso, se sigue con el siguiente paso.
-4.  **Reorganizar el árbol si es necesario**: El nuevo nodo (el nodo 2) tiene un hijo izquierdo y su subárbol derecho tiene más nodos que su subárbol izquierdo. Se intercambian los hijos del nuevo nodo para mantener la propiedad de Fibonacci.
-5.  **Actualizar la raíz si es necesario**: No hay necesidad de actualizar la raíz porque el nuevo nodo (el nodo 2) no se convirtió en la nueva raíz.
+**Paso 1: Identificar el nodo a eliminar**
 
-El resultado final es:
+-   El nodo 3 es el que se desea eliminar.
+
+**Paso 2: Verificar si el nodo tiene hijos**
+
+-   El nodo 3 tiene un hijo izquierdo (el nodo 2).
+
+**Paso 3: Reemplazar el nodo a eliminar con su hijo derecho**
+
+-   No hay un hijo derecho para el nodo 3, pero sí un hijo izquierdo (el nodo 2). Sin embargo, no se reemplaza el nodo 3 con el nodo 2 porque el nodo 2 tiene un hijo izquierdo. En lugar de eso, se sigue con el siguiente paso.
+
+**Paso 4: Reorganizar el árbol si es necesario**
+
+-   El nuevo nodo (el nodo 2) tiene un hijo izquierdo y su subárbol derecho tiene más nodos que su subárbol izquierdo. Se intercambian los hijos del nuevo nodo para mantener la propiedad de Fibonacci.
+
+**Paso 5: Actualizar la raíz si es necesario**
+
+-   No hay necesidad de actualizar la raíz porque el nuevo nodo (el nodo 2) no se convirtió en la nueva raíz.
+
+Resultado Intermedio:
 
 ```         
                                             5
@@ -356,11 +374,19 @@ El resultado final es:
 
 Sin embargo, como queremos eliminar el elemento 3, seguimos con los pasos restantes.
 
-6.  **Identificar el nodo a eliminar:** El nodo 3 es el que se desea eliminar.
-7.  **Verificar si el nodo tiene hijos:** El nodo 3 no tiene hijos.
-8.  **Reemplazar el nodo a eliminar con su hijo derecho:** No hay un hijo derecho para el nodo 3, por lo que simplemente se elimina el nodo 3 del árbol.
+**Paso 6: Identificar el nodo a eliminar**
 
-El resultado final es:
+-   El nodo 3 es el que se desea eliminar
+
+**Paso 7: Verificar si el nodo tiene hijos**
+
+-   El nodo 3 no tiene hijos
+
+**Paso 8: Reemplazar el nodo a eliminar con su hijo derecho**
+
+-   No hay un hijo derecho para el nodo 3, por lo que simplemente se elimina el nodo 3 del árbol.
+
+Resultado final:
 
 ```         
                                             5
@@ -369,14 +395,6 @@ El resultado final es:
 ```
 
 En resumen, la eliminación de un elemento en un montículo de Fibonacci implica reemplazar el nodo a eliminar con su hijo derecho o izquierdo y luego reorganizar el árbol para mantener la propiedad de Fibonacci.
-
-**Complejidad temporal**
-
-$O(log n)$, donde $n$ es el número de nodos en el árbol. Esto se debe a que el árbol está ordenado, lo que hace que la búsqueda sea muy eficiente.
-
-**Complejidad espacial**
-
-$O(1)$, ya que solo necesitamos acceder a los nodos del árbol para realizar la búsqueda.
 
 ##### Ventajas
 
@@ -389,152 +407,11 @@ $O(1)$, ya que solo necesitamos acceder a los nodos del árbol para realizar la 
 1.  **Complejidad de implementación**: Puede ser más costoso de implementar que otros tipos de árboles binarios.
 2.  **Requerimientos de mantenimiento**: Requiere un mantenimiento constante para asegurarse de que está correctamente ordenado.
 
-##### Pseudocódigo
-
-```         
-FUNCIÓN TransformarGrafoAMontículoFibonacci(Grafo G)
-
-// Obtener el tamaño del grafo (número de nodos)
-  n = TamañoDeGrafo(G)
-
-// Inicializar la secuencia de Fibonacci
-  F[0] = 0
-  F[1] = 1
-  Para i desde 2 hasta n+1 hacer
-    F[i] = F[i-1] + F[i-2]
-
-// Crear un montículo de Fibonacci vacío
-  MontículoFibonacci M
-
-// Recorrer los nodos del grafo y agregarlos al montículo de Fibonacci
-  Para cada nodo i en G hacer
-    Si GradoDeConexión(i) > 0 Entonces
-      AgregarNodoAlMontículo(M, i, F[GradoDeConexión(i)])
-    FIN SI
-
-// Devolver el montículo de Fibonacci construido
-  RETORNAR M
-
-FUNCIÓN AgregarNodoAlMontículo(MontículoFibonacci M, Nodo i, Altura h)
-// Agregar el nodo i al montículo de Fibonacci con altura h
-  InsertarNodoEnMontículo(M, i, h)
-
-FUNCIÓN InsertarNodoEnMontículo(MontículoFibonacci M, Nodo i, Altura h)
-// Insertar el nodo i en el lugar correcto del montículo de Fibonacci
-  SI MontículoVacio(M) Entonces
-    AgregarNodoAlRaíz(M, i, h)
-  SINO
-    BuscarLugarParaInsertar(M, i, h)
-  FIN SI
-
-FUNCIÓN BuscarLugarParaInsertar(MontículoFibonacci M, Nodo i, Altura h)
-// Buscar el lugar donde insertar el nodo i en el montículo de Fibonacci
-  Raíz = RaízDelMontículo(M)
-  Si Raíz es NULL Entonces
-    AgregarNodoAlRaíz(M, i, h)
-  SINO
-    Si Altura(h) < Altura(Raíz) Entonces
-      InsertarNodoEnHijoIzquierdo(M, i, h)
-    SINO
-      InsertarNodoEnHijoDerecho(M, i, h)
-    FIN SI
-  FIN SI
-
-FUNCIÓN AgregarNodoAlRaíz(MontículoFibonacci M, Nodo i, Altura h)
-// Agregar el nodo i como raíz del montículo de Fibonacci
-  Raíz = NuevoNodo(i, h)
-  MontículoDelMontículo(M) = Raíz
-
-FUNCIÓN InsertarNodoEnHijoIzquierdo(MontículoFibonacci M, Nodo i, Altura h)
-// Insertar el nodo i en el hijo izquierdo del raíz
-  HijoIzquierdo = HijoIzquierdoDeRaíz(M)
-  Si HijoIzquierdo es NULL Entonces
-    AgregarNodoAlHijoIzquierdo(M, i, h)
-  SINO
-    BuscarLugarParaInsertarEnHijoIzquierdo(M, i, h)
-  FIN SI
-
-FUNCIÓN InsertarNodoEnHijoDerecho(MontículoFibonacci M, Nodo i, Altura h)
-// Insertar el nodo i en el hijo derecho del raíz
-  HijoDerecho = HijoDerechoDeRaíz(M)
-  Si HijoDerecho es NULL Entonces
-    AgregarNodoAlHijoDerecho(M, i, h)
-  SINO
-    BuscarLugarParaInsertarEnHijoDerecho(M, i, h)
-  FIN SI
-
-FUNCIÓN AgregarNodoAlHijoIzquierdo(MontículoFibonacci M, Nodo i, Altura h)
-// Agregar el nodo i como hijo izquierdo del raíz
-  HijoIzquierdo = NuevoNodo(i, h)
-  HijosDelMontículo(M) = HijoIzquierdo
-
-FUNCIÓN AgregarNodoAlHijoDerecho(MontículoFibonacci M, Nodo i, Altura h)
-// Agregar el nodo i como hijo derecho del raíz
-  HijoDerecho = NuevoNodo(i, h)
-  HijosDelMontículo(M) = HijoDerecho
-
-FUNCIÓN BuscarLugarParaInsertarEnHijoIzquierdo(MontículoFibonacci M, Nodo i, Altura h)
-// Buscar el lugar donde insertar el nodo i en el hijo izquierdo del raíz
-  HijoIzquierdo = HijoIzquierdoDeRaíz(M)
-  Si HijoIzquierdo es NULL Entonces
-    AgregarNodoAlHijoIzquierdo(M, i, h)
-  SINO
-    BuscarLugarParaInsertarEnHijoIzquierdo(M, i, h)
-  FIN SI
-
-FUNCIÓN BuscarLugarParaInsertarEnHijoDerecho(MontículoFibonacci M, Nodo i, Altura h)
-// Buscar el lugar donde insertar el nodo i en el hijo derecho del raíz
-  HijoDerecho = HijoDerechoDeRaíz(M)
-  Si HijoDerecho es NULL Entonces
-    AgregarNodoAlHijoDerecho(M, i, h)
-  SINO
-    BuscarLugarParaInsertarEnHijoDerecho(M, i, h)
-  FIN SI
-
-FUNCIÓN NuevoNodo(Nodo i, Altura h)
-// Crear un nuevo nodo con el valor i y la altura h
-  RETORNAR Nuevo Nodo(i, h)
-
-FUNCIÓN RaízDelMontículo(MontículoFibonacci M)
-// Devolver la raíz del montículo de Fibonacci
-  RETORNAR MontículoDelMontículo(M)
-
-FUNCIÓN HijoIzquierdoDeRaíz(MontículoFibonacci M)
-// Devolver el hijo izquierdo de la raíz del montículo de Fibonacci
-  RETORNAR HijosDelMontículo(M)[0]
-
-FUNCIÓN HijoDerechoDeRaíz(MontículoFibonacci M)
-// Devolver el hijo derecho de la raíz del montículo de Fibonacci
-  RETORNAR HijosDelMontículo(M)[1]
-```
-
--   La función `AgregarNodoAlMontículo` agrega un nodo al montículo de Fibonacci con una altura determinada.
-
--   La función `InsertarNodoEnMontículo` inserta un nodo en el lugar correcto del montículo de Fibonacci.
-
--   Las funciones `BuscarLugarParaInsertar`, `AgregarNodoAlRaíz`, `InsertarNodoEnHijoIzquierdo` e `InsertarNodoEnHijoDerecho` se utilizan para encontrar el lugar donde insertar un nodo en el montículo de Fibonacci.
-
--   Las funciones `NuevoNodo`, `RaízDelMontículo`, `HijoIzquierdoDeRaíz` y `HijoDerechoDeRaíz` crean nuevos nodos y devuelven la raíz, hijo izquierdo o hijo derecho del montículo de Fibonacci.
-
 **Referencias**
 
 -   Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
 -   Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
 -   Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
-
-```{python}
-#%%timeit
-from scipy.sparse.csgraph import dijkstra
-# Utiliza el algoritmo de Dijkstra a través de scipy
-dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
-
-# Ruta del nodo 0 al 13
-camino = trazar_camino(predecessors, 0, 13)
-
-print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
-print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo medio de ejecución: 363 microsegundos')
-```
 
 #### Dijkstra
 
@@ -581,184 +458,116 @@ print('Tiempo medio de ejecución: 363 microsegundos')
     -   Si el nodo destino ha sido marcado como visitado o si la distancia más pequeña entre los nodos no visitados es infinita, el algoritmo termina.
     -   De lo contrario, selecciona el nodo no visitado con la distancia más pequeña, establece este nodo como el nuevo nodo actual y repite el proceso.\
         ![Dijkstra Animation](imagenes/Dijkstra_Animation.gif)\
-        Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra)
+        Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra) **Ejemplo**
+
 **Ejemplo**
 
-Ruta más corta del Nodo A al C
+Ruta más corta del Nodo **A** al **C**
 
-|       |  A  |  B  |  C  |  D  |  E  |  F  |
-|:-----:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A** |  0  | -2  |  2  |  0  |  5  |  0  |
-| **B** |  5  |  0  |  0  |  3  |  0  | -1  |
-| **C** |  0  |  0  |  0  |  0  |  6  |  0  |
-| **D** |  0  | -2  |  0  |  0  |  0  |  0  |
-| **E** |  0  |  0  |  0  |  0  |  0  |  0  |
-| **F** |  1  |  0  |  0  |  0  |  0  |  0  |
+|       |  A  |  B  |  C  |  D  |  E  |
+|:-----:|:---:|:---:|:---:|:---:|:---:|
+| **A** | \-  |  2  | \-  | \-  |  3  |
+| **B** |  2  | \-  | \-  |  3  | \-  |
+| **C** | \-  | \-  | \-  |  2  |  4  |
+| **D** | \-  | \-  |  2  | \-  | \-  |
+| **E** |  3  | \-  |  4  | \-  | \-  |
 
 **Paso 1: Inicialización**
 
--   Se selecciona el nodo A como punto de partida y se establece su peso como 0.
--   Los pesos iniciales de cada nodo son:
-    -   **A**: 0
-    -   **B**: -2
-    -   **C**: 2
-    -   **D**: 0
-    -   **E**: 5
-    -   **F**: 1
+-   Creamos un conjunto de nodos visitados vacío (`V = ∅`).
+-   Creamos una tabla de distancias desde el nodo **A**, donde la distancia del nodo **A** a sí mismo es 0 y todas las demás distancias son infinitas.
+-   Creamos una tabla de nodos previos, que contendrá la ruta más corta desde el nodo **A** hasta cada nodo.
 
-**Paso 2: Buscar el nodo con el peso más bajo**
+| Nodo | Distancia |
+|------|-----------|
+| A    | 0         |
+| B    | ∞         |
+| C    | ∞         |
+| D    | ∞         |
+| E    | ∞         |
 
--   Se busca el nodo con el peso más bajo en el montículo de Fibonacci.
--   En este caso, el nodo **A** tiene un peso de **0**, que es el más bajo.
+**Paso 2: Selección del nodo con la distancia más pequeña**
 
-**Paso 3: Actualizar los pesos**
+-   El nodo con la distancia más pequeña desde el nodo **A** es el nodo **B**, que tiene una distancia de 2.
+-   Agregamos el nodo **B** al conjunto de nodos visitados (`V = {B}`).
 
--   Se actualizan los pesos de los nodos adyacentes al nodo **A** (**B** y **C**).
--   El peso del nodo **B** se actualiza a **-2 + 5 = 3**.
--   El peso del nodo **C** se actualiza a **0**.
+**Paso 3: Actualización de distancias**
 
-**Paso 4: Repetir**
+-   La distancia del nodo **C** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **C**, que es ∞ + ∞ = ∞.
+-   La distancia del nodo **D** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **D**, que es 2 + 3 = 5.
+-   La distancia del nodo **E** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **E**, que es ∞, ya que no hay arista entre los nodos **B** y **E**.
 
--   Se repite el proceso de buscar el nodo con el peso más bajo y actualizar los pesos hasta que se haya visitado todos los nodos del grafo.
--   En este caso, el nodo **A** ya ha sido visitado, así que pasamos al siguiente paso.
+| Nodo | Distancia |
+|------|-----------|
+| A    | 0         |
+| B    | 2         |
+| C    | ∞         |
+| D    | 5         |
+| E    | ∞         |
 
-**Paso 5: Buscar el nodo con el peso más bajo**
+**Paso 4: Selección del nodo con la distancia más pequeña**
 
--   Se busca el nodo con el peso más bajo en el montículo de Fibonacci.
--   En este caso, el nodo **C** tiene un peso de **0**, que es el más bajo.
+-   El nodo con la distancia más pequeña desde el nodo **A** es el nodo **B**, que tiene una distancia de 2.
+-   Agregamos el nodo **B** al conjunto de nodos visitados (`V = {B}`).
 
-**Paso 6: Actualizar los pesos**
+**Paso 5: Actualización de distancias**
 
--   No hay nodos adyacentes al nodo **C** que necesiten ser actualizados.
+-   La distancia del nodo **C** desde el nodo **A** es la suma de la distancia del nodo **D** a sí mismo y la distancia del nodo **D** al nodo **C**, que es ∞ + 2 = 2.
+-   La distancia del nodo **E** desde el nodo **A** es la suma de la distancia del nodo **B** a sí mismo y la distancia del nodo **B** al nodo **E**, que es 2 + ∞ = ∞.
 
-**Paso 7: Repetir**
+| Nodo | Distancia |
+|------|-----------|
+| A    | 0         |
+| B    | 2         |
+| C    | 2         |
+| D    | 5         |
+| E    | ∞         |
 
--   Se repite el proceso de buscar el nodo con el peso más bajo y actualizar los pesos hasta que se haya visitado todos los nodos del grafo.
--   En este caso, el nodo **C** ya ha sido visitado, así que pasamos al siguiente paso.
+**Paso 6: Selección del nodo con la distancia más pequeña**
 
-**Paso 8: Buscar el nodo con el peso más bajo**
+-   El nodo con la distancia más pequeña desde el nodo **A** es el nodo **C**, que tiene una distancia de 2.
+-   Agregamos el nodo **C** al conjunto de nodos visitados (`V = {B, C}`).
 
--   No hay nodos adyacentes al nodo **C** que necesiten ser actualizados.
+La ruta más corta del Nodo **A** al **C** con el Algoritmo Dijkstra es:
 
-**Paso 9: Recuperar la ruta**
+1.  A → B
+2.  B → D
+3.  D → C
 
--   La ruta más corta desde el nodo **A** hasta el nodo **C** es:
-    -   **A** → **B** → **C** (peso total: -2 + 3 = **1**)
-
-La ruta más corta desde el nodo **A** hasta el nodo **C** es **A** → **B** → **C** con un peso total de **1**.
+La distancia total es 2 + 3 = 5.
 
 ##### Pseudocódigo
 
-```         
-FUNCIÓN Dijkstra(Grafo G, Nodo s, Nodo t)
-  
-// Verificar si el grafo es conexo
-  SI NoEsConexo(G) Entonces
-    RETORNAR "Error: El grafo no es conexo"
-  FIN SI
+**Algoritmo Dijkstra**
 
-// Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
-  SI NoExisteCaminoDesdeS(HastaT, G) Entonces
-    RETORNAR "No existe ruta entre los nodos s y t"
-  FIN SI
+**Entrada:**
 
-// Inicializar la distancia desde el nodo origen s hasta cada nodo en el grafo
-  Para cada nodo v en G hacer
-    d[v] = INFINITO
+-   `G`: Grafo dirigido ponderado, donde cada arista tiene un peso (coste) asociado.
+-   `s`: Nodo inicial (fuente).
+-   `nodos`: Conjunto de nodos del grafo.
 
-// Inicializar la distancia desde el nodo origen s hasta el nodo s
-  d[s] = 0
+**Salida:**
 
-// Inicializar el predecesor de cada nodo en el camino más corto
-  π[s] = NULL
+-   `distancias`: Arreglo que almacena la distancia mínima desde el nodo `s` a cada uno de los demás nodos en el grafo.
 
-  // Para cada nodo v en el grafo:
-  Para cada nodo v en G hacer
-    Si d[v] != INFINITO Entonces
-      // Actualizar la distancia y predecesor del nodo v según sea necesario
-      Para cada arista (u, v) en E hacer
-        Si d[u] + peso(u, v) < d[v] Entonces
-          d[v] = d[u] + peso(u, v)
-          π[v] = u
-        FIN SI
-    FIN SI
+-   `predecesores`: Arreglo que almacena el predecesor de cada nodo en el camino más corto desde el nodo `s`.
 
-// Verificar si la distancia desde el nodo s hasta el nodo t es infinita
-  Si d[t] == INFINITO Entonces
-    RETORNAR "La distancia entre los nodos s y t es infinita"
-  FIN SI
+**Inicialización**
 
-// Construir el camino más corto desde el nodo origen s hasta el nodo destino t
-  camino = []
-  v = t
-  Mientras π[v] != NULL Hacer
-    camino.insertar al principio(π[v])
-    v = π[v]
-  FIN MIENTRAS
+-   `distancias[s] = 0` (la distancia desde el nodo `s` a sí mismo es 0).
+-   Para cada nodo `u` en `nodos`, excepto `s`:
+    -   `distancias[u] = ∞` (la distancia desde el nodo `s` al nodo `u` no se conoce aún).
+    -   `predecesores[u] = null` (no hay predecesor conocido para el nodo `u` en el camino más corto desde el nodo `s`).
 
-// Devolver el camino más corto y la distancia entre los nodos s y t
-  RETORNAR (camino, d[t])
+**Bucle**
 
-FUNCIÓN NoEsConexo(Grafo G)
-// Verificar si el grafo es conexo
-  SI ExisteCicloEnG(G) Entonces
-    RETORNAR Verdadero
-  FIN SI
-
-  RETORNAR Falso
-
-FUNCIÓN NoExisteCaminoDesdeS(HastaT, Grafo G)
-// Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
-  Para cada arista (u, v) en E hacer
-    Si u == s y v == t Entonces
-      RETORNAR Verdadero
-    FIN SI
-  FIN PARA
-
-  RETORNAR Falso
-
-FUNCIÓN peso(u, v)
-// Devolver el peso de la arista entre los nodos u y v
-  RETORNAR pesoDeLaArista(u, v)
-
-FUNCIÓN ExisteCicloEnG(Grafo G)
-// Verificar si existe un ciclo en el grafo
-  Para cada nodo v en G hacer
-    Si d[v] != INFINITO Entonces
-    // Buscar un ciclo utilizando la función de búsqueda Depth First Search (DFS)
-      SI HayCiclo(v, G) Entonces
-        RETORNAR Verdadero
-      FIN SI
-    FIN SI
-  FIN PARA
-
-  RETORNAR Falso
-
-FUNCIÓN HayCiclo(nodo v, Grafo G)
-// Buscar un ciclo utilizando la función de búsqueda DFS
-  visited[v] = Verdadero
-  Para cada arista (u, v) en E hacer
-    Si u == v Entonces
-      RETORNAR Verdadero
-    FIN SI
-    Si !visited[u] Entonces
-      SI HayCiclo(u, G) Entonces
-        RETORNAR Verdadero
-      FIN SI
-  FIN PARA
-
-  RETORNAR Falso
-```
-
--   La función `NoEsConexo` verifica si el grafo es conexo.
-
--   La función `NoExisteCaminoDesdeS` verifica si existe un camino desde el nodo origen hasta el nodo destino.
-
--   La función `peso` devuelve el peso de la arista entre dos nodos.
-
--   Las funciones `ExisteCicloEnG`, `HayCiclo` y `visited` se utilizan para verificar si existe un ciclo en el grafo utilizando la función de búsqueda `DFS`.
-
-    -   `DFS` :Su funcionamiento consiste en ir expandiendo todos y cada uno de los nodos que va localizando, de forma recurrente, en un camino concreto. Cuando ya no quedan más nodos que visitar en dicho camino, regresa de modo que repite el mismo proceso con cada uno de los hermanos del nodo ya procesado.
+-   Mientras haya nodos que no han sido visitados:
+    -   Selecciona el nodo `u` con la distancia mínima desde el nodo `s` (es decir, `distancias[u]` es la menor entre todas las distancias conocidas hasta ahora).
+    -   Para cada arista `(u, v)` en el grafo que sale del nodo `u`:
+        -   Calcula la distancia `d` desde el nodo `s` al nodo `v` a través del nodo `u`: `d = distancias[u] + peso(arista (u, v))`.
+        -   Si esta distancia `d` es menor que la distancia conocida hasta ahora para el nodo `v`, actualiza:
+            -   `distancias[v] = d`
+            -   `predecesores[v] = u` (actualiza el predecesor del nodo `v` en el camino más corto desde el nodo `s`).
 
 **Referencias:**
 
@@ -770,51 +579,41 @@ FUNCIÓN HayCiclo(nodo v, Grafo G)
 
 -   colaboradores de Wikipedia (2021) Búsqueda en profundidad. <https://es.wikipedia.org/wiki/B%C3%BAsqueda_en_profundidad>.
 
+###### Implementación en Python
+
 ```{python}
-def dijkstra_algorithm(graph, start_node):
-    unvisited_nodes = list(graph.nodes)  # Cambio de metodo de nodos
+# Definir la matriz de adyacencia
+matriz = [ 
+[0, 2, 0, 0, 3], 
+[2, 0, 0, 3, 0], 
+[0, 0, 0, 2, 4], 
+[0, 0, 2, 0, 0], 
+[3, 0, 4, 0, 0]]
 
-    # We'll use this dict to save the cost of visiting each node and update it as we move along the graph   
-    shortest_path = {}
- 
-    # We'll use this dict to save the shortest known path to a node found so far
-    previous_nodes = {}
- 
-    # We'll use max_value to initialize the "infinity" value of the unvisited nodes   
-    max_value = sys.maxsize
-    for node in unvisited_nodes:
-        shortest_path[node] = max_value
-    # However, we initialize the starting node's value with 0   
-    shortest_path[start_node] = 0
-    
-    # The algorithm executes until we visit all nodes
-    while unvisited_nodes:
-        # The code block below finds the node with the lowest score
-        current_min_node = None
-        for node in unvisited_nodes: # Iterate over the nodes
-            if current_min_node == None:
-                current_min_node = node
-            elif shortest_path[node] < shortest_path[current_min_node]:
-                current_min_node = node
-                
-        # The code block below retrieves the current node's neighbors and updates their distances
-        neighbors = graph.neighbors(current_min_node)
-        for neighbor in neighbors:
-            tentative_value = shortest_path[current_min_node] + graph[current_min_node][neighbor].get('weight', 1)
-            if tentative_value < shortest_path[neighbor]:
-                shortest_path[neighbor] = tentative_value
-                # We also update the best path to the current node
-                previous_nodes[neighbor] = current_min_node
- 
-        # After visiting its neighbors, we mark the node as "visited"
-        unvisited_nodes.remove(current_min_node)
-    
-    return previous_nodes, shortest_path
+# Crear un grafo vacío
+G = nx.Graph()
 
-# Test the function
-previous_nodes, shortest_path = dijkstra_algorithm(G, 0)
-print("Previous nodes:", previous_nodes)
-print("Shortest path:", shortest_path)
+# Agregar nodos al grafo
+nodos = ['A', 'B', 'C', 'D', 'E']
+G.add_nodes_from(nodos)
+
+# Agregar aristas al grafo según la matriz de adyacencia
+for i in range(len(matriz)):
+    for j in range(i+1, len(matriz[i])):
+        if matriz[i][j] != 0:
+            G.add_edge(nodos[i], nodos[j], peso=matriz[i][j])
+
+# Imprimir información del grafo
+print("Nodos:", list(G.nodes()))
+print("Aristas con pesos:")
+for u, v, d in G.edges(data=True):
+    print(f"{u} - {v}: {d['peso']}")
+```
+
+```{python}
+pred, dist = nx.dijkstra_predecessor_and_distance(G,'C',weight = d['peso'])
+print(pred)
+print(dist)
 ```
 
 **Referencias:**\
@@ -826,42 +625,11 @@ print("Shortest path:", shortest_path)
 
 ##### Caracteristicas
 
--   **Pesos negativos:** Utilizar esta estructura de datos con Dijkstra permite el uso de este algoritmo en grafos con pesos negativos al mantener una estructura ordenada.
-
 -   **Menor complejidad temporal**: $O(V^2)$ → $O(V \log V + E)$.
 
     -   $V$ es el número de vértices en el grafo.
 
     -   $E$ es el número de aristas en el grafo.
-
-##### Pasos
-
-**Paso 1: Inicialización**
-
--   Se inicializa un montículo de Fibonacci con todos los nodos del grafo y sus respectivos pesos.
--   Se selecciona el nodo de partida (el nodo desde el que se desea encontrar la ruta más corta).
--   Se establece el peso del nodo de partida como 0, ya que es el punto de partida.
-
-**Paso 2: Buscar el nodo con el peso más bajo**
-
--   Se busca el nodo con el peso más bajo en el montículo de Fibonacci.
--   Si se encuentra un nodo con un peso menor que el peso actual del nodo de partida, se actualiza el peso del nodo de partida y se selecciona como nuevo nodo de partida.
-
-**Paso 3: Actualizar los pesos**
-
--   Se actualizan los pesos de los nodos adyacentes al nodo de partida.
--   Si un nodo tiene un peso menor que el peso actual del nodo de partida, se actualiza el peso del nodo y se selecciona como nuevo nodo de partida.
-
-**Paso 4: Repetir**
-
--   Se repite el proceso de buscar el nodo con el peso más bajo y actualizar los pesos hasta que se haya visitado todos los nodos del grafo.
--   Cuando se ha visitado todos los nodos, se ha encontrado la ruta más corta desde el nodo de partida hasta cada uno de los demás nodos.
-
-**Paso 5: Recuperar la ruta**
-
--   Se recupera la ruta más corta desde el nodo de partida hasta cada uno de los demás nodos.
--   La ruta más corta se encuentra siguiendo los nodos que tienen un peso menor que el peso del nodo anterior.
-
 
 ##### Diagrama de Flujo
 
@@ -869,123 +637,46 @@ print("Shortest path:", shortest_path)
 
 ##### Pseudocódigo con Complejidad Temporal
 
-```         
-FUNCIÓN DijkstraFibo(Grafo G, Nodo s, Nodo t)
-  // Verificar si el grafo es conexo
-  SI NoEsConexo(G) Entonces
-    RETORNAR "Error: El grafo no es conexo"
-  FIN SI
+**Algoritmo de Dijkstra con Montículo de Fibonacci**
 
-  // Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
-  SI NoExisteCaminoDesdeS(HastaT, G) Entonces
-    RETORNAR "No existe ruta entre los nodos s y t"
-  FIN SI
+**Entradas:**
 
-  // Inicializar la distancia desde el nodo origen s hasta cada nodo en el grafo
-  Para cada nodo v en G hacer
-    d[v] = INFINITO
+-   `grafo`: el grafo que se desea buscar
+-   `origen`: el nodo de origen
 
-  // Crear un montículo de Fibonacci para almacenar las distancias
-  MontículoFibonacci M
-  AgregarNodoAlMontículo(M, s, 0)
+**Salidas:**
 
-  // Iterar sobre los nodos en el montículo de Fibonacci (O(V log V))
-  Mientras M no esté vacío Hacer
-    // Extraer el nodo con la distancia más pequeña del montículo (O(log V))
-    v = ExtraerMinimoDeMontículo(M)
-    d[v] = Distancia(v, s)
+-   `distancias`: un arreglo que almacena las distancias mínimas desde el nodo de origen hasta cada uno de los nodos del grafo
+-   `predecesores`: un arreglo que almacena los predecesores de cada uno de los nodos del grafo
 
-    // Para cada arista incidente al nodo extraído (O(E))
-    Para cada arista (u, v) en E hacer
-      Si u != v Entonces
-        // Actualizar la distancia y predecesor del nodo destino según sea necesario (O(1))
-        d[u] = Distancia(u, s) + peso(u, v)
-        AgregarNodoAlMontículo(M, u, d[u])
-      FIN SI
-    FIN PARA
+**Pseudocódigo:**
 
-  // Verificar si la distancia desde el nodo s hasta el nodo t es infinita (O(V))
-  Si d[t] == INFINITO Entonces
-    RETORNAR "La distancia entre los nodos s y t es infinita"
-  FIN SI
+1.  **Iniciar**: crear un objeto vacío para almacenar las distancias (`distancias`) y los predecesores (`predecesores`)
+2.  **Insertar el nodo origen en el montículo de Fibonacci**:
+    -   Llamar a la función `insertar_en_montículo(origen, raíz)` para insertar el nodo origen en el montículo de Fibonacci (complejidad temporal $O(\log V)$)
+3.  **Iterar hasta que se encuentre el destino o se vacíe el montículo**:
+    -   Mientras el montículo no esté vacío y el nodo actual no sea el destino:
+        -   Extraer el nodo con la distancia mínima del montículo (`nodo_minimo`)
+        -   Si el nodo extraído es el destino, terminar la búsqueda
+4.  **Actualizar las distancias y predecesores**:
+    -   Para cada vecino `vecino` de `nodo_minimo` que no haya sido visitado antes:
+        -   Calcular la distancia desde el origen hasta `vecino` a través de `nodo_minimo`
+        -   Si esta distancia es menor que la distancia actual almacena en `distancias[vecino]`, actualizar `distancias[vecino]` y `predecesores[vecino]`
+5.  **Insertar los vecinos no visitados en el montículo de Fibonacci**:
+    -   Para cada vecino `vecino` de `nodo_minimo` que no haya sido visitado antes:
+        -   Llamar a la función `insertar_en_montículo(vecino, raíz)` para insertar el vecino en el montículo de Fibonacci (complejidad temporal $O(\log V)$)
+6.  **Iterar sobre las aristas del grafo**:
+    -   Para cada arista `(u, v)` en el grafo:
+        -   Si `distancias[u] + peso(u, v)` es menor que la distancia actual almacena en `distancias[v]`, actualizar `distancias[v]` y `predecesores[v]`
+7.  **Devolver**: devolver las distancias (`distancias`) y los predecesores (`predecesores`)
 
-  // Construir el camino más corto desde el nodo s hasta el nodo t utilizando el predecesor de cada nodo (O(V))
-  camino = []
-  v = t
-  Mientras v != s Hacer
-    camino.insertar al principio(v)
-    v = Predecesor(v, s)
-  FIN MIENTRAS
+**Completitud temporal:**
 
-  // Devolver el camino más corto y la distancia entre los nodos s y t (O(1))
-  RETORNAR (camino, d[t])
+La complejidad temporal total del Algoritmo de Dijkstra con Montículo de Fibonacci es:
 
-FUNCIÓN NoEsConexo(Grafo G) // O(V + E)
-  // Verificar si el grafo es conexo
-  SI ExisteCicloEnG(G) Entonces
-    RETORNAR Verdadero
-  FIN SI
+$O(V \log V + E)$
 
-  RETORNAR Falso
-
-FUNCIÓN NoExisteCaminoDesdeS(HastaT, Grafo G) // O(E)
-  // Verificar si existe un camino desde el nodo origen s hasta el nodo destino t
-  Para cada arista (u, v) en E hacer
-    Si u == s y v == t Entonces
-      RETORNAR Verdadero
-    FIN SI
-  FIN PARA
-
-  RETORNAR Falso
-
-FUNCIÓN Distancia(v, s) // O(1)
-  // Devolver la distancia desde el nodo origen s hasta el nodo v
-  RETORNAR d[v]
-
-FUNCIÓN peso(u, v) // O(1)
-  // Devolver el peso de la arista entre los nodos u y v
-  RETORNAR pesoDeLaArista(u, v)
-
-FUNCIÓN ExisteCicloEnG(Grafo G) // O(V + E)
-  // Verificar si existe un ciclo en el grafo
-  Para cada nodo v en G hacer
-    Si d[v] != INFINITO Entonces
-      // Buscar un ciclo utilizando la función de búsqueda DFS (O(V + E))
-      SI HayCiclo(v, G) Entonces
-        RETORNAR Verdadero
-      FIN SI
-    FIN SI
-  FIN PARA
-
-  RETORNAR Falso
-
-FUNCIÓN HayCiclo(nodo v, Grafo G) // O(V + E)
-  // Buscar un ciclo utilizando la función de búsqueda DFS
-  visited[v] = Verdadero
-  Para cada arista (u, v) en E hacer
-    Si u == v Entonces
-      RETORNAR Verdadero
-    FIN SI
-    Si !visited[u] Entonces
-      SI HayCiclo(u, G) Entonces
-        RETORNAR Verdadero
-      FIN SI
-  FIN PARA
-
-  RETORNAR Falso
-
-FUNCIÓN AgregarNodoAlMontículo(MontículoFibonacci M, Nodo v, Distancia d) // O(log V)
-  // Agregar un nodo al montículo de Fibonacci
-  InsertarNodoEnMontículo(M, v, d)
-
-FUNCIÓN ExtraerMinimoDeMontículo(MontículoFibonacci M) // O(log V)
-  // Extraer el nodo con la distancia más pequeña del montículo
-  RETORNAR MinimoDelMontículo(M)
-
-FUNCIÓN InsertarNodoEnMontículo(MontículoFibonacci M, Nodo v, Distancia d) // O(log V)
-  // Insertar un nodo en el montículo de Fibonacci
-  InsertarNodoEnPosiciónCorrecta(M, v, d)
-```
+donde $V$ es el número de vértices (nodos) en el grafo y $E$ es el número de aristas (edades) en el grafo.
 
 ###### Explicación del pseudocódigo
 
@@ -1015,7 +706,21 @@ FUNCIÓN InsertarNodoEnMontículo(MontículoFibonacci M, Nodo v, Distancia d) //
 
 En conclusión, la complejidad temporal del algoritmo es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo, lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
 
+###### Implementación en Python
 
+```{python}
+#%%timeit
+from scipy.sparse.csgraph import dijkstra
+# Utiliza el algoritmo de Dijkstra a través de scipy
+dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
+
+# Ruta del nodo 0 al 13
+camino = trazar_camino(predecessors, 0, 13)
+
+print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
+print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
+print('Tiempo medio de ejecución: 363 microsegundos')
+```
 
 ### Bellman Ford
 
@@ -1162,8 +867,5 @@ print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
 print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13])
 print('Tiempo de ejecución: 85 microsegundos')
 ```
-
-
-
 
 ## Elección final de Algoritmo de camino más corto
