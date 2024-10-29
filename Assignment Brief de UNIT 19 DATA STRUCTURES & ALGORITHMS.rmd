@@ -505,7 +505,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 -   La distancia del nodo C desde el nodo A no se puede calcular directamente a partir de las distancias conocidas.
 -   La distancia del nodo D desde el nodo A es la suma de la distancia del nodo B a sí mismo y la distancia del nodo B al nodo D, que es 2 + 3 = 5.
--   La distancia del nodo E desde el nodo A es la suma de la distancia del nodo A a sí mismo y la distancia del nodo A al nodo E, que es 0 + 5 = 5.
+-   La distancia del nodo E desde el nodo A es 5 ya que hay arista directa
 
 | Nodo | Distancia |
 |------|-----------|
@@ -582,7 +582,7 @@ La distancia total es 2 + 3 + 2 = 7.
 ###### Implementación en Python
 
 ```{python}
-# Definir la matriz de adyacencia
+# Defino la matriz de adyacenncia utilizada en el ejemplo
 matriz = [ 
 [0, 2, 0, 0, 5], 
 [2, 0, 0, 3, 0], 
@@ -605,20 +605,13 @@ for i in range(len(matriz)):
 ```
 
 ```{python}
-print('El camino más corto es: ',nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra'))
-print('La distancia total es: ', nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra'))
+print("Camino más corto: ",nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra'))
+
+print("Distancia: ",nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra'))
 
 ```
 
 **Referencias:**
-
--   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
-
--   colaboradores de Wikipedia (2024) Algoritmo de Dijkstra. <https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra>.
-
--   Tuychiev, B. (2024) Implementing the Dijkstra Algorithm in Python: A Step-by-Step Tutorial. <https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python>.
-
--   colaboradores de Wikipedia (2021) Búsqueda en profundidad. <https://es.wikipedia.org/wiki/B%C3%BAsqueda_en_profundidad>.
 
 -   *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
 
