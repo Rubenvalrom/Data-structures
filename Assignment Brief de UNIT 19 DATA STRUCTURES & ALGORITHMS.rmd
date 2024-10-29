@@ -25,28 +25,38 @@ Al realizar este trabajo sobre algoritmos de camino más corto, podría encontra
 En este proyecto se han utilizado diversas herramientas y lenguajes de programación para abordar el problema de encontrar caminos más cortos en grafos. A continuación, se presenta una justificación técnica de las herramientas y lenguajes empleados:
 
 1.  **Python**:
+
     -   **Bibliotecas Especializadas**: Python cuenta con una amplia gama de bibliotecas especializadas para el análisis y manipulación de grafos, como `networkx`, `numpy`, `scipy`, y `matplotlib`, que simplifican el desarrollo y la visualización de soluciones.
+
 2.  **NetworkX**:
-    -   **Manipulación de Grafos**: `networkx` es una biblioteca de Python diseñada para la creación, manipulación y estudio de la estructura, dinámica y funciones de grafos complejos. Permite una fácil implementación y análisis de grafos.
+
+    -   **Manipulación de Grafos**: es una biblioteca diseñada para la creación, manipulación y estudio de la estructura, dinámica y funciones de grafos complejos. Permite una fácil implementación y análisis de grafos.
     -   **Algoritmos Integrados**: Proporciona una variedad de algoritmos integrados para el análisis de grafos, incluyendo algoritmos de caminos más cortos, lo que facilita la implementación y comparación de diferentes métodos.
+
 3.  **NumPy**:
+
     -   **Eficiencia Computacional**: `numpy` es una biblioteca fundamental para la computación científica en Python. Proporciona soporte para arrays y matrices multidimensionales, junto con una colección de funciones matemáticas de alto nivel para operar con estos arrays.
     -   **Manejo de Datos**: Facilita el manejo y la manipulación eficiente de grandes conjuntos de datos, lo cual es crucial para el análisis de grafos y la implementación de algoritmos de caminos más cortos.
+
 4.  **SciPy**:
-    -   **Algoritmos Avanzados**: `scipy` es una biblioteca de Python utilizada para la computación científica y técnica. Incluye módulos para la optimización, álgebra lineal, integración, interpolación, funciones especiales, y más.
-    -   **Algoritmos de Grafos**: Proporciona implementaciones eficientes de algoritmos de caminos más cortos, como Dijkstra, Bellman-Ford, Johnson y Floyd-Warshall, lo que permite comparar el rendimiento y la eficiencia de diferentes métodos.
+
+    -   **Algoritmos Avanzados**: es una biblioteca utilizada para la computación científica y técnica. Incluye módulos para la optimización, álgebra lineal, integración, interpolación, funciones especiales, y más.
+    -   **Algoritmos de Grafos**: al igual que NetworkX proporciona implementaciones eficientes de algoritmos de caminos más cortos, como Dijkstra, Bellman-Ford, Johnson y Floyd-Warshall, lo que permite comparar el rendimiento y la eficiencia de diferentes métodos.
+
 5.  **Matplotlib**:
+
     -   **Visualización de Grafos**: `matplotlib` es una biblioteca de Python utilizada para crear visualizaciones estáticas, animadas e interactivas. Se ha utilizado para visualizar los grafos y sus propiedades de manera clara y comprensible.
     -   **Flexibilidad y Personalización**: Permite una gran flexibilidad y personalización en la creación de gráficos, lo que facilita la representación visual de los resultados del análisis de grafos.
-6.  **Visual Studio Code**:
-    -   **Entorno de Desarrollo Integrado (IDE)**: Visual Studio Code es un editor de código fuente desarrollado por Microsoft. Ofrece soporte para la depuración, control de versiones, y una amplia gama de extensiones que mejoran la productividad.
-    -   **Facilidad de Uso**: Su interfaz intuitiva y personalizable facilita el desarrollo y la gestión de proyectos de programación, incluyendo aquellos que involucran análisis de grafos y algoritmos complejos.
-7.  **Jupyter Notebook (Dentro de VSCode)**:
-    -   **Documentación y Reproducibilidad**: Facilita la documentación del flujo de trabajo y la reproducibilidad de los experimentos, permitiendo a otros investigadores seguir y replicar los resultados obtenidos.
-8.  **Scribbr Citation Generator**:
+
+6.  **Scribbr Citation Generator**:
+
     -   **Generación de Citas y Referencias**: Scribbr Citation Generator es una herramienta en línea que facilita la creación de citas y referencias, en este caso Harvard.
-9.  **RStudio**:
-    -   **Exportación**: Permite la creación de documentos `HTML` con tabla de contenidos de manera que el usuario puede navegar por el documento con facilidad. Además permite exportarlo a PDF aunque esto empeora la experiencia del usuario.
+
+7.  **RStudio**:
+
+    -   **Documentación y Reproducibilidad**: Facilita la documentación del flujo de trabajo y ofrece un entorno de desarrollo el cual incluye una consola, editor de sintaxis que apoya la ejecución de código, así como herramientas para el trazado, la depuración y la gestión del espacio de trabajo.
+
+    -   **Exportación**: Permite la creación de documentos `HTML` con tabla de contenidos de aportando muchas opciones de customización pudiendo así facilitar la lectura. Además permite exportarlo a PDF aunque esto empeora la experiencia del usuario.
 
 ## Tipos de datos básicos empleados en el proyecto
 
@@ -495,7 +505,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 -   La distancia del nodo C desde el nodo A no se puede calcular directamente a partir de las distancias conocidas.
 -   La distancia del nodo D desde el nodo A es la suma de la distancia del nodo B a sí mismo y la distancia del nodo B al nodo D, que es 2 + 3 = 5.
--   La distancia del nodo E desde el nodo A sigue siendo infinita, ya que no hay arista directa entre los nodos B y E.
+-   La distancia del nodo E desde el nodo A es la suma de la distancia del nodo A a sí mismo y la distancia del nodo A al nodo E, que es 0 + 5 = 5.
 
 | Nodo | Distancia |
 |------|-----------|
@@ -503,17 +513,17 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 | B    | 2         |
 | C    | ∞         |
 | D    | 5         |
-| E    | ∞         |
+| E    | 5         |
 
 **Paso 4: Selección del nodo con la distancia más pequeña**
 
--   El nodo con la distancia más pequeña desde el nodo A sigue siendo el nodo B, con una distancia de 2.
+-   El nodo con la distancia más pequeña desde el nodo A es el nodo B, con una distancia de 2.
 -   Agregamos el nodo B al conjunto de nodos visitados (V = {B}).
 
 **Paso 5: Actualización de distancias**
 
 -   La distancia del nodo C desde el nodo A es la suma de la distancia del nodo D a sí mismo y la distancia del nodo D al nodo C, que es ∞ + 2 = 2.
--   La distancia del nodo E desde el nodo A sigue siendo infinita.
+-   La distancia del nodo E desde el nodo A sigue siendo 5.
 
 | Nodo | Distancia |
 |------|-----------|
@@ -521,7 +531,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 | B    | 2         |
 | C    | 2         |
 | D    | 5         |
-| E    | ∞         |
+| E    | 5         |
 
 **Paso 6: Selección del nodo con la distancia más pequeña**
 
@@ -569,16 +579,6 @@ La distancia total es 2 + 3 + 2 = 7.
             -   `distancias[v] = d`
             -   `predecesores[v] = u` (actualiza el predecesor del nodo `v` en el camino más corto desde el nodo `s`).
 
-**Referencias:**
-
--   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
-
--   colaboradores de Wikipedia (2024) Algoritmo de Dijkstra. <https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra>.
-
--   Tuychiev, B. (2024) Implementing the Dijkstra Algorithm in Python: A Step-by-Step Tutorial. <https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python>.
-
--   colaboradores de Wikipedia (2021) Búsqueda en profundidad. <https://es.wikipedia.org/wiki/B%C3%BAsqueda_en_profundidad>.
-
 ###### Implementación en Python
 
 ```{python}
@@ -602,28 +602,39 @@ for i in range(len(matriz)):
     for j in range(i+1, len(matriz[i])):
         if matriz[i][j] != 0:
             G.add_edge(nodos[i], nodos[j], peso=matriz[i][j])
-
-# Imprimir información del grafo
-print("Nodos:", list(G.nodes()))
-print("Aristas con pesos:")
-for u, v, d in G.edges(data=True):
-    print(f"{u} - {v}: {d['peso']}")
 ```
 
 ```{python}
-nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra')
-nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra')
+print('El camino más corto es: ',nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra'))
+print('La distancia total es: ', nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra'))
 
 ```
 
-**Referencias:**\
-- Klochay, A. (2022) Implementing Dijkstra’s algorithm in Python. <https://www.udacity.com/blog/2021/10/implementing-dijkstras-algorithm-in-python.html>
+**Referencias:**
 
-*Nota: tuve que cambiar la función original para obtener los nodos por la que utiliza `NetworkX` actualmente*
+-   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
+
+-   colaboradores de Wikipedia (2024) Algoritmo de Dijkstra. <https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra>.
+
+-   Tuychiev, B. (2024) Implementing the Dijkstra Algorithm in Python: A Step-by-Step Tutorial. <https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python>.
+
+-   colaboradores de Wikipedia (2021) Búsqueda en profundidad. <https://es.wikipedia.org/wiki/B%C3%BAsqueda_en_profundidad>.
+
+-   *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
+
+-   *shortest_path_length — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path_length.html#networkx.algorithms.shortest_paths.generic.shortest_path_length.>
 
 #### Implementación de Dijkstra en Montículos de Fibonacci
 
-##### Caracteristicas
+El algoritmo de Dijkstra es un método eficiente para encontrar el camino más corto entre dos nodos en un grafo ponderado. Sin embargo, cuando se trata con grandes conjuntos de datos, la complejidad del algoritmo puede aumentar significativamente debido a la necesidad de mantener una cola de prioridades ordenada.
+
+**Implementación en el Algoritmo de Dijkstra**
+
+Para implementar montículos de Fibonacci en el algoritmo de Dijkstra, podemos utilizarlos para mantener la cola de nodos a visitar. En lugar de utilizar una cola estándar, utilizamos un montículo de Fibonacci que ordena los nodos según su distancia estimada (distancia mínima conocida hasta ese punto).
+
+**Ventajas**
+
+La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrece varias ventajas:
 
 -   **Menor complejidad temporal**: $O(V^2)$ → $O(V \log V + E)$.
 
@@ -631,9 +642,11 @@ nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkst
 
     -   $E$ es el número de aristas en el grafo.
 
+-   **Reduce la memoria**: Utiliza menos memoria que una cola estándar, ya que solo se necesitan mantener los nodos en el montículo.
+
 ##### Diagrama de Flujo
 
-![](imagenes/Diagrama%20de%20flujo%20Dijkstra%20Fibo.png)
+![![]()](imagenes/Diagrama%20de%20flujo%20Dijkstra%20Fibo.png)
 
 ##### Pseudocódigo con Complejidad Temporal
 
@@ -672,39 +685,7 @@ nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkst
 
 **Completitud temporal:**
 
-La complejidad temporal total del Algoritmo de Dijkstra con Montículo de Fibonacci es:
-
-$O(V \log V + E)$
-
-donde $V$ es el número de vértices (nodos) en el grafo y $E$ es el número de aristas (edades) en el grafo.
-
-###### Explicación del pseudocódigo
-
-1.  **Verificar si el grafo es conexo**: La función `NoEsConexo(G)` verifica si el grafo es conexo utilizando la función `ExisteCicloEnG(G)`, que busca un ciclo en el grafo mediante una búsqueda DFS. Si se encuentra un ciclo, el grafo no es conexo y la función devuelve un error.
-
-2.  **Verificar si existe un camino desde el nodo origen s hasta el nodo destino t**: La función `NoExisteCaminoDesdeS(HastaT, G)` recorre todas las aristas del grafo para verificar si existe un camino desde el nodo origen s hasta el nodo destino t. Si no existe un camino, la función devuelve un mensaje de error.
-
-3.  **Inicializar distancias y crear montículo de Fibonacci**: La función inicializa las distancias desde el nodo origen s hasta cada nodo en el grafo con valor infinito, excepto para el nodo s que se establece en 0. Luego, crea un montículo de Fibonacci y agrega el nodo s con distancia 0 al montículo.
-
-4.  **Iterar sobre los nodos del montículo**: La función itera sobre los nodos en el montículo de Fibonacci utilizando la función `ExtraerMinimoDeMontículo(M)` para extraer el nodo con la distancia más pequeña. Este proceso se repite hasta que el montículo esté vacío.
-
-5.  **Actualizar distancias y predecesores**: Para cada arista incidente al nodo extraído, la función actualiza la distancia y predecesor del nodo destino según sea necesario.
-
-6.  **Construir camino más corto**: Finalmente, la función verifica si la distancia desde el nodo s hasta el nodo t es infinita y devuelve un mensaje de error si es así. De lo contrario, construye el camino más corto desde el nodo s hasta el nodo t utilizando el predecesor de cada nodo.
-
-7.  **Devolver camino más corto y distancia**: La función devuelve el camino más corto y la distancia entre los nodos s y t.
-
-###### Análisis de la complejidad temporal:
-
--   La función `NoEsConexo(G)` tiene una complejidad temporal de $O(V + E)$ porque utiliza la función `ExisteCicloEnG(G)`, que busca un ciclo en el grafo mediante una búsqueda DFS.
--   La función `NoExisteCaminoDesdeS(HastaT, G)` tiene una complejidad temporal de $O(E)$ porque recorre todas las aristas del grafo para verificar si existe un camino desde el nodo origen s hasta el nodo destino t.
--   Las funciones `Distancia(v, s)` y `peso(u, v)` tienen ambas una complejidad temporal de $O(1)$ porque solo devuelven valores precalculados.
--   La función `ExisteCicloEnG(G)` tiene una complejidad temporal de $O(V + E)$ porque utiliza la función de búsqueda DFS para buscar un ciclo en el grafo.
--   La función `HayCiclo(nodo v, Grafo G)` tiene una complejidad temporal de $O(V + E)$ porque utiliza la función de búsqueda DFS para buscar un ciclo en el subgrafo inducido por el nodo v.
--   Las funciones `AgregarNodoAlMontículo(MontículoFibonacci M, Nodo v, Distancia d)` y `ExtraerMinimoDeMontículo(MontículoFibonacci M)` tienen ambas una complejidad temporal de $O(\log V)$ porque utilizan el montículo de Fibonacci para insertar y extraer nodos.
--   La función `InsertarNodoEnPosiciónCorrecta(M, v, d)` tiene una complejidad temporal de $O(\log V)$ porque utiliza el montículo de Fibonacci para insertar un nodo en la posición correcta.
-
-En conclusión, la complejidad temporal del algoritmo es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo, lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
+Es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo, lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
 
 ###### Implementación en Python
 
@@ -719,7 +700,6 @@ camino = trazar_camino(predecessors, 0, 13)
 
 print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
 print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo medio de ejecución: 363 microsegundos')
 ```
 
 ### Bellman Ford
@@ -777,7 +757,6 @@ camino = trazar_camino(predecessors, 0, 13)
 
 print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
 print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo de ejecución: 163 microsegundos')
 ```
 
 ### Johnson
@@ -820,7 +799,6 @@ camino = trazar_camino(predecessors, 0, 13)
 
 print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
 print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
-print('Tiempo de ejecución: 435 microsegundos')
 ```
 
 ### Floyd-Warshall
@@ -852,7 +830,6 @@ Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall)
 -   floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
 
 ```{python}
-#%%timeit
 from scipy.sparse.csgraph import floyd_warshall
 
 #Utiliza el algoritmo de Floyd-Warshall a través de scipy
@@ -865,7 +842,6 @@ camino = trazar_camino(predecessors[0], 0, 13)
 
 print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
 print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13])
-print('Tiempo de ejecución: 85 microsegundos')
 ```
 
 ## Elección final de Algoritmo de camino más corto
