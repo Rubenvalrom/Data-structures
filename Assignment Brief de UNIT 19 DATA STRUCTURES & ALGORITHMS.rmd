@@ -170,7 +170,7 @@ matriz_adyacencia[matriz_adyacencia == 1] = np.random.randint(1, 5, size=np.coun
 matriz_adyacencia[matriz_adyacencia == 0] = np.random.randint(10, 110, size=np.count_nonzero(matriz_adyacencia == 0))
 matriz_adyacencia[matriz_adyacencia > 20] = 0
 np.fill_diagonal(matriz_adyacencia, 0)
-print(matriz_adyacencia)
+
 matriz_adyacencia = csr_matrix(matriz_adyacencia)
 
 # Crear un grafo desde la matriz de adyacencia
@@ -582,33 +582,9 @@ La distancia total es 2 + 3 + 2 = 7.
 ###### Implementación en Python
 
 ```{python}
-# Defino la matriz de adyacenncia utilizada en el ejemplo
-matriz = [ 
-[0, 2, 0, 0, 5], 
-[2, 0, 0, 3, 0], 
-[0, 0, 0, 2, 4], 
-[0, 0, 2, 0, 0], 
-[5, 0, 4, 0, 0]]
+print("Camino más corto: ",nx.shortest_path(G, source=0, target=13, weight='weight', method='dijkstra'))
 
-# Crear un grafo vacío
-G = nx.Graph()
-
-# Agregar nodos al grafo
-nodos = ['A', 'B', 'C', 'D', 'E']
-G.add_nodes_from(nodos)
-
-# Agregar aristas al grafo según la matriz de adyacencia
-for i in range(len(matriz)):
-    for j in range(i+1, len(matriz[i])):
-        if matriz[i][j] != 0:
-            G.add_edge(nodos[i], nodos[j], peso=matriz[i][j])
-```
-
-```{python}
-print("Camino más corto: ",nx.shortest_path(G, source='A', target='C', weight='peso', method='dijkstra'))
-
-print("Distancia: ",nx.shortest_path_length(G, source='A', target='C', weight='peso', method='dijkstra'))
-
+print("Distancia: ",nx.shortest_path_length(G, source=0, target=13, weight='weight', method='dijkstra'))
 ```
 
 **Referencias:**
@@ -676,17 +652,17 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
         -   Si `distancias[u] + peso(u, v)` es menor que la distancia actual almacena en `distancias[v]`, actualizar `distancias[v]` y `predecesores[v]`
 7.  **Devolver**: devolver las distancias (`distancias`) y los predecesores (`predecesores`)
 
-**Completitud temporal:**
+**Complejidad temporal:**
 
-Es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo, lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
+Es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo ($V$), lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
 
 ###### Implementación en Python
 
 ```{python}
-#%%timeit
 from scipy.sparse.csgraph import dijkstra
+
 # Utiliza el algoritmo de Dijkstra a través de scipy
-dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
+dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False,indices = 0, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors, 0, 13)
@@ -701,7 +677,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
 2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O[N(N^2 k)]$, donde $k$ es el número promedio de aristas conectadas por nodo.
+3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O[V(V^2 E)]$
 4.  **Detección de Ciclos Negativos**: Puede detectar la presencia potencial de ciclos de peso negativo en el grafo.
 5.  **Distancias Mínimas**: Calcula las distancias mínimas desde un nodo origen a todos los demás nodos, siempre y cuando no haya ciclos de peso negativo.
 
@@ -732,7 +708,9 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 -   Si no se detecta ningún ciclo negativo después de $V-1$ iteraciones de relaxación de aristas más una última revisión, el algoritmo ha encontrado las distancias mínimas desde el nodo origen a todos los demás nodos en el grafo.
 -   Las distancias mínimas están almacenadas en la matriz de distancias, que es una tabla que contiene la distancia mínima desde el nodo origen a cada vértice en el grafo.
 
-**Referencias:** - Jariasf (2013) CAMINO MAS CORTO: ALGORITMO DE BELLMAN-FORD. <https://jariasf.wordpress.com/2013/01/01/camino-mas-corto-algoritmo-de-bellman-ford/>.
+**Referencias:**
+
+-   Jariasf (2013) CAMINO MAS CORTO: ALGORITMO DE BELLMAN-FORD. <https://jariasf.wordpress.com/2013/01/01/camino-mas-corto-algoritmo-de-bellman-ford/>.
 
 -   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
 
@@ -757,10 +735,9 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 #### Características:
 
 1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos y no dirigidos.
-2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(V^2 \log V + VE)$, donde $V$ es el número de vértices y $E$ es el número de aristas.
-4.  **Distancias Mínimas**: Calcula las distancias mínimas entre todos los pares de nodos en el grafo.
-5.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas.
+2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.\
+3.  **Complejidad Temporal**: $O(V^2 \log V + VE)$\
+4.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas.
 
 #### Pasos:
 
@@ -785,7 +762,7 @@ Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
 from scipy.sparse.csgraph import johnson
 
 #Utiliza el algoritmo de Johnson a través de scipy
-dist_matrix, predecessors = johnson(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
+dist_matrix, predecessors = johnson(matriz_adyacencia ,directed=False, indices=0, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors, 0, 13)
@@ -798,11 +775,9 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 #### Características:
 
-1.  **Aplicabilidad**: El algoritmo de Floyd-Warshall se aplica a grafos dirigidos y no dirigidos.
+1.  **Aplicabilidad**: Se aplica a grafos dirigidos y no dirigidos.
 2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(V^3)$, donde $V$ es el número de vértices.
-4.  **Distancias Mínimas**: Calcula las distancias mínimas entre todos los pares de nodos en el grafo.
-5.  **Simplicidad**: Es un algoritmo sencillo de implementar y entender.
+3.  **Complejidad Temporal**: $O(V^3)$
 
 #### Pasos:
 
@@ -828,7 +803,7 @@ from scipy.sparse.csgraph import floyd_warshall
 #Utiliza el algoritmo de Floyd-Warshall a través de scipy
 #Nota: Este algoritmo no permite calcular la distancia eligiendo un nodo de inicio
 
-dist_matrix, predecessors = floyd_warshall(matriz_adyacencia, directed=False, return_predecessors=True)
+dist_matrix, predecessors = floyd_warshall(matriz_adyacencia, unweighted=False, directed=False, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors[0], 0, 13)
