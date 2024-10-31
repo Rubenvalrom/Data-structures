@@ -428,13 +428,13 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 #### Dijkstra
 
-##### Características:
+##### Características
 
 1.  **Aplicabilidad**: Funciona en grafos dirigidos y no dirigidos.
 2.  **Pesos Positivos**: Solo funciona con grafos que tienen pesos no negativos en las aristas.
 3.  **Complejidad Temporal**: $O(V^2)$, donde $V$ es el número de vértices en el grafo.
 
-##### Pasos:
+##### Pasos
 
 1.  **Inicialización**:
 
@@ -479,11 +479,11 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 |       |  A  |  B  |  C  |  D  |  E  |
 |:-----:|:---:|:---:|:---:|:---:|:---:|
-| **A** | \-  |  2  | \-  | \-  |  5  |
-| **B** |  2  | \-  | \-  |  3  | \-  |
-| **C** | \-  | \-  | \-  |  2  |  4  |
-| **D** | \-  |  3  |  2  | \-  | \-  |
-| **E** |  5  | \-  |  4  | \-  | \-  |
+| **A** |  0  |  2  |  ∞  |  ∞  |  5  |
+| **B** |  2  |  0  |  ∞  |  3  |  ∞  |
+| **C** |  ∞  |  ∞  |  0  |  2  |  4  |
+| **D** |  ∞  |  3  |  2  |  0  |  ∞  |
+| **E** |  5  |  ∞  |  4  |  ∞  |  0  |
 
 **Paso 1: Inicialización**
 
@@ -634,7 +634,7 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
 -   `distancias`: un arreglo que almacena las distancias mínimas desde el nodo de origen hasta cada uno de los nodos del grafo
 -   `predecesores`: un arreglo que almacena los predecesores de cada uno de los nodos del grafo
 
-**Pseudocódigo:**
+**Pseudocódigo**
 
 1.  **Iniciar**: crear un objeto vacío para almacenar las distancias (`distancias`) y los predecesores (`predecesores`)
 2.  **Insertar el nodo origen en el montículo de Fibonacci**:
@@ -655,7 +655,7 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
         -   Si `distancias[u] + peso(u, v)` es menor que la distancia actual almacena en `distancias[v]`, actualizar `distancias[v]` y `predecesores[v]`
 7.  **Devolver**: devolver las distancias (`distancias`) y los predecesores (`predecesores`)
 
-**Complejidad temporal:**
+**Complejidad temporal**
 
 Es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo ($V$), lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
 
@@ -676,7 +676,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ### Bellman Ford
 
-#### Características:
+#### Características
 
 1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
 2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
@@ -684,7 +684,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 4.  **Detección de Ciclos Negativos**: Puede detectar la presencia potencial de ciclos de peso negativo en el grafo.
 5.  **Distancias Mínimas**: Calcula las distancias mínimas desde un nodo origen a todos los demás nodos, siempre y cuando no haya ciclos de peso negativo.
 
-#### Pasos:
+#### Pasos
 
 **1: Inicialización**
 
@@ -711,7 +711,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 -   Si no se detecta ningún ciclo negativo después de $V-1$ iteraciones de relaxación de aristas más una última revisión, el algoritmo ha encontrado las distancias mínimas desde el nodo origen a todos los demás nodos en el grafo.
 -   Las distancias mínimas están almacenadas en la matriz de distancias, que es una tabla que contiene la distancia mínima desde el nodo origen a cada vértice en el grafo.
 
-**Referencias:**
+**Referencias**
 
 -   Jariasf (2013) CAMINO MAS CORTO: ALGORITMO DE BELLMAN-FORD. <https://jariasf.wordpress.com/2013/01/01/camino-mas-corto-algoritmo-de-bellman-ford/>.
 
@@ -719,7 +719,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 -   bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
 
-#### Ejemplo:
+#### Ejemplo
 
 Supongamos que tenemos el siguiente grafo con 5 nodos:
 
@@ -848,7 +848,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ### Johnson
 
-#### Características:
+#### Características
 
 1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos **sin ciclos negativos**. Puede manejar grafos no dirigidos transformándolos en dirigidos duplicando las aristas.
 2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
@@ -856,7 +856,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 4.  **Complejidad Espacial**: $O(V^2 + VE)$. Esto se debe a la necesidad de almacenar la matriz de distancias y los pesos reponderados.
 5.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas desde cada vértice.
 
-#### Pasos:
+#### Pasos
 
 1.  **Añadir nuevo nodo**: Primero se añade un nuevo nodo $q$ al grafo, conectado a cada uno de los nodos del grafo por una arista de peso cero.
 2.  **Ejecutar Bellman-Ford**: En segundo lugar, se utiliza el algoritmo de Bellman-Ford, empezando por el nuevo vértice $q$, para determinar para cada vértice $v$ el peso mínimo $h(v)$ del camino de $q$ a $v$. Si en este paso se detecta un ciclo negativo, el algoritmo concluye.
@@ -865,7 +865,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ![Johnson Algorithm](./imagenes/AlgJohnsonImg.png) Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
 
-#### Ejemplo:
+#### Ejemplo
 
 Supongamos que tenemos el siguiente grafo con 4 nodos:
 
@@ -965,14 +965,14 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ### Floyd-Warshall
 
-#### Características:
+#### Características
 
 1.  **Aplicabilidad**: Se aplica a grafos dirigidos y no dirigidos.
 2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
 3.  **Complejidad Temporal**: $O(V^3)$, donde $V$ es el número de vértices.
 4.  **Complejidad Espacial**: $O(V^2)$, debido a la matriz de distancias.
 
-#### Pasos:
+#### Pasos
 
 1.  **Inicialización**
     -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`. Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si existe, de lo contrario es infinito. La distancia de un nodo a sí mismo es 0.
@@ -983,7 +983,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 4.  **Detección de Ciclos Negativos**
     -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo contiene un ciclo de peso negativo.
 
-#### Ejemplo:
+#### Ejemplo
 
 Supongamos que tenemos el siguiente grafo con 4 nodos:
 
@@ -1071,7 +1071,7 @@ Supongamos que tenemos el siguiente grafo con 4 nodos:
     -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo contiene un ciclo de peso negativo.
         -   En este caso todas las distancias son positivas por lo que no hay ciclos negativos.
 
-#### Implementación en Python:
+#### Implementación en Python
 
 <img src="./imagenes/Floyd-Warshall-Algorithm-Problem.png" width="700"/>
 
@@ -1098,3 +1098,13 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13
 ```
 
 ## Elección final de Algoritmo de camino más corto
+
+He elegido el algoritmo de Dijkstra con Monticulos de Fibonacci.
+
+**Razones:**
+
+1. **Eficiencia**: El algoritmo de Dijkstra es muy eficiente para grafos con pesos positivos. Su complejidad temporal es $O(V \log V + E)$, lo que lo hace adecuado para grafos grandes.
+
+2. **Optimización**: Dijkstra está específicamente optimizado para encontrar la ruta más corta desde un solo origen a un solo destino, lo que se ajusta perfectamente al problema de encontrar la ruta más corta en un mapa.
+
+3. **Uso de Pesos Positivos**: Dado que el grafo solo tiene pesos positivos, Dijkstra es ideal ya que está diseñado para manejar este tipo de grafos sin problemas.
