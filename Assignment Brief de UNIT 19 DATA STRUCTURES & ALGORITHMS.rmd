@@ -171,6 +171,7 @@ matriz_adyacencia[matriz_adyacencia == 0] = np.random.randint(10, 110, size=np.c
 matriz_adyacencia[matriz_adyacencia > 20] = 0
 np.fill_diagonal(matriz_adyacencia, 0)
 
+# Cambio el formato de la matriz de adyacencia a una matriz dispersa en formato CSR
 matriz_adyacencia = csr_matrix(matriz_adyacencia)
 
 # Crear un grafo desde la matriz de adyacencia
@@ -180,10 +181,9 @@ G = nx.from_numpy_array(matriz_adyacencia.toarray())
 
 fig = plt.figure(figsize=(9, 5))
 
-
-
 # Número de nodos
 num_nodos = len(G.nodes)
+
 # Calcular las posiciones en forma de elipse
 pos = {}
 for i in range(num_nodos):
@@ -193,13 +193,16 @@ for i in range(num_nodos):
     pos[i] = (x, y)
     
 # Dibujar nodos y aristas
-nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=1500, font_size=20)
+nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='darkgrey', node_size=1500, font_size=20)
 fig.set_facecolor('#e5e5e5')
 # Obtener los pesos de las aristas
 edge_labels = nx.get_edge_attributes(G, 'weight')
 
+# Apesar de no tener decimales salen como n.0, los paso a enteros para quitarlo
+edge_labels = {key: int(value) for key, value in edge_labels.items()}
+
 # Dibujar los pesos de las aristas
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='darkblue', font_size=7)
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,font_color='black', font_size=7,bbox=dict(facecolor='#e5e5e5', edgecolor='darkgrey', boxstyle='round,pad=0.5'))
 plt.show()
 ```
 
@@ -468,7 +471,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
     -   Si el nodo destino ha sido marcado como visitado o si la distancia más pequeña entre los nodos no visitados es infinita, el algoritmo termina.
     -   De lo contrario, selecciona el nodo no visitado con la distancia más pequeña, establece este nodo como el nuevo nodo actual y repite el proceso.\
         ![Dijkstra Animation](imagenes/Dijkstra_Animation.gif)\
-        Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra) **Ejemplo**
+        Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra)
 
 **Ejemplo**
 
@@ -677,7 +680,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
 2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
-3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O[V(V^2 E)]$
+3.  **Complejidad Temporal**: Tiene una complejidad temporal de $O(VE)$
 4.  **Detección de Ciclos Negativos**: Puede detectar la presencia potencial de ciclos de peso negativo en el grafo.
 5.  **Distancias Mínimas**: Calcula las distancias mínimas desde un nodo origen a todos los demás nodos, siempre y cuando no haya ciclos de peso negativo.
 
@@ -716,6 +719,119 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 -   bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
 
+#### Ejemplo:
+
+Supongamos que tenemos el siguiente grafo con 5 nodos:
+
+|       |  A  |  B  |  C  |  D  |  E  |
+|:-----:|:---:|:---:|:---:|:---:|:---:|
+| **A** |  0  |  6  |  ∞  |  7  |  ∞  |
+| **B** |  ∞  |  0  |  5  |  8  | -4  |
+| **C** |  ∞  | -2  |  0  |  ∞  |  ∞  |
+| **D** |  ∞  |  ∞  | -3  |  0  |  9  |
+| **E** |  2  |  ∞  |  7  |  ∞  |  0  |
+
+1.  **Inicialización**:
+
+    -   Establecer la distancia al nodo origen (A) como 0 y a todos los demás nodos como infinito.
+    -   Inicializar la matriz de distancias y predecesores.
+
+    | Nodo | Distancia | Predecesor |
+    |------|-----------|------------|
+    | A    | 0         | \-         |
+    | B    | ∞         | \-         |
+    | C    | ∞         | \-         |
+    | D    | ∞         | \-         |
+    | E    | ∞         | \-         |
+
+2.  **Relajación de aristas**:
+
+    -   Repetir el proceso de relajación para cada arista $V-1$ veces (4 veces en este caso).
+
+    **Iteración 1**:
+
+    -   Relajar arista (A, B): `dist[B] = min(∞, 0 + 6) = 6`
+    -   Relajar arista (A, D): `dist[D] = min(∞, 0 + 7) = 7`
+    -   Relajar arista (B, C): `dist[C] = min(∞, 6 + 5) = 11`
+    -   Relajar arista (B, E): `dist[E] = min(∞, 6 - 4) = 2`
+    -   Relajar arista (C, B): `dist[B] = min(6, 11 - 2) = 9`
+    -   Relajar arista (D, C): `dist[C] = min(11, 7 - 3) = 4`
+    -   Relajar arista (E, A): `dist[A] = min(0, 2 + 2) = 0`
+
+    | Nodo | Distancia | Predecesor |
+    |------|-----------|------------|
+    | A    | 0         | \-         |
+    | B    | 6         | A          |
+    | C    | 4         | D          |
+    | D    | 7         | A          |
+    | E    | 2         | B          |
+
+    **Iteración 2**:
+
+    -   Relajar arista (B, C): `dist[C] = min(4, 6 + 5) = 4`
+    -   Relajar arista (B, E): `dist[E] = min(2, 6 - 4) = 2`
+    -   Relajar arista (C, B): `dist[B] = min(6, 4 - 2) = 2`
+    -   Relajar arista (D, C): `dist[C] = min(4, 7 - 3) = 4`
+    -   Relajar arista (E, A): `dist[A] = min(0, 2 + 2) = 0`
+
+    | Nodo | Distancia | Predecesor |
+    |------|-----------|------------|
+    | A    | 0         | \-         |
+    | B    | 2         | C          |
+    | C    | 4         | D          |
+    | D    | 7         | A          |
+    | E    | 2         | B          |
+
+    **Iteración 3**:
+
+    -   Relajar arista (B, C): `dist[C] = min(4, 2 + 5) = 4`
+    -   Relajar arista (B, E): `dist[E] = min(2, 2 - 4) = -2`
+    -   Relajar arista (C, B): `dist[B] = min(2, 4 - 2) = 2`
+    -   Relajar arista (D, C): `dist[C] = min(4, 7 - 3) = 4`
+    -   Relajar arista (E, A): `dist[A] = min(0, -2 + 2) = 0`
+
+    | Nodo | Distancia | Predecesor |
+    |------|-----------|------------|
+    | A    | 0         | \-         |
+    | B    | 2         | C          |
+    | C    | 4         | D          |
+    | D    | 7         | A          |
+    | E    | -2        | B          |
+
+    **Iteración 4**:
+
+    -   Relajar arista (B, C): `dist[C] = min(4, 2 + 5) = 4`
+    -   Relajar arista (B, E): `dist[E] = min(-2, 2 - 4) = -2`
+    -   Relajar arista (C, B): `dist[B] = min(2, 4 - 2) = 2`
+    -   Relajar arista (D, C): `dist[C] = min(4, 7 - 3) = 4`
+    -   Relajar arista (E, A): `dist[A] = min(0, -2 + 2) = 0`
+
+    | Nodo | Distancia | Predecesor |
+    |------|-----------|------------|
+    | A    | 0         | \-         |
+    | B    | 2         | C          |
+    | C    | 4         | D          |
+    | D    | 7         | A          |
+    | E    | -2        | B          |
+
+3.  **Detección de ciclos negativos**:
+
+    -   Revisar todas las aristas una vez más para detectar ciclos negativos. Si se puede relajar alguna arista, entonces hay un ciclo negativo.
+
+4.  **Resultado**:
+
+    -   La matriz de distancias mínimas desde el nodo origen (A) a todos los demás nodos es:
+
+    | Nodo | Distancia | Predecesor |
+    |------|-----------|------------|
+    | A    | 0         | \-         |
+    | B    | 2         | C          |
+    | C    | 4         | D          |
+    | D    | 7         | A          |
+    | E    | -2        | B          |
+
+#### Implementación en Python
+
 ```{python}
 #%%timeit
 from scipy.sparse.csgraph import bellman_ford
@@ -734,28 +850,104 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 #### Características:
 
-1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos y no dirigidos.
-2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.\
-3.  **Complejidad Temporal**: $O(V^2 \log V + VE)$\
-4.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas.
+1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos **sin ciclos negativos**. Puede manejar grafos no dirigidos transformándolos en dirigidos duplicando las aristas.
+2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
+3.  **Complejidad Temporal**: $O(V^2 \log V + VE)$
+4.  **Complejidad Espacial**: $O(V^2 + VE)$. Esto se debe a la necesidad de almacenar la matriz de distancias y los pesos reponderados.
+5.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas desde cada vértice.
 
 #### Pasos:
 
-1.  **Añadir nuevo nodo** Primero se añade un nuevo nodo q al grafo, conectado a cada uno de los nodos del grafo por una arista de peso cero.
+1.  **Añadir nuevo nodo**: Primero se añade un nuevo nodo $q$ al grafo, conectado a cada uno de los nodos del grafo por una arista de peso cero.
+2.  **Ejecutar Bellman-Ford**: En segundo lugar, se utiliza el algoritmo de Bellman-Ford, empezando por el nuevo vértice $q$, para determinar para cada vértice $v$ el peso mínimo $h(v)$ del camino de $q$ a $v$. Si en este paso se detecta un ciclo negativo, el algoritmo concluye.
+3.  **Modificar pesos**: Seguidamente, a las aristas del grafo original se les cambia el peso usando los valores calculados por el algoritmo de Bellman-Ford: una arista de $u$ a $v$ con peso $w(u, v)$ se transforma a $w(u, v) + h(u) - h(v)$.
+4.  **Ejecutar Dijkstra**: Por último, para cada nodo $s$ se usa el algoritmo de Dijkstra (posiblemente con montículos de Fibonacci) para determinar el camino más corto entre $s$ y los otros nodos, usando el grafo con pesos modificados.
 
-2.  **Ejecutar Bellman-Ford** En segundo lugar, se utiliza el algoritmo de Bellman-Ford, empezando por el nuevo vértice q, para determinar para cada vértice v el peso mínimo $h(v)$ del camino de q a v. Si en este paso se detecta un ciclo negativo, el algoritmo concluye.
+![Johnson Algorithm](./imagenes/AlgJohnsonImg.png) Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
 
-3.  **Modificar pesos** Seguidamente, a las aristas del grafo original se les cambia el peso usando los valores calculados por el algoritmo de Bellman-Ford: una arista de u a v con tamaño $w(u, v)$, da el nuevo tamaño $w(u, v) + h(u) - h(v)$.
+#### Ejemplo:
 
-4.  **Ejecutar Dijkstra** Por último, para cada nodo s se usa el algoritmo de Dijkstra (tambien con monticulos de Fibonacci) para determinar el camino más corto entre s y los otros nodos, usando el grafo con pesos modificados.
+Supongamos que tenemos el siguiente grafo con 4 nodos:
 
-![Johnson Algorithm](./imagenes/AlgJohnsonImg.png)\
-Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
+|       |  A  |  B  |  C  |  D  |
+|:-----:|:---:|:---:|:---:|:---:|
+| **A** |  0  |  3  |  ∞  |  7  |
+| **B** |  8  |  0  |  2  |  ∞  |
+| **C** |  5  |  ∞  |  0  |  1  |
+| **D** |  2  |  ∞  |  ∞  |  0  |
+
+1.  **Añadir nuevo nodo**:
+
+    -   Añadir un nuevo nodo $q$ conectado a cada uno de los nodos del grafo por una arista de peso cero.
+
+    |       |  A  |  B  |  C  |  D  |  q  |
+    |:-----:|:---:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  ∞  |  7  |  0  |
+    | **B** |  8  |  0  |  2  |  ∞  |  0  |
+    | **C** |  5  |  ∞  |  0  |  1  |  0  |
+    | **D** |  2  |  ∞  |  ∞  |  0  |  0  |
+    | **q** |  0  |  0  |  0  |  0  |  0  |
+
+2.  **Ejecutar Bellman-Ford**:
+
+    -   Ejecutar el algoritmo de Bellman-Ford desde el nodo $q$ para determinar los pesos mínimos $h(v)$ desde $q$ a cada nodo $v$.
+
+    | Nodo | h(v) |
+    |------|------|
+    | A    | 0    |
+    | B    | 0    |
+    | C    | 0    |
+    | D    | 0    |
+    | q    | 0    |
+
+3.  **Modificar pesos**:
+
+    -   Modificar los pesos de las aristas usando los valores calculados por Bellman-Ford: $w'(u, v) = w(u, v) + h(u) - h(v)$.
+
+    |       |  A  |  B  |  C  |  D  |
+    |:-----:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  ∞  |  7  |
+    | **B** |  8  |  0  |  2  |  ∞  |
+    | **C** |  5  |  ∞  |  0  |  1  |
+    | **D** |  2  |  ∞  |  ∞  |  0  |
+
+4.  **Ejecutar Dijkstra**:
+
+    -   Ejecutar el algoritmo de Dijkstra desde cada nodo usando los pesos modificados.
+
+    **Desde A**:
+
+    -   Distancias: A: 0, B: 3, C: 5, D: 6
+
+    **Desde B**:
+
+    -   Distancias: A: 8, B: 0, C: 2, D: 3
+
+    **Desde C**:
+
+    -   Distancias: A: 5, B: 8, C: 0, D: 1
+
+    **Desde D**:
+
+    -   Distancias: A: 2, B: 5, C: 7, D: 0
+
+5.  **Resultado**:
+
+    -   La matriz de distancias mínimas entre todos los pares de nodos es:
+
+    |       |  A  |  B  |  C  |  D  |
+    |:-----:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  5  |  6  |
+    | **B** |  8  |  0  |  2  |  3  |
+    | **C** |  5  |  8  |  0  |  1  |
+    | **D** |  2  |  5  |  7  |  0  |
 
 **Referencias:**
 
 -   colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
 -   johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
+
+#### Implementación en Python
 
 ```{python}
 #%%timeit
@@ -777,7 +969,8 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 1.  **Aplicabilidad**: Se aplica a grafos dirigidos y no dirigidos.
 2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
-3.  **Complejidad Temporal**: $O(V^3)$
+3.  **Complejidad Temporal**: $O(V^3)$, donde $V$ es el número de vértices.
+4.  **Complejidad Espacial**: $O(V^2)$, debido a la matriz de distancias.
 
 #### Pasos:
 
@@ -787,6 +980,98 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
     -   Para cada nodo `k`, actualizar la matriz de distancias considerando `k` como un nodo intermedio. Para cada par de nodos `(i, j)`, actualizar `dist[i][j]` como el mínimo entre `dist[i][j]` y `dist[i][k] + dist[k][j]`.
 3.  **Resultado**
     -   Después de completar las iteraciones, la matriz `dist` contendrá las distancias mínimas entre todos los pares de nodos.
+4.  **Detección de Ciclos Negativos**
+    -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo contiene un ciclo de peso negativo.
+
+#### Ejemplo:
+
+Supongamos que tenemos el siguiente grafo con 4 nodos:
+
+|       |  A  |  B  |  C  |  D  |
+|:-----:|:---:|:---:|:---:|:---:|
+| **A** |  0  |  3  |  ∞  |  7  |
+| **B** |  8  |  0  |  2  |  ∞  |
+| **C** |  5  |  ∞  |  0  |  1  |
+| **D** |  2  |  ∞  |  ∞  |  0  |
+
+1.  **Inicialización**:
+
+    -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`. Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si existe, de lo contrario es infinito. La distancia de un nodo a sí mismo es 0.
+
+    |       |  A  |  B  |  C  |  D  |
+    |:-----:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  ∞  |  7  |
+    | **B** |  8  |  0  |  2  |  ∞  |
+    | **C** |  5  |  ∞  |  0  |  1  |
+    | **D** |  2  |  ∞  |  ∞  |  0  |
+
+2.  **Iteración**:
+
+    -   Para cada nodo `k`, actualizar la matriz de distancias considerando `k` como un nodo intermedio. Para cada par de nodos `(i, j)`, actualizar `dist[i][j]` como el mínimo entre `dist[i][j]` y `dist[i][k] + dist[k][j]`.
+
+    **Iteración con k = A (k = 0)**:
+
+    -   No hay cambios ya que `dist[i][j]` no se puede mejorar usando el nodo A como intermedio.
+
+    **Iteración con k = B (k = 1)**:
+
+    -   Actualizar `dist[A][C]` como `min(∞, 3 + 2) = 5`
+    -   Actualizar `dist[A][D]` como `min(7, 3 + ∞) = 7`
+    -   Actualizar `dist[B][D]` como `min(∞, 0 + ∞) = ∞`
+    -   Actualizar `dist[C][B]` como `min(∞, ∞ + 0) = ∞`
+    -   Actualizar `dist[D][B]` como `min(∞, ∞ + 8) = ∞`
+
+    |       |  A  |  B  |  C  |  D  |
+    |:-----:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  5  |  7  |
+    | **B** |  8  |  0  |  2  |  ∞  |
+    | **C** |  5  |  ∞  |  0  |  1  |
+    | **D** |  2  |  ∞  |  ∞  |  0  |
+
+    **Iteración con k = C (k = 2)**:
+
+    -   Actualizar `dist[A][D]` como `min(7, 5 + 1) = 6`
+    -   Actualizar `dist[B][D]` como `min(∞, 2 + 1) = 3`
+    -   Actualizar `dist[C][A]` como `min(5, 0 + 5) = 5`
+    -   Actualizar `dist[D][A]` como `min(2, ∞ + 2) = 2`
+    -   Actualizar `dist[D][B]` como `min(∞, ∞ + 8) = ∞`
+
+    |       |  A  |  B  |  C  |  D  |
+    |:-----:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  5  |  6  |
+    | **B** |  8  |  0  |  2  |  3  |
+    | **C** |  5  |  ∞  |  0  |  1  |
+    | **D** |  2  |  ∞  |  ∞  |  0  |
+
+    **Iteración con k = D (k = 3)**:
+
+    -   Actualizar `dist[A][B]` como `min(3, 6 + ∞) = 3`
+    -   Actualizar `dist[A][C]` como `min(5, 6 + ∞) = 5`
+    -   Actualizar `dist[B][A]` como `min(8, 3 + 2) = 5`
+    -   Actualizar `dist[B][C]` como `min(2, 3 + ∞) = 2`
+    -   Actualizar `dist[C][A]` como `min(5, 1 + 2) = 3`
+    -   Actualizar `dist[C][B]` como `min(∞, 1 + ∞) = ∞`
+    -   Actualizar `dist[D][A]` como `min(2, 0 + 2) = 2`
+    -   Actualizar `dist[D][B]` como `min(∞, 0 + ∞) = ∞`
+    -   Actualizar `dist[D][C]` como `min(∞, 0 + ∞) = ∞`
+
+    |       |  A  |  B  |  C  |  D  |
+    |:-----:|:---:|:---:|:---:|:---:|
+    | **A** |  0  |  3  |  5  |  6  |
+    | **B** |  8  |  0  |  2  |  3  |
+    | **C** |  5  |  8  |  0  |  1  |
+    | **D** |  2  |  5  |  7  |  0  |
+
+3.  **Resultado**:
+
+    -   Después de completar las iteraciones, la matriz `dist` contendrá las distancias mínimas entre todos los pares de nodos.
+
+4.  **Detección de Ciclos Negativos**:
+
+    -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo contiene un ciclo de peso negativo.
+        -   En este caso todas las distancias son positivas por lo que no hay ciclos negativos.
+
+#### Implementación en Python:
 
 <img src="./imagenes/Floyd-Warshall-Algorithm-Problem.png" width="700"/>
 
