@@ -88,6 +88,7 @@ En este proyecto se han utilizado diversas herramientas y lenguajes de programac
 
     -   Ejemplo: num_nodos = 14
 
+  
 ### Creación de una Matriz de adyacencia y representación gráfica del grafo
 
 Se utlizará para medir el tiempo de ejecución de distintos algoritmos
@@ -420,21 +421,15 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 1.  **Complejidad de implementación**: Puede ser más costoso de implementar que otros tipos de árboles binarios.
 2.  **Requerimientos de mantenimiento**: Requiere un mantenimiento constante para asegurarse de que está correctamente ordenado.
 
-**Referencias**
-
--   Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
--   Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
--   Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
-
 #### Dijkstra
 
-##### Características:
+##### Características
 
 1.  **Aplicabilidad**: Funciona en grafos dirigidos y no dirigidos.
 2.  **Pesos Positivos**: Solo funciona con grafos que tienen pesos no negativos en las aristas.
 3.  **Complejidad Temporal**: $O(V^2)$, donde $V$ es el número de vértices en el grafo.
 
-##### Pasos:
+##### Pasos
 
 1.  **Inicialización**:
 
@@ -479,11 +474,11 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 |       |  A  |  B  |  C  |  D  |  E  |
 |:-----:|:---:|:---:|:---:|:---:|:---:|
-| **A** | \-  |  2  | \-  | \-  |  5  |
-| **B** |  2  | \-  | \-  |  3  | \-  |
-| **C** | \-  | \-  | \-  |  2  |  4  |
-| **D** | \-  |  3  |  2  | \-  | \-  |
-| **E** |  5  | \-  |  4  | \-  | \-  |
+| **A** |  0  |  2  |  ∞  |  ∞  |  5  |
+| **B** |  2  |  0  |  ∞  |  3  |  ∞  |
+| **C** |  ∞  |  ∞  |  0  |  2  |  4  |
+| **D** |  ∞  |  3  |  2  |  0  |  ∞  |
+| **E** |  5  |  ∞  |  4  |  ∞  |  0  |
 
 **Paso 1: Inicialización**
 
@@ -590,12 +585,6 @@ print("Camino más corto: ",nx.shortest_path(G, source=0, target=13, weight='wei
 print("Distancia: ",nx.shortest_path_length(G, source=0, target=13, weight='weight', method='dijkstra'))
 ```
 
-**Referencias:**
-
--   *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
-
--   *shortest_path_length — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path_length.html#networkx.algorithms.shortest_paths.generic.shortest_path_length.>
-
 #### Implementación de Dijkstra en Montículos de Fibonacci
 
 El algoritmo de Dijkstra es un método eficiente para encontrar el camino más corto entre dos nodos en un grafo ponderado. Sin embargo, cuando se trata con grandes conjuntos de datos, la complejidad del algoritmo puede aumentar significativamente debido a la necesidad de mantener una cola de prioridades ordenada.
@@ -634,7 +623,7 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
 -   `distancias`: un arreglo que almacena las distancias mínimas desde el nodo de origen hasta cada uno de los nodos del grafo
 -   `predecesores`: un arreglo que almacena los predecesores de cada uno de los nodos del grafo
 
-**Pseudocódigo:**
+**Pseudocódigo**
 
 1.  **Iniciar**: crear un objeto vacío para almacenar las distancias (`distancias`) y los predecesores (`predecesores`)
 2.  **Insertar el nodo origen en el montículo de Fibonacci**:
@@ -655,7 +644,7 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
         -   Si `distancias[u] + peso(u, v)` es menor que la distancia actual almacena en `distancias[v]`, actualizar `distancias[v]` y `predecesores[v]`
 7.  **Devolver**: devolver las distancias (`distancias`) y los predecesores (`predecesores`)
 
-**Complejidad temporal:**
+**Complejidad temporal**
 
 Es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la distancia más pequeña del montículo de Fibonacci un número igual al número de nodos en el grafo ($V$), lo que tiene una complejidad temporal de $O(\log V)$, y se actualizan las distancias y predecesores de los nodos incidentes a cada arista, lo que tiene una complejidad temporal de $O(E)$.
 
@@ -676,7 +665,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ### Bellman Ford
 
-#### Características:
+#### Características
 
 1.  **Aplicabilidad**: El algoritmo Bellman-Ford se aplica a grafos dirigidos con pesos negativos, ya que no puede manejar aristas con pesos negativos en grafos no dirigidos.
 2.  **Pesos Negativos**: Puede manejar grafos con pesos negativos en las aristas.
@@ -684,7 +673,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 4.  **Detección de Ciclos Negativos**: Puede detectar la presencia potencial de ciclos de peso negativo en el grafo.
 5.  **Distancias Mínimas**: Calcula las distancias mínimas desde un nodo origen a todos los demás nodos, siempre y cuando no haya ciclos de peso negativo.
 
-#### Pasos:
+#### Pasos
 
 **1: Inicialización**
 
@@ -711,15 +700,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 -   Si no se detecta ningún ciclo negativo después de $V-1$ iteraciones de relaxación de aristas más una última revisión, el algoritmo ha encontrado las distancias mínimas desde el nodo origen a todos los demás nodos en el grafo.
 -   Las distancias mínimas están almacenadas en la matriz de distancias, que es una tabla que contiene la distancia mínima desde el nodo origen a cada vértice en el grafo.
 
-**Referencias:**
-
--   Jariasf (2013) CAMINO MAS CORTO: ALGORITMO DE BELLMAN-FORD. <https://jariasf.wordpress.com/2013/01/01/camino-mas-corto-algoritmo-de-bellman-ford/>.
-
--   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
-
--   bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
-
-#### Ejemplo:
+#### Ejemplo
 
 Supongamos que tenemos el siguiente grafo con 5 nodos:
 
@@ -848,15 +829,14 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ### Johnson
 
-#### Características:
+#### Características
 
 1.  **Aplicabilidad**: El algoritmo de Johnson se aplica a grafos dirigidos **sin ciclos negativos**. Puede manejar grafos no dirigidos transformándolos en dirigidos duplicando las aristas.
 2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
 3.  **Complejidad Temporal**: $O(V^2 \log V + VE)$
-4.  **Complejidad Espacial**: $O(V^2 + VE)$. Esto se debe a la necesidad de almacenar la matriz de distancias y los pesos reponderados.
-5.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas desde cada vértice.
+4.  **Uso de Algoritmos Auxiliares**: Utiliza el algoritmo de Bellman-Ford para reponderar los pesos de las aristas y luego aplica el algoritmo de Dijkstra para encontrar las distancias más cortas desde cada vértice.
 
-#### Pasos:
+#### Pasos
 
 1.  **Añadir nuevo nodo**: Primero se añade un nuevo nodo $q$ al grafo, conectado a cada uno de los nodos del grafo por una arista de peso cero.
 2.  **Ejecutar Bellman-Ford**: En segundo lugar, se utiliza el algoritmo de Bellman-Ford, empezando por el nuevo vértice $q$, para determinar para cada vértice $v$ el peso mínimo $h(v)$ del camino de $q$ a $v$. Si en este paso se detecta un ciclo negativo, el algoritmo concluye.
@@ -865,7 +845,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ![Johnson Algorithm](./imagenes/AlgJohnsonImg.png) Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Johnson)
 
-#### Ejemplo:
+#### Ejemplo
 
 Supongamos que tenemos el siguiente grafo con 4 nodos:
 
@@ -942,11 +922,6 @@ Supongamos que tenemos el siguiente grafo con 4 nodos:
     | **C** |  5  |  8  |  0  |  1  |
     | **D** |  2  |  5  |  7  |  0  |
 
-**Referencias:**
-
--   colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
--   johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
-
 #### Implementación en Python
 
 ```{python}
@@ -965,14 +940,13 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 ### Floyd-Warshall
 
-#### Características:
+#### Características
 
 1.  **Aplicabilidad**: Se aplica a grafos dirigidos y no dirigidos.
 2.  **Pesos Positivos y Negativos**: Puede manejar grafos con pesos positivos y negativos en las aristas, siempre y cuando no existan ciclos de peso negativo.
 3.  **Complejidad Temporal**: $O(V^3)$, donde $V$ es el número de vértices.
-4.  **Complejidad Espacial**: $O(V^2)$, debido a la matriz de distancias.
 
-#### Pasos:
+#### Pasos
 
 1.  **Inicialización**
     -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`. Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si existe, de lo contrario es infinito. La distancia de un nodo a sí mismo es 0.
@@ -983,7 +957,7 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 4.  **Detección de Ciclos Negativos**
     -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo contiene un ciclo de peso negativo.
 
-#### Ejemplo:
+#### Ejemplo
 
 Supongamos que tenemos el siguiente grafo con 4 nodos:
 
@@ -1071,16 +1045,11 @@ Supongamos que tenemos el siguiente grafo con 4 nodos:
     -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo contiene un ciclo de peso negativo.
         -   En este caso todas las distancias son positivas por lo que no hay ciclos negativos.
 
-#### Implementación en Python:
+#### Implementación en Python
 
 <img src="./imagenes/Floyd-Warshall-Algorithm-Problem.png" width="700"/>
 
 Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall)
-
-**Referencias:**
-
--   colaboradores de Wikipedia (2020) Algoritmo de Floyd-Warshall. <https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall>.
--   floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
 
 ```{python}
 from scipy.sparse.csgraph import floyd_warshall
@@ -1098,3 +1067,40 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13
 ```
 
 ## Elección final de Algoritmo de camino más corto
+
+He elegido el algoritmo de Dijkstra con Monticulos de Fibonacci.
+
+**Razones:**
+
+1. **Eficiencia**: El algoritmo de Dijkstra es muy eficiente para grafos con pesos positivos. Su complejidad temporal es $O(V \log V + E)$, lo que lo hace adecuado para grafos grandes.
+
+2. **Optimización**: Dijkstra está específicamente optimizado para encontrar la ruta más corta desde un solo origen a un solo destino, lo que se ajusta perfectamente al problema de encontrar la ruta más corta en un mapa.
+
+3. **Uso de Pesos Positivos**: Dado que el grafo representa un mapa solo tendrá pesos positivos, Dijkstra es ideal ya que está diseñado para manejar este tipo de grafos sin problemas.
+
+## Bibliografía
+
+### Montículos de Fibonacci
+- Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
+- Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
+- Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
+
+### Algoritmo de Dijkstra
+- *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
+- *shortest_path_length — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path_length.html#networkx.algorithms.shortest_paths.generic.shortest_path_length.>
+
+### Algoritmo de Bellman-Ford
+- M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
+- bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
+- Bellman-Ford Algorithm (no date). <https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/>.
+- Michael Sambol (2015) Bellman-Ford in 4 minutes — Theory. https://www.youtube.com/watch?v=9PHkk0UavIM.
+
+### Algoritmo de Johnson
+- colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
+- johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
+- Basics Strong (2023) Jhonson’s algorithm explained. https://www.youtube.com/watch?v=MV7EAD9zL64.
+
+### Algoritmo de Floyd-Warshall
+- colaboradores de Wikipedia (2020) Algoritmo de Floyd-Warshall. <https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall>.
+- floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
+- Michael Sambol (2016) Floyd–Warshall algorithm in 4 minutes. https://www.youtube.com/watch?v=4OQeCuLYj-4.
