@@ -2,12 +2,8 @@
 title: "Assignment Brief de UNIT 19 - DATA STRUCTURES & ALGORITHMS"
 author: "Rubén Valverde Romero"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: 
-  prettydoc::html_pretty:
-    css: style.css
-    theme: tactile
-    toc: yes
-    toc_depth: 6
+output:
+  pdf_document: default
 ---
 
 ## Análisis de Riesgo
@@ -88,7 +84,6 @@ En este proyecto se han utilizado diversas herramientas y lenguajes de programac
 
     -   Ejemplo: num_nodos = 14
 
-  
 ### Creación de una Matriz de adyacencia y representación gráfica del grafo
 
 Se utlizará para medir el tiempo de ejecución de distintos algoritmos
@@ -167,8 +162,12 @@ G.add_edge(11, 10)
 matriz_adyacencia = nx.to_numpy_array(G)
 
 # Asigna pesos a las aristas de forma sesgada
-matriz_adyacencia[matriz_adyacencia == 1] = np.random.randint(1, 5, size=np.count_nonzero(matriz_adyacencia == 1))
-matriz_adyacencia[matriz_adyacencia == 0] = np.random.randint(10, 110, size=np.count_nonzero(matriz_adyacencia == 0))
+matriz_adyacencia[matriz_adyacencia == 1] = np.random.randint(1, 5, 
+size=np.count_nonzero(matriz_adyacencia == 1))
+
+matriz_adyacencia[matriz_adyacencia == 0] = np.random.randint(10, 110, 
+size=np.count_nonzero(matriz_adyacencia == 0))
+
 matriz_adyacencia[matriz_adyacencia > 20] = 0
 np.fill_diagonal(matriz_adyacencia, 0)
 
@@ -194,7 +193,9 @@ for i in range(num_nodos):
     pos[i] = (x, y)
     
 # Dibujar nodos y aristas
-nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='darkgrey', node_size=1500, font_size=20)
+nx.draw(G, pos, with_labels=True, node_color='lightblue', 
+edge_color='darkgrey', node_size=1500, font_size=20)
+
 fig.set_facecolor('#e5e5e5')
 # Obtener los pesos de las aristas
 edge_labels = nx.get_edge_attributes(G, 'weight')
@@ -203,7 +204,10 @@ edge_labels = nx.get_edge_attributes(G, 'weight')
 edge_labels = {key: int(value) for key, value in edge_labels.items()}
 
 # Dibujar los pesos de las aristas
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,font_color='black', font_size=7,bbox=dict(facecolor='#e5e5e5', edgecolor='darkgrey', boxstyle='round,pad=0.5'))
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
+font_color='black', font_size=7,bbox=dict(facecolor='#e5e5e5', 
+edgecolor='darkgrey', boxstyle='round,pad=0.5'))
+
 plt.show()
 ```
 
@@ -315,11 +319,11 @@ Supongamos que tenemos un montículo de Fibonacci vacío y queremos insertar los
 El resultado final es:
 
 ```         
-                                            5
-                                           / \
-                                          3   7
-                                         /
-                                        2
+                                          5
+                                         / \
+                                        3   7
+                                       /
+                                      2
 ```
 
 ##### Eliminar
@@ -379,11 +383,11 @@ Supongamos que tenemos un montículo de Fibonacci con los nodos 5, 3, 7 y 2 en e
 Resultado Intermedio:
 
 ```         
-                                            5
-                                           / \
-                                          7   2
-                                         /
-                                        3
+                                          5
+                                         / \
+                                        7   2
+                                       /
+                                      3
 ```
 
 Sin embargo, como queremos eliminar el elemento 3, seguimos con los pasos restantes.
@@ -403,9 +407,9 @@ Sin embargo, como queremos eliminar el elemento 3, seguimos con los pasos restan
 Resultado final:
 
 ```         
-                                            5
-                                           / \
-                                          7   2
+                                          5
+                                         / \
+                                        7   2
 ```
 
 En resumen, la eliminación de un elemento en un montículo de Fibonacci implica reemplazar el nodo a eliminar con su hijo derecho o izquierdo y luego reorganizar el árbol para mantener la propiedad de Fibonacci.
@@ -465,20 +469,18 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
     -   Si el nodo destino ha sido marcado como visitado o si la distancia más pequeña entre los nodos no visitados es infinita, el algoritmo termina.
     -   De lo contrario, selecciona el nodo no visitado con la distancia más pequeña, establece este nodo como el nuevo nodo actual y repite el proceso.\
-        ![Dijkstra Animation](imagenes/Dijkstra_Animation.gif)\
-        Fuente: [Wikipedia](https://es.wikipedia.org/wiki/Algoritmo_de_Dijkstra)
 
 **Ejemplo**
 
 **Encontrar la ruta más corta entre nodos A y C utilizando el Algoritmo Dijkstra**
 
-|       |  A  |  B  |  C  |  D  |  E  |
-|:-----:|:---:|:---:|:---:|:---:|:---:|
-| **A** |  0  |  2  |  ∞  |  ∞  |  5  |
-| **B** |  2  |  0  |  ∞  |  3  |  ∞  |
-| **C** |  ∞  |  ∞  |  0  |  2  |  4  |
-| **D** |  ∞  |  3  |  2  |  0  |  ∞  |
-| **E** |  5  |  ∞  |  4  |  ∞  |  0  |
+|       |    A     |    B     |    C     |    D     |    E     |
+|:-----:|:--------:|:--------:|:--------:|:--------:|:--------:|
+| **A** |    0     |    2     | $\infty$ | $\infty$ |    5     |
+| **B** |    2     |    0     | $\infty$ |    3     | $\infty$ |
+| **C** | $\infty$ | $\infty$ |    0     |    2     |    4     |
+| **D** | $\infty$ |    3     |    2     |    0     | $\infty$ |
+| **E** |    5     | $\infty$ |    4     | $\infty$ |    0     |
 
 **Paso 1: Inicialización**
 
@@ -489,10 +491,10 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 | Nodo | Distancia |
 |------|-----------|
 | A    | 0         |
-| B    | ∞         |
-| C    | ∞         |
-| D    | ∞         |
-| E    | ∞         |
+| B    | $\infty$  |
+| C    | $\infty$  |
+| D    | $\infty$  |
+| E    | $\infty$  |
 
 **Paso 2: Selección del nodo con la distancia más pequeña**
 
@@ -509,7 +511,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 |------|-----------|
 | A    | 0         |
 | B    | 2         |
-| C    | ∞         |
+| C    | $\infty$  |
 | D    | 5         |
 | E    | 5         |
 
@@ -520,7 +522,7 @@ En resumen, la eliminación de un elemento en un montículo de Fibonacci implica
 
 **Paso 5: Actualización de distancias**
 
--   La distancia del nodo C desde el nodo A es la suma de la distancia del nodo D a sí mismo y la distancia del nodo D al nodo C, que es ∞ + 2 = 2.
+-   La distancia del nodo C desde el nodo A es la suma de la distancia del nodo D a sí mismo y la distancia del nodo D al nodo C, que es $\infty$ + 2 = 2.
 -   La distancia del nodo E desde el nodo A sigue siendo 5.
 
 | Nodo | Distancia |
@@ -564,7 +566,7 @@ La distancia total es 2 + 3 + 2 = 7.
 
 -   `distancias[s] = 0` (la distancia desde el nodo `s` a sí mismo es 0).
 -   Para cada nodo `u` en `nodos`, excepto `s`:
-    -   `distancias[u] = ∞` (la distancia desde el nodo `s` al nodo `u` no se conoce aún).
+    -   `distancias[u] =`$\infty$ (la distancia desde el nodo `s` al nodo `u` no se conoce aún).
     -   `predecesores[u] = null` (no hay predecesor conocido para el nodo `u` en el camino más corto desde el nodo `s`).
 
 **Bucle**
@@ -605,9 +607,13 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
 
 -   **Reduce la memoria**: Utiliza menos memoria que una cola estándar, ya que solo se necesitan mantener los nodos en el montículo.
 
-##### Diagrama de Flujo
+\newpage
 
-![![]()](imagenes/Diagrama%20de%20flujo%20Dijkstra%20Fibo.png)
+##### Diagrama de Flujo                
+
+##### -                                                                                                          
+
+![](imagenes/Diagrama%20de%20flujo%20Dijkstra%20Fibo.png){width="398"}
 
 ##### Pseudocódigo con Complejidad Temporal
 
@@ -704,13 +710,13 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 Supongamos que tenemos el siguiente grafo con 5 nodos:
 
-|       |  A  |  B  |  C  |  D  |  E  |
-|:-----:|:---:|:---:|:---:|:---:|:---:|
-| **A** |  0  |  6  |  ∞  |  7  |  ∞  |
-| **B** |  ∞  |  0  |  5  |  8  | -4  |
-| **C** |  ∞  | -2  |  0  |  ∞  |  ∞  |
-| **D** |  ∞  |  ∞  | -3  |  0  |  9  |
-| **E** |  2  |  ∞  |  7  |  ∞  |  0  |
+|       |    A     |    B     |    C     |    D     |    E     |
+|:-----:|:--------:|:--------:|:--------:|:--------:|:--------:|
+| **A** |    0     |    6     | $\infty$ |    7     | $\infty$ |
+| **B** | $\infty$ |    0     |    5     |    8     |    -4    |
+| **C** | $\infty$ |    -2    |    0     | $\infty$ | $\infty$ |
+| **D** | $\infty$ | $\infty$ |    -3    |    0     |    9     |
+| **E** |    2     | $\infty$ |    7     | $\infty$ |    0     |
 
 1.  **Inicialización**:
 
@@ -720,10 +726,10 @@ Supongamos que tenemos el siguiente grafo con 5 nodos:
     | Nodo | Distancia | Predecesor |
     |------|-----------|------------|
     | A    | 0         | \-         |
-    | B    | ∞         | \-         |
-    | C    | ∞         | \-         |
-    | D    | ∞         | \-         |
-    | E    | ∞         | \-         |
+    | B    | $\infty$  | \-         |
+    | C    | $\infty$  | \-         |
+    | D    | $\infty$  | \-         |
+    | E    | $\infty$  | \-         |
 
 2.  **Relajación de aristas**:
 
@@ -731,13 +737,13 @@ Supongamos que tenemos el siguiente grafo con 5 nodos:
 
     **Iteración 1**:
 
-    -   Relajar arista (A, B): `dist[B] = min(∞, 0 + 6) = 6`
-    -   Relajar arista (A, D): `dist[D] = min(∞, 0 + 7) = 7`
-    -   Relajar arista (B, C): `dist[C] = min(∞, 6 + 5) = 11`
-    -   Relajar arista (B, E): `dist[E] = min(∞, 6 - 4) = 2`
-    -   Relajar arista (C, B): `dist[B] = min(6, 11 - 2) = 9`
-    -   Relajar arista (D, C): `dist[C] = min(11, 7 - 3) = 4`
-    -   Relajar arista (E, A): `dist[A] = min(0, 2 + 2) = 0`
+    -   Relajar arista (A, B): dist[B] = min($\infty$, 0 + 6) = 6
+    -   Relajar arista (A, D): dist[D] = min($\infty$, 0 + 7) = 7
+    -   Relajar arista (B, C): dist[C] = min($\infty$, 6 + 5) = 11
+    -   Relajar arista (B, E): dist[E] = min($\infty$, 6 - 4) = 2
+    -   Relajar arista (C, B): dist[B] = min(6, 11 - 2) = 9
+    -   Relajar arista (D, C): dist[C] = min(11, 7 - 3) = 4
+    -   Relajar arista (E, A): dist[A] = min(0, 2 + 2) = 0
 
     | Nodo | Distancia | Predecesor |
     |------|-----------|------------|
@@ -749,11 +755,11 @@ Supongamos que tenemos el siguiente grafo con 5 nodos:
 
     **Iteración 2**:
 
-    -   Relajar arista (B, C): `dist[C] = min(4, 6 + 5) = 4`
-    -   Relajar arista (B, E): `dist[E] = min(2, 6 - 4) = 2`
-    -   Relajar arista (C, B): `dist[B] = min(6, 4 - 2) = 2`
-    -   Relajar arista (D, C): `dist[C] = min(4, 7 - 3) = 4`
-    -   Relajar arista (E, A): `dist[A] = min(0, 2 + 2) = 0`
+    -   Relajar arista (B, C): dist[C] = min(4, 6 + 5) = 4
+    -   Relajar arista (B, E): dist[E] = min(2, 6 - 4) = 2
+    -   Relajar arista (C, B): dist[B] = min(6, 4 - 2) = 2
+    -   Relajar arista (D, C): dist[C] = min(4, 7 - 3) = 4
+    -   Relajar arista (E, A): dist[A] = min(0, 2 + 2) = 0
 
     | Nodo | Distancia | Predecesor |
     |------|-----------|------------|
@@ -765,11 +771,11 @@ Supongamos que tenemos el siguiente grafo con 5 nodos:
 
     **Iteración 3**:
 
-    -   Relajar arista (B, C): `dist[C] = min(4, 2 + 5) = 4`
-    -   Relajar arista (B, E): `dist[E] = min(2, 2 - 4) = -2`
-    -   Relajar arista (C, B): `dist[B] = min(2, 4 - 2) = 2`
-    -   Relajar arista (D, C): `dist[C] = min(4, 7 - 3) = 4`
-    -   Relajar arista (E, A): `dist[A] = min(0, -2 + 2) = 0`
+    -   Relajar arista (B, C): dist[C] = min(4, 2 + 5) = 4
+    -   Relajar arista (B, E): dist[E] = min(2, 2 - 4) = -2
+    -   Relajar arista (C, B): dist[B] = min(2, 4 - 2) = 2
+    -   Relajar arista (D, C): dist[C] = min(4, 7 - 3) = 4
+    -   Relajar arista (E, A): dist[A] = min(0, -2 + 2) = 0
 
     | Nodo | Distancia | Predecesor |
     |------|-----------|------------|
@@ -781,11 +787,11 @@ Supongamos que tenemos el siguiente grafo con 5 nodos:
 
     **Iteración 4**:
 
-    -   Relajar arista (B, C): `dist[C] = min(4, 2 + 5) = 4`
-    -   Relajar arista (B, E): `dist[E] = min(-2, 2 - 4) = -2`
-    -   Relajar arista (C, B): `dist[B] = min(2, 4 - 2) = 2`
-    -   Relajar arista (D, C): `dist[C] = min(4, 7 - 3) = 4`
-    -   Relajar arista (E, A): `dist[A] = min(0, -2 + 2) = 0`
+    -   Relajar arista (B, C): dist[C] = min(4, 2 + 5) = 4
+    -   Relajar arista (B, E): dist[E] = min(-2, 2 - 4) = -2
+    -   Relajar arista (C, B): dist[B] = min(2, 4 - 2) = 2
+    -   Relajar arista (D, C): dist[C] = min(4, 7 - 3) = 4
+    -   Relajar arista (E, A): dist[A] = min(0, -2 + 2) = 0
 
     | Nodo | Distancia | Predecesor |
     |------|-----------|------------|
@@ -849,24 +855,24 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 Supongamos que tenemos el siguiente grafo con 4 nodos:
 
-|       |  A  |  B  |  C  |  D  |
-|:-----:|:---:|:---:|:---:|:---:|
-| **A** |  0  |  3  |  ∞  |  7  |
-| **B** |  8  |  0  |  2  |  ∞  |
-| **C** |  5  |  ∞  |  0  |  1  |
-| **D** |  2  |  ∞  |  ∞  |  0  |
+|       |  A  |    B     |    C     |    D     |
+|:-----:|:---:|:--------:|:--------:|:--------:|
+| **A** |  0  |    3     | $\infty$ |    7     |
+| **B** |  8  |    0     |    2     | $\infty$ |
+| **C** |  5  | $\infty$ |    0     |    1     |
+| **D** |  2  | $\infty$ | $\infty$ |    0     |
 
 1.  **Añadir nuevo nodo**:
 
     -   Añadir un nuevo nodo $q$ conectado a cada uno de los nodos del grafo por una arista de peso cero.
 
-    |       |  A  |  B  |  C  |  D  |  q  |
-    |:-----:|:---:|:---:|:---:|:---:|:---:|
-    | **A** |  0  |  3  |  ∞  |  7  |  0  |
-    | **B** |  8  |  0  |  2  |  ∞  |  0  |
-    | **C** |  5  |  ∞  |  0  |  1  |  0  |
-    | **D** |  2  |  ∞  |  ∞  |  0  |  0  |
-    | **q** |  0  |  0  |  0  |  0  |  0  |
+    |       |  A  |    B     |    C     |    D     |  q  |
+    |:-----:|:---:|:--------:|:--------:|:--------:|:---:|
+    | **A** |  0  |    3     | $\infty$ |    7     |  0  |
+    | **B** |  8  |    0     |    2     | $\infty$ |  0  |
+    | **C** |  5  | $\infty$ |    0     |    1     |  0  |
+    | **D** |  2  | $\infty$ | $\infty$ |    0     |  0  |
+    | **q** |  0  |    0     |    0     |    0     |  0  |
 
 2.  **Ejecutar Bellman-Ford**:
 
@@ -884,12 +890,12 @@ Supongamos que tenemos el siguiente grafo con 4 nodos:
 
     -   Modificar los pesos de las aristas usando los valores calculados por Bellman-Ford: $w'(u, v) = w(u, v) + h(u) - h(v)$.
 
-    |       |  A  |  B  |  C  |  D  |
-    |:-----:|:---:|:---:|:---:|:---:|
-    | **A** |  0  |  3  |  ∞  |  7  |
-    | **B** |  8  |  0  |  2  |  ∞  |
-    | **C** |  5  |  ∞  |  0  |  1  |
-    | **D** |  2  |  ∞  |  ∞  |  0  |
+    |       |  A  |    B     |    C     |    D     |
+    |:-----:|:---:|:--------:|:--------:|:--------:|
+    | **A** |  0  |    3     | $\infty$ |    7     |
+    | **B** |  8  |    0     |    2     | $\infty$ |
+    | **C** |  5  | $\infty$ |    0     |    1     |
+    | **D** |  2  | $\infty$ | $\infty$ |    0     |
 
 4.  **Ejecutar Dijkstra**:
 
@@ -961,23 +967,23 @@ print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[13])
 
 Supongamos que tenemos el siguiente grafo con 4 nodos:
 
-|       |  A  |  B  |  C  |  D  |
-|:-----:|:---:|:---:|:---:|:---:|
-| **A** |  0  |  3  |  ∞  |  7  |
-| **B** |  8  |  0  |  2  |  ∞  |
-| **C** |  5  |  ∞  |  0  |  1  |
-| **D** |  2  |  ∞  |  ∞  |  0  |
+|       |  A  |    B     |    C     |    D     |
+|:-----:|:---:|:--------:|:--------:|:--------:|
+| **A** |  0  |    3     | $\infty$ |    7     |
+| **B** |  8  |    0     |    2     | $\infty$ |
+| **C** |  5  | $\infty$ |    0     |    1     |
+| **D** |  2  | $\infty$ | $\infty$ |    0     |
 
 1.  **Inicialización**:
 
     -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`. Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si existe, de lo contrario es infinito. La distancia de un nodo a sí mismo es 0.
 
-    |       |  A  |  B  |  C  |  D  |
-    |:-----:|:---:|:---:|:---:|:---:|
-    | **A** |  0  |  3  |  ∞  |  7  |
-    | **B** |  8  |  0  |  2  |  ∞  |
-    | **C** |  5  |  ∞  |  0  |  1  |
-    | **D** |  2  |  ∞  |  ∞  |  0  |
+    |       |  A  |    B     |    C     |    D     |
+    |:-----:|:---:|:--------:|:--------:|:--------:|
+    | **A** |  0  |    3     | $\infty$ |    7     |
+    | **B** |  8  |    0     |    2     | $\infty$ |
+    | **C** |  5  | $\infty$ |    0     |    1     |
+    | **D** |  2  | $\infty$ | $\infty$ |    0     |
 
 2.  **Iteración**:
 
@@ -989,45 +995,45 @@ Supongamos que tenemos el siguiente grafo con 4 nodos:
 
     **Iteración con k = B (k = 1)**:
 
-    -   Actualizar `dist[A][C]` como `min(∞, 3 + 2) = 5`
-    -   Actualizar `dist[A][D]` como `min(7, 3 + ∞) = 7`
-    -   Actualizar `dist[B][D]` como `min(∞, 0 + ∞) = ∞`
-    -   Actualizar `dist[C][B]` como `min(∞, ∞ + 0) = ∞`
-    -   Actualizar `dist[D][B]` como `min(∞, ∞ + 8) = ∞`
+    -   Actualizar dist[A][C] como min($\infty$, 3 + 2) = 5
+    -   Actualizar dist[A][D] como min(7, 3 + $\infty$) = 7
+    -   Actualizar dist[B][D] como min($\infty$ 0 + $\infty$) = $\infty$
+    -   Actualizar dist[C][B] como min($\infty$, $\infty$ + 0) = $\infty$
+    -   Actualizar dist[D][B] como min($\infty$, $\infty$ + 8) = $\infty$
 
-    |       |  A  |  B  |  C  |  D  |
-    |:-----:|:---:|:---:|:---:|:---:|
-    | **A** |  0  |  3  |  5  |  7  |
-    | **B** |  8  |  0  |  2  |  ∞  |
-    | **C** |  5  |  ∞  |  0  |  1  |
-    | **D** |  2  |  ∞  |  ∞  |  0  |
+    |       |  A  |    B     |    C     |    D     |
+    |:-----:|:---:|:--------:|:--------:|:--------:|
+    | **A** |  0  |    3     |    5     |    7     |
+    | **B** |  8  |    0     |    2     | $\infty$ |
+    | **C** |  5  | $\infty$ |    0     |    1     |
+    | **D** |  2  | $\infty$ | $\infty$ |    0     |
 
     **Iteración con k = C (k = 2)**:
 
-    -   Actualizar `dist[A][D]` como `min(7, 5 + 1) = 6`
-    -   Actualizar `dist[B][D]` como `min(∞, 2 + 1) = 3`
-    -   Actualizar `dist[C][A]` como `min(5, 0 + 5) = 5`
-    -   Actualizar `dist[D][A]` como `min(2, ∞ + 2) = 2`
-    -   Actualizar `dist[D][B]` como `min(∞, ∞ + 8) = ∞`
+    -   Actualizar dist[A][D] como min(7, 5 + 1) = 6
+    -   Actualizar dist[B][D] como min($\infty$, 2 + 1) = 3
+    -   Actualizar dist[C][A] como min(5, 0 + 5) = 5
+    -   Actualizar dist[D][A] como min(2, $\infty$ + 2) = 2
+    -   Actualizar dist[D][B] como min($\infty$, $\infty$ + 8) = $\infty$
 
-    |       |  A  |  B  |  C  |  D  |
-    |:-----:|:---:|:---:|:---:|:---:|
-    | **A** |  0  |  3  |  5  |  6  |
-    | **B** |  8  |  0  |  2  |  3  |
-    | **C** |  5  |  ∞  |  0  |  1  |
-    | **D** |  2  |  ∞  |  ∞  |  0  |
+    |       |  A  |    B     |    C     |  D  |
+    |:-----:|:---:|:--------:|:--------:|:---:|
+    | **A** |  0  |    3     |    5     |  6  |
+    | **B** |  8  |    0     |    2     |  3  |
+    | **C** |  5  | $\infty$ |    0     |  1  |
+    | **D** |  2  | $\infty$ | $\infty$ |  0  |
 
     **Iteración con k = D (k = 3)**:
 
-    -   Actualizar `dist[A][B]` como `min(3, 6 + ∞) = 3`
-    -   Actualizar `dist[A][C]` como `min(5, 6 + ∞) = 5`
-    -   Actualizar `dist[B][A]` como `min(8, 3 + 2) = 5`
-    -   Actualizar `dist[B][C]` como `min(2, 3 + ∞) = 2`
-    -   Actualizar `dist[C][A]` como `min(5, 1 + 2) = 3`
-    -   Actualizar `dist[C][B]` como `min(∞, 1 + ∞) = ∞`
-    -   Actualizar `dist[D][A]` como `min(2, 0 + 2) = 2`
-    -   Actualizar `dist[D][B]` como `min(∞, 0 + ∞) = ∞`
-    -   Actualizar `dist[D][C]` como `min(∞, 0 + ∞) = ∞`
+    -   Actualizar dist[A][B] como min(3, 6 + $\infty$) = 3
+    -   Actualizar dist[A][C] como min(5, 6 + $\infty$) = 5
+    -   Actualizar dist[B][A] como min(8, 3 + 2) = 5
+    -   Actualizar dist[B][C] como min(2, 3 + $\infty$) = 2
+    -   Actualizar dist[C][A] como min(5, 1 + 2) = 3
+    -   Actualizar dist[C][B] como min($\infty$, 1 + $\infty$) = $\infty$
+    -   Actualizar dist[D][A] como min(2, 0 + 2) = 2
+    -   Actualizar dist[D][B] como min($\infty$, 0 + $\infty$) = $\infty$
+    -   Actualizar dist[D][C] como min($\infty$, 0 + $\infty$) = $\infty$
 
     |       |  A  |  B  |  C  |  D  |
     |:-----:|:---:|:---:|:---:|:---:|
@@ -1072,35 +1078,40 @@ He elegido el algoritmo de Dijkstra con Monticulos de Fibonacci.
 
 **Razones:**
 
-1. **Eficiencia**: El algoritmo de Dijkstra es muy eficiente para grafos con pesos positivos. Su complejidad temporal es $O(V \log V + E)$, lo que lo hace adecuado para grafos grandes.
+1.  **Eficiencia**: El algoritmo de Dijkstra es muy eficiente para grafos con pesos positivos. Su complejidad temporal es $O(V \log V + E)$, lo que lo hace adecuado para grafos grandes.
 
-2. **Optimización**: Dijkstra está específicamente optimizado para encontrar la ruta más corta desde un solo origen a un solo destino, lo que se ajusta perfectamente al problema de encontrar la ruta más corta en un mapa.
+2.  **Optimización**: Dijkstra está específicamente optimizado para encontrar la ruta más corta desde un solo origen a un solo destino, lo que se ajusta perfectamente al problema de encontrar la ruta más corta en un mapa.
 
-3. **Uso de Pesos Positivos**: Dado que el grafo representa un mapa solo tendrá pesos positivos, Dijkstra es ideal ya que está diseñado para manejar este tipo de grafos sin problemas.
+3.  **Uso de Pesos Positivos**: Dado que el grafo representa un mapa solo tendrá pesos positivos, Dijkstra es ideal ya que está diseñado para manejar este tipo de grafos sin problemas.
 
 ## Bibliografía
 
 ### Montículos de Fibonacci
-- Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
-- Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
-- Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
+
+-   Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
+-   Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
+-   Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
 
 ### Algoritmo de Dijkstra
-- *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
-- *shortest_path_length — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path_length.html#networkx.algorithms.shortest_paths.generic.shortest_path_length.>
+
+-   *shortest_path — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path.html#networkx.algorithms.shortest_paths.generic.shortest_path.>
+-   *shortest_path_length — NetworkX 3.4.2 documentation* (no date). <https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.generic.shortest_path_length.html#networkx.algorithms.shortest_paths.generic.shortest_path_length.>
 
 ### Algoritmo de Bellman-Ford
-- M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
-- bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
-- Bellman-Ford Algorithm (no date). <https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/>.
-- Michael Sambol (2015) Bellman-Ford in 4 minutes — Theory. https://www.youtube.com/watch?v=9PHkk0UavIM.
+
+-   M, G.P. (2023) Explicación de algoritmos y estructuras de datos de grafos con Ejemplos en Java y C++. <https://www.freecodecamp.org/espanol/news/explicacion-de-algoritmos-y-estructuras-de-datos-de-grafos-con-ejemplos-en-java-y-c/>.
+-   bellman_ford — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.bellman_ford.html#scipy.sparse.csgraph.bellman_ford>.
+-   Bellman-Ford Algorithm (no date). <https://www.geeksforgeeks.org/bellman-ford-algorithm-dp-23/>.
+-   Michael Sambol (2015) Bellman-Ford in 4 minutes — Theory. <https://www.youtube.com/watch?v=9PHkk0UavIM>.
 
 ### Algoritmo de Johnson
-- colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
-- johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
-- Basics Strong (2023) Jhonson’s algorithm explained. https://www.youtube.com/watch?v=MV7EAD9zL64.
+
+-   colaboradores de Wikipedia (2020) Algoritmo de Johnson. <https://es.wikipedia.org/wiki/Algoritmo_de_Johnson>.
+-   johnson — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.johnson.html#scipy.sparse.csgraph.johnson>.
+-   Basics Strong (2023) Jhonson’s algorithm explained. <https://www.youtube.com/watch?v=MV7EAD9zL64>.
 
 ### Algoritmo de Floyd-Warshall
-- colaboradores de Wikipedia (2020) Algoritmo de Floyd-Warshall. <https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall>.
-- floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
-- Michael Sambol (2016) Floyd–Warshall algorithm in 4 minutes. https://www.youtube.com/watch?v=4OQeCuLYj-4.
+
+-   colaboradores de Wikipedia (2020) Algoritmo de Floyd-Warshall. <https://es.wikipedia.org/wiki/Algoritmo_de_Floyd-Warshall>.
+-   floyd_warshall — SciPy v1.14.1 Manual (no date). <https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.floyd_warshall.html#scipy.sparse.csgraph.floyd_warshall>.
+-   Michael Sambol (2016) Floyd–Warshall algorithm in 4 minutes. <https://www.youtube.com/watch?v=4OQeCuLYj-4>.
