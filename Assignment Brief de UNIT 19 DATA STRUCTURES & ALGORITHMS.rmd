@@ -6,6 +6,10 @@ output:
   pdf_document: default
 ---
 
+## Introducción
+
+El objetivo de este proyecto es implementar y comparar algoritmos de camino más corto en grafos ponderados. Se abordarán los algoritmos de Dijkstra, Bellman-Ford, Floyd-Warshall y Jhonson así como algunas variantes. Se utilizarán librerías especializadas en grafos, operaciones matemáticos y visualización de gráficos. Finalmente se elegirá uno de los algoritmos y se implementará en la creación de un sistema de rutas para la empresa de transporte Yo te lo LLevo SL.
+
 ## Análisis de Riesgo
 
 Al realizar este trabajo sobre algoritmos de camino más corto, podría encontrarme con varios problemas que dificulten el desarrollo del proyecto:
@@ -14,7 +18,7 @@ Al realizar este trabajo sobre algoritmos de camino más corto, podría encontra
 
 2.  **Complejidad Computacional**: Al trabajar con grafos grandes, los algoritmos de camino más corto pueden volverse extremadamente lentos y consumir una gran cantidad de memoria. Debería optimizar mi código y considerar el uso de estructuras de datos eficientes para manejar grafos de gran tamaño, aun así existe el riesgo de que mi pc se congele.
 
-3.  **Conversión a PDF**: Pasar un notebook a PDF puede ser tedioso y problemático, especialmente si contiene gráficos y visualizaciones complejas. Debería asegurarme de que todas las celdas se rendericen correctamente y de que el formato final sea legible y profesional.
+3.  **Conversión a PDF**: Pasar un notebook a PDF puede ser tedioso y problemático, el compilador de LaTex es propenso a dar errores , especialmente si contiene gráficos o simbolos. Debería asegurarme de que todas las celdas se rendericen correctamente y de que el formato final sea legible y profesional.
 
 ## Justificación Técnica de Herramientas y Lenguajes
 
@@ -88,46 +92,39 @@ En este proyecto se han utilizado diversas herramientas y lenguajes de programac
 
 Se utlizará para medir el tiempo de ejecución de distintos algoritmos
 
-```{python include=FALSE}
+```{python}
 # Importar librerias
 import subprocess
 import sys
-
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
 try:
     import numpy as np
 except ImportError:
     install('numpy')
     import numpy as np
-
 try:
     import networkx as nx
 except ImportError:
     install('networkx')
     import networkx as nx
-
 try:
     import matplotlib.pyplot as plt
 except ImportError:
     install('matplotlib')
     import matplotlib.pyplot as plt
-
 try:
     import random
 except ImportError:
     install('random')
     import random
-
 try:
     from scipy.sparse import csr_matrix
 except ImportError:
     install('scipy')
     from scipy.sparse import csr_matrix
-```
 
-```{python}
+# Semilla para reproducibilidad
 np.random.seed(2706)
 
 # Crea una gráfica vacía
@@ -179,7 +176,7 @@ G = nx.from_numpy_array(matriz_adyacencia.toarray())
 
 # Dibujar el grafo con nodos en forma de elipse
 
-fig = plt.figure(figsize=(9, 5))
+fig = plt.figure(figsize=(10, 7))
 
 # Número de nodos
 num_nodos = len(G.nodes)
@@ -196,7 +193,7 @@ for i in range(num_nodos):
 nx.draw(G, pos, with_labels=True, node_color='lightblue', 
 edge_color='darkgrey', node_size=1500, font_size=20)
 
-fig.set_facecolor('#e5e5e5')
+fig.set_facecolor('white')
 # Obtener los pesos de las aristas
 edge_labels = nx.get_edge_attributes(G, 'weight')
 
@@ -205,7 +202,7 @@ edge_labels = {key: int(value) for key, value in edge_labels.items()}
 
 # Dibujar los pesos de las aristas
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
-font_color='black', font_size=7,bbox=dict(facecolor='#e5e5e5', 
+font_color='black', font_size=9,bbox=dict(facecolor='#e5e5e5', 
 edgecolor='darkgrey', boxstyle='round,pad=0.5'))
 
 plt.show()
@@ -214,7 +211,8 @@ plt.show()
 ### Creación de una función para desglosar el camino
 
 ```{python}
-# Función para trazar el camino desde un nodo dado hasta el nodo de inicio utilizando el array de predecesores
+# Función para trazar el camino desde un nodo dado 
+# hasta el nodo de inicio utilizando el array de predecesores
 def trazar_camino(predecesores, nodo_inicio, nodo_fin):
     camino = []
     nodo_actual = nodo_fin
@@ -254,176 +252,70 @@ Para esta variante del algoritmo primero se explicará: - La estructura de datos
 |   1    |   -4   |             -4             |
 |   -7   |   -2   |             -7             |
 
+6.  **Implementación de una Cola de Prioridad**: Para permitir la eliminación rápida y la concatenación, se utilizan listas ligadas circularmente doblemente ligadas para conectar las raíces de todos los árboles. Los hijos de cada nodo también están conectados mediante tal lista. Para cada nodo, mantenemos su número de hijos y si el nodo está marcado.
+
 <img src="./imagenes/Fibonacci_heap.svg" alt="Montículo de Fibonacci" width="900"/>
 
 Fuente: [Growingwiththeweb](https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/)
 
-##### Insertar
+     
+##### Operaciones
+     
+1.  **Encontrar Mínimo**
+    Mantenemos un puntero a la raíz que contiene la clave mínima, lo que permite acceso en tiempo $O(1)$ a la mínima. Este puntero debe ser actualizado durante las otras operaciones, lo que añade solo un overhead constante de tiempo.
 
-**Paso 1: Verificar si el árbol está vacío**
+2.  **Unión**
+    La operación de fusión simplemente concatena las listas de raíces de dos montículos juntos, y establece el mínimo en ser el menor de los dos montículos. Esto se puede hacer en tiempo $O(1)$, y la potencialidad no cambia, lo que lleva nuevamente a un tiempo amortizado constante.
 
--   Si el árbol está vacío (no hay nodos), crea un nuevo nodo con el elemento que se desea insertar y establece ese nodo como la raíz del árbol.
+3.  **Insertar**
+    La operación de inserción se puede considerar como un caso especial de la operación de fusión, con un solo nodo. El nodo simplemente se agrega al final de la lista de raíces, aumentando la potencialidad en uno. El costo amortizado sigue siendo constante.
 
-**Paso 2: Identificar el lugar correcto para insertar el elemento**
+4.  **Eliminar Mínimo**
 
--   Comienza en la raíz del árbol.
--   Mientras que el elemento a insertar es mayor que el valor del nodo actual, sigue hacia la derecha (hacia el hijo derecho).
--   Si el elemento a insertar es menor que el valor del nodo actual, sigue hacia la izquierda (hacia el hijo izquierdo).
+    Esta operación realiza la mayor parte del trabajo en restaurar la estructura de la pila. Tiene tres fases:
 
-**Paso 3: Insertar el elemento en el lugar correcto**
+    **Fase 1:** Eliminar el nodo raíz con el elemento mínimo
 
--   Una vez que se ha encontrado el lugar correcto para insertar el elemento, crea un nuevo nodo con ese elemento.
--   Si el lugar correcto es una hoja (un nodo sin hijos), coloca el nuevo nodo allí.
+    *   Se elimina el nodo raíz que contiene el elemento mínimo.
+    *   Cada uno de sus hijos se convierte en un nuevo nodo raíz.
+    *   El tiempo necesario para procesar estos nuevos nodos es $O(d)$, donde $d$ es el número de hijos del nodo eliminado. La potencialidad aumenta en $d-1$. Por lo tanto, el tiempo amortizado de esta fase es $O(d) = O(\log n)$.
 
-**Paso 4: Reorganizar el árbol si es necesario**
+    **Fase 2:** Enlazar nodos con la misma grado
 
--   Si el nuevo nodo tiene dos hijos, reorganiza el árbol para mantener la propiedad de Fibonacci:
--   Si el nuevo nodo tiene un hijo izquierdo y su subárbol derecho tiene más nodos que su subárbol izquierdo, intercambia los hijos del nuevo nodo.
--   Repite este proceso hasta que se cumpla la propiedad de Fibonacci.
+    *   Hay hasta $n$ nodos raíz.
+    *   Se reduce el número de nodos raíz enlazando juntos nodos del mismo grado.
+    *   Cuando se encuentran dos nodos con el mismo grado, se hace que el nodo con la clave más grande sea hijo del otro, para mantener la propiedad de pila mínima. El grado del nodo más pequeño aumenta en uno.
+    *   Esto se repite hasta que cada nodo tenga un grado diferente.
 
-**Paso 5: Actualizar la raíz si es necesario**
+    **Fase 3**: Buscar el mínimo y actualizar el puntero
 
--   Si el nuevo nodo se convirtió en la nueva raíz del árbol (es decir, se movió hacia arriba), actualiza la raíz del árbol con el nuevo nodo.
+    *   Se busca la lista final de nodos raíz para encontrar el mínimo, y se actualiza el puntero correspondiente. Este paso toma tiempo $O(\log n)$ porque el número de nodos ha sido reducido.
 
-**Complejidad Temporal**
+    **Tiempo amortizado total**
 
--   $O(1)$, constante.
+    *   El tiempo amortizado total de esta operación es $O(\log n)$, siempre que $d = O(\log n)$. La prueba de esto se da en la siguiente sección.
 
-**Ejemplo:**
+5.  **Disminución de Clave**
 
-Supongamos que tenemos un montículo de Fibonacci vacío y queremos insertar los elementos 5, 3, 7 y 2 en ese orden.
+    Si la disminución de la clave de un nodo $x$ hace que sea menor que su padre, entonces se corta de su padre y se convierte en una nueva raíz no marcada. Si también es menor que la clave mínima, entonces el puntero mínimo se actualiza.
+    Luego iniciamos una serie de cortes cascados, comenzando con el padre de $x$. Mientras que el nodo actual esté marcado, se corta de su padre y se convierte en una raíz no marcada. Su padre original es considerado a continuación. Este proceso termina cuando se alcanza un nodo no marcado $y$.
+    Si $y$ no es una raíz, se marca. En este proceso introducimos algún número de árboles nuevos, digamos $k$. Excepto posiblemente $x$, cada uno de estos nuevos árboles pierde su marca original. El nodo terminal $y$ puede volverse marcado.
+    Por lo tanto, el cambio en el número de nodos marcados es entre $-k$ y $-k+2$. La variación resultante en la potencialidad es $k + 2(-k+2) = -k+4$. El tiempo real necesario para realizar los cortes fue $O(k)$.
+    Por lo tanto, el tiempo amortizado es $O(k) + c(-k+4)$, que es constante, siempre y cuando $c$ sea suficientemente grande.
 
-```         
-                                             5
-                                            / \
-                                           3   7
-                                          /
-                                         2
-```
+##### Desempeño
 
-1.  **Insertar 5:**
-    -   Crea un nuevo nodo con valor 5 y lo establece como la raíz del árbol.
-2.  **Insertar 3:**
-    -   Identifica el lugar correcto para insertar 3 (izquierda de 5).
-    -   Crea un nuevo nodo con valor 3 y lo coloca en ese lugar.
-    -   Reorganiza el árbol: no es necesario porque 3 tiene solo un hijo izquierdo.
-3.  **Insertar 7:**
-    -   Identifica el lugar correcto para insertar 7 (derecha de 5).
-    -   Crea un nuevo nodo con valor 7 y lo coloca en ese lugar.
-    -   Reorganiza el árbol: no es necesario porque 7 tiene solo un hijo derecho.
-4.  **Insertar 2:**
-    -   Identifica el lugar correcto para insertar 2 (izquierda de 3).
-    -   Crea un nuevo nodo con valor 2 y lo coloca en ese lugar.
-    -   Reorganiza el árbol: no es necesario porque 2 tiene solo un hijo izquierdo.
+Aunque las pilas de Fibonacci parecen muy eficientes, tienen los siguientes dos inconvenientes:
 
-El resultado final es:
+1.  **Complejidad en la implementación**: Son complicadas de implementar.
+2.  **Ineficiencia en la práctica**: No son tan eficientes en la práctica cuando se comparan con formas teóricamente menos eficientes de pilas.
 
-```         
-                                          5
-                                         / \
-                                        3   7
-                                       /
-                                      2
-```
+En su versión más simple, requieren manipulación de cuatro punteros por nodo, mientras que solo dos o tres punteros por nodo son necesarios en otras estructuras, como la pila binomial o la pila de pareja. Esto resulta en un consumo de memoria grande por nodo y factores constantes altos en todas las operaciones.
 
-##### Eliminar
-
-**Paso 1: Identificar el nodo a eliminar**
-
--   Busca el nodo que contiene el elemento que se desea eliminar.
-
-**Paso 2: Verificar si el nodo tiene hijos**
-
--   Si el nodo a eliminar no tiene hijos, simplemente elimina ese nodo del árbol.
--   Si el nodo a eliminar tiene un hijo izquierdo y un hijo derecho, sigue con el siguiente paso.
-
-**Paso 3: Reemplazar el nodo a eliminar con su hijo derecho**
-
--   Si el nodo a eliminar tiene un hijo derecho, reemplaza el nodo a eliminar con su hijo derecho.
--   Si el nodo a eliminar no tiene un hijo derecho, pero sí un hijo izquierdo, reemplaza el nodo a eliminar con su hijo izquierdo.
-
-**Paso 4: Reorganizar el árbol si es necesario**
-
--   Si se reemplazó el nodo a eliminar con su hijo derecho o izquierdo, puede que sea necesario reorganizar el árbol para mantener la propiedad de Fibonacci:
--   Si el nuevo nodo tiene un hijo izquierdo y su subárbol derecho tiene más nodos que su subárbol izquierdo, intercambia los hijos del nuevo nodo.
--   Repite este proceso hasta que se cumpla la propiedad de Fibonacci.
-
-**Paso 5: Actualizar la raíz si es necesario**
-
--   Si el nuevo nodo se convirtió en la nueva raíz del árbol (es decir, se movió hacia arriba), actualiza la raíz del árbol con el nuevo nodo.
-
-**Complejidad temporal**
-
-$O(log V)$, donde $V$ es el número de nodos en el árbol. Esto se debe a que el árbol está ordenado, lo que hace que la búsqueda sea muy eficiente.
-
-**Ejemplo**
-
-Supongamos que tenemos un montículo de Fibonacci con los nodos 5, 3, 7 y 2 en ese orden y queremos eliminar el elemento 3.
-
-**Paso 1: Identificar el nodo a eliminar**
-
--   El nodo 3 es el que se desea eliminar.
-
-**Paso 2: Verificar si el nodo tiene hijos**
-
--   El nodo 3 tiene un hijo izquierdo (el nodo 2).
-
-**Paso 3: Reemplazar el nodo a eliminar con su hijo derecho**
-
--   No hay un hijo derecho para el nodo 3, pero sí un hijo izquierdo (el nodo 2). Sin embargo, no se reemplaza el nodo 3 con el nodo 2 porque el nodo 2 tiene un hijo izquierdo. En lugar de eso, se sigue con el siguiente paso.
-
-**Paso 4: Reorganizar el árbol si es necesario**
-
--   El nuevo nodo (el nodo 2) tiene un hijo izquierdo y su subárbol derecho tiene más nodos que su subárbol izquierdo. Se intercambian los hijos del nuevo nodo para mantener la propiedad de Fibonacci.
-
-**Paso 5: Actualizar la raíz si es necesario**
-
--   No hay necesidad de actualizar la raíz porque el nuevo nodo (el nodo 2) no se convirtió en la nueva raíz.
-
-Resultado Intermedio:
-
-```         
-                                          5
-                                         / \
-                                        7   2
-                                       /
-                                      3
-```
-
-Sin embargo, como queremos eliminar el elemento 3, seguimos con los pasos restantes.
-
-**Paso 6: Identificar el nodo a eliminar**
-
--   El nodo 3 es el que se desea eliminar
-
-**Paso 7: Verificar si el nodo tiene hijos**
-
--   El nodo 3 no tiene hijos
-
-**Paso 8: Reemplazar el nodo a eliminar con su hijo derecho**
-
--   No hay un hijo derecho para el nodo 3, por lo que simplemente se elimina el nodo 3 del árbol.
-
-Resultado final:
-
-```         
-                                          5
-                                         / \
-                                        7   2
-```
-
-En resumen, la eliminación de un elemento en un montículo de Fibonacci implica reemplazar el nodo a eliminar con su hijo derecho o izquierdo y luego reorganizar el árbol para mantener la propiedad de Fibonacci.
-
-##### Ventajas
-
-1.  **Búsqueda eficiente**: La búsqueda es muy rápida debido a la estructura del árbol binario completo.
-2.  **Inserción y eliminación eficientes**: Estas operaciones se realizan en tiempo $O(log n)$, lo que es más rápido que en otros tipos de árboles binarios.
-3.  **Estructura compacta**: Reduce el uso de memoria.
-
-##### Desventajas
-
-1.  **Complejidad de implementación**: Puede ser más costoso de implementar que otros tipos de árboles binarios.
-2.  **Requerimientos de mantenimiento**: Requiere un mantenimiento constante para asegurarse de que está correctamente ordenado.
+##### Conclusión
+Los montículos de Fibonacci son estructuras de datos complejas que ofrecen un desempeño eficiente en términos de tiempo para operaciones 
+como la eliminación del mínimo, la disminución de clave y la fusión. Aunque tienen una implementación complicada y pueden ser ineficientes 
+en la práctica debido a su alto consumo de memoria por nodo, son útiles en aplicaciones donde se requiere un acceso rápido al elemento mínimo.
 
 #### Dijkstra
 
@@ -582,9 +474,11 @@ La distancia total es 2 + 3 + 2 = 7.
 ###### Implementación en Python
 
 ```{python}
-print("Camino más corto: ",nx.shortest_path(G, source=0, target=13, weight='weight', method='dijkstra'))
+print("Camino más corto: ",nx.shortest_path(G, source=0, target=13, 
+weight='weight', method='dijkstra'))
 
-print("Distancia: ",nx.shortest_path_length(G, source=0, target=13, weight='weight', method='dijkstra'))
+print("Distancia: ",nx.shortest_path_length(G, source=0, target=13, 
+weight='weight', method='dijkstra'))
 ```
 
 #### Implementación de Dijkstra en Montículos de Fibonacci
@@ -609,9 +503,9 @@ La implementación de montículos de Fibonacci en el algoritmo de Dijkstra ofrec
 
 \newpage
 
-##### Diagrama de Flujo                
+##### Diagrama de Flujo
 
-##### -                                                                                                          
+##### -
 
 ![](imagenes/Diagrama%20de%20flujo%20Dijkstra%20Fibo.png){width="398"}
 
@@ -660,7 +554,8 @@ Es $O(V \log V + E)$ porque se repite el proceso de extraer el nodo con la dista
 from scipy.sparse.csgraph import dijkstra
 
 # Utiliza el algoritmo de Dijkstra a través de scipy
-dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False,indices = 0, return_predecessors=True)
+dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False,
+indices = 0, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors, 0, 13)
@@ -824,7 +719,8 @@ Supongamos que tenemos el siguiente grafo con 5 nodos:
 from scipy.sparse.csgraph import bellman_ford
 
 # Utiliza el algoritmo de Bellman-Ford a través de scipy
-dist_matrix, predecessors = bellman_ford(matriz_adyacencia, directed=False, indices=0, return_predecessors=True)
+dist_matrix, predecessors = bellman_ford(matriz_adyacencia, directed=False, 
+indices=0, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors, 0, 13)
@@ -935,7 +831,8 @@ Supongamos que tenemos el siguiente grafo con 4 nodos:
 from scipy.sparse.csgraph import johnson
 
 #Utiliza el algoritmo de Johnson a través de scipy
-dist_matrix, predecessors = johnson(matriz_adyacencia ,directed=False, indices=0, return_predecessors=True)
+dist_matrix, predecessors = johnson(matriz_adyacencia ,directed=False, 
+indices=0, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors, 0, 13)
@@ -1063,7 +960,8 @@ from scipy.sparse.csgraph import floyd_warshall
 #Utiliza el algoritmo de Floyd-Warshall a través de scipy
 #Nota: Este algoritmo no permite calcular la distancia eligiendo un nodo de inicio
 
-dist_matrix, predecessors = floyd_warshall(matriz_adyacencia, unweighted=False, directed=False, return_predecessors=True)
+dist_matrix, predecessors = floyd_warshall(matriz_adyacencia, unweighted=False, 
+directed=False, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors[0], 0, 13)
@@ -1072,7 +970,13 @@ print("El camino desde el nodo 0 hasta el nodo 13 es:", camino)
 print("La distancia mínima entre el nodo 0 y el nodo 13 es:", dist_matrix[0, 13])
 ```
 
-## Elección final de Algoritmo de camino más corto
+## Conclusión
+
+Como se ha podido observar cada algoritmo tiene sus ventajas y desventajas. Dijkstra es el más eficiente para grafos con pesos positivos. Bellman-Ford maneja pesos negativos y detecta ciclos negativos, pero es más lento. Johnson combina Bellman-Ford y Dijkstra para manejar pesos negativos sin ciclos negativos. Floyd-Warshall es simple y maneja todos los pares de nodos, pero es el menos eficiente.
+
+La elección del algoritmo depende del tipo de grafo, su tamaño, capacidad computacional y requerimientos del problema a solventar.
+
+# Elección final de Algoritmo de camino más corto
 
 He elegido el algoritmo de Dijkstra con Monticulos de Fibonacci.
 
@@ -1089,6 +993,7 @@ He elegido el algoritmo de Dijkstra con Monticulos de Fibonacci.
 ### Montículos de Fibonacci
 
 -   Colaboradores de Wikipedia (2024) Montículo de Fibonacci. <https://es.wikipedia.org/wiki/Mont%C3%ADculo_de_Fibonacci>.
+-   Wikipedia contributors (2024) Fibonacci heap. https://en.wikipedia.org/wiki/Fibonacci_heap.
 -   Fibonacci heap (2018). <https://www.growingwiththeweb.com/data-structures/fibonacci-heap/overview/>.
 -   Michael Sambol (no date) Fibonacci Heaps <https://www.youtube.com/playlist?list=PL9xmBV_5YoZNkwWDXcSiZjMgacw2P0U2j>.
 
