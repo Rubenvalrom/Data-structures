@@ -6,7 +6,22 @@ output:
   pdf_document:
     toc: true
     toc_depth: 3
+    extra_dependencies: ["geometry", "amsmath", "graphicx", "sectsty", "tocloft"]
+header-includes:
+  - \usepackage{sectsty}
+  - \usepackage{titlesec}
+  - \usepackage{setspace}
+  - \usepackage{tocloft} 
+  - \renewcommand{\contentsname}{Índice}
+  - \onehalfspacing
+  - \titleformat{\section}{\LARGE\bfseries}{\thesection}{3em}{}
+  - \titleformat{\subsection}{\Large\bfseries}{\thesubsection}{2.6em}{}
+  - \titleformat{\subsubsection}{\large\bfseries}{\thesubsubsection}{2.2em}{}
+  - \titleformat{\paragraph}{\normalsize\bfseries}{\theparagraph}{1.8em}{}
+  - \titleformat{\subparagraph}{\small\bfseries}{\thesubparagraph}{1.4em}{}
 ---
+
+\newpage
 
 ## Introducción
 
@@ -62,6 +77,7 @@ herramientas y lenguajes empleados:
         creación, manipulación y estudio de la estructura, dinámica y
         funciones de grafos complejos. Permite una fácil implementación
         y análisis de grafos.
+
     -   **Algoritmos Integrados**: Proporciona una variedad de
         algoritmos integrados para el análisis de grafos, incluyendo
         algoritmos de caminos más cortos, lo que facilita la
@@ -73,7 +89,9 @@ herramientas y lenguajes empleados:
         fundamental para la computación científica en Python.
         Proporciona soporte para arrays y matrices multidimensionales,
         junto con una colección de funciones matemáticas de alto nivel
-        para operar con estos arrays.
+        para operar con estos arrays. Se ejecuta en `C` lo cual
+        disminuye considerablemente los tiempos de ejecución.
+
     -   **Manejo de Datos**: Facilita el manejo y la manipulación
         eficiente de grandes conjuntos de datos, lo cual es crucial para
         el análisis de grafos y la implementación de algoritmos de
@@ -85,6 +103,7 @@ herramientas y lenguajes empleados:
         computación científica y técnica. Incluye módulos para la
         optimización, álgebra lineal, integración, interpolación,
         funciones especiales, y más.
+
     -   **Algoritmos de Grafos**: al igual que NetworkX proporciona
         implementaciones eficientes de algoritmos de caminos más cortos,
         como Dijkstra, Bellman-Ford, Johnson y Floyd-Warshall, lo que
@@ -97,6 +116,7 @@ herramientas y lenguajes empleados:
         Python utilizada para crear visualizaciones estáticas, animadas
         e interactivas. Se ha utilizado para visualizar los grafos y sus
         propiedades de manera clara y comprensible.
+
     -   **Flexibilidad y Personalización**: Permite una gran
         flexibilidad y personalización en la creación de gráficos, lo
         que facilita la representación visual de los resultados del
@@ -104,9 +124,9 @@ herramientas y lenguajes empleados:
 
 6.  **Scribbr Citation Generator**:
 
-    -   **Generación de Citas y Referencias**: Scribbr Citation
-        Generator es una herramienta en línea que facilita la creación
-        de citas y referencias, en este caso Harvard.
+    -   **Generación de Citas y Referencias**: Es una herramienta en
+        línea que facilita la creación de citas y referencias, en este
+        caso Harvard.
 
 7.  **RStudio**:
 
@@ -125,6 +145,7 @@ herramientas y lenguajes empleados:
     -   **Calidad Tipográfica**: LaTeX es un sistema de composición de
         textos de alta calidad que facilita la creación de documentos
         técnicos y científicos con una presentación profesional.
+
     -   **Soporte para Fórmulas Matemáticas**: Proporciona un soporte
         avanzado para la escritura de fórmulas matemáticas y expresiones
         complejas, lo cual es esencial para la presentación de
@@ -181,7 +202,8 @@ herramientas y lenguajes empleados:
 
 6.  **scipy.sparse.csr_matrix:** Representa una matriz dispersa en
     formato CSR (Compressed Sparse Row), que es eficiente para
-    operaciones aritméticas y de almacenamiento.
+    operaciones aritméticas y de almacenamiento.\\*Nota: el formato
+    CSC(Compressed Sparse Column) da resultados muy similares.*
 
     -   Ejemplo: matriz_adyacencia = csr_matrix([[0, 1, 0], [1, 0, 1],
         [0, 1, 0]])
@@ -207,6 +229,7 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
+import scipy.sparse as sp
 from scipy.sparse import csr_matrix
 import osmnx as ox
 import sys
@@ -218,49 +241,46 @@ np.random.seed(2706)
 # Crear una grafo con 20 nodos
 G = nx.Graph()
 
-for i in range(14):
+for i in range(13):
     G.add_node(i)
 
 # Añade aristas a la gráfica
 G.add_edge(0, 3)
-G.add_edge(3, 6)
+G.add_edge(13, 6)
 G.add_edge(6, 9)
 G.add_edge(9, 10)
 G.add_edge(0, 2)
 G.add_edge(2, 5)
 G.add_edge(5, 8)
-G.add_edge(8, 10)
+G.add_edge(8, 1)
 G.add_edge(0, 1)
 G.add_edge(1, 4)
 G.add_edge(4, 7)
 G.add_edge(7, 10)
 G.add_edge(3, 6)
 G.add_edge(6, 9)
-G.add_edge(9, 13)
 G.add_edge(13, 10)
 G.add_edge(12, 9)
-G.add_edge(12, 11)
 G.add_edge(11, 10)
-G.add_edge(12, 13)
+G.add_edge(13, 11)
+G.add_edge(11, 7)
+G.add_edge(7, 4)
+G.add_edge(4, 9)
+G.add_edge(1, 2)
+G.add_edge(12, 5)
+G.add_edge(5, 8)
+G.add_edge(8, 11)
+G.add_edge(11, 12)
+G.add_edge(12, 10)
+G.add_edge(4, 10)
+G.add_edge(2, 12)
 
-# Calcula la matriz de adyacencia actualizada
-matriz_adyacencia = nx.to_numpy_array(G)
+# Asigna un peso aleatorio a cada arista
+for u, v in G.edges:
+    G.edges[u, v]['weight'] = np.random.randint(1, 6)
 
-# Asigna pesos a las aristas de forma sesgada
-matriz_adyacencia[matriz_adyacencia == 1] = np.random.randint(2, 6, 
-size=np.count_nonzero(matriz_adyacencia == 1))
-
-matriz_adyacencia[matriz_adyacencia == 0] = np.random.randint(12, 110, 
-size=np.count_nonzero(matriz_adyacencia == 0))
-
-matriz_adyacencia[matriz_adyacencia > 20] = 0
-np.fill_diagonal(matriz_adyacencia, 0)
-
-# Convertir la matriz de adyacencia en una matriz dispersa
-matriz_adyacencia = csr_matrix(matriz_adyacencia)
-
-# Crear un grafo desde la matriz de adyacencia
-G = nx.from_numpy_array(matriz_adyacencia)
+# Calcula la matriz de adyacencia en forma de matriz dispersa
+matriz_adyacencia = csr_matrix(nx.to_numpy_array(G))
 
 # Dibujar el grafo con nodos en forma de elipse
 fig = plt.figure(figsize=(8, 6))
@@ -280,18 +300,6 @@ for i in range(num_nodos):
 nx.draw(G, pos, with_labels=True, node_color='lightblue', 
 edge_color='darkgrey', node_size=1500, font_size=20)
 
-fig.set_facecolor('white')
-# Obtener los pesos de las aristas
-edge_labels = nx.get_edge_attributes(G, 'weight')
-
-# Apesar de no tener decimales salen como n.0, los paso a enteros para quitarlo
-edge_labels = {key: int(value) for key, value in edge_labels.items()}
-
-# Dibujar los pesos de las aristas
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels,
-font_color='black', font_size=9,bbox=dict(facecolor='#e5e5e5', 
-edgecolor='darkgrey', boxstyle='round,pad=0.5'))
-
 plt.show()
 ```
 
@@ -304,10 +312,10 @@ def trazar_camino(predecesores, nodo_inicio, nodo_fin):
     camino = []
     nodo_actual = nodo_fin
     while nodo_actual != nodo_inicio:
-        camino.append(nodo_actual)
+        camino.insert(0, nodo_actual)
         nodo_actual = predecesores[nodo_actual]
-    camino.append(nodo_inicio)
-    camino.reverse()
+    camino.insert(0, nodo_inicio)
+    camino = np.array(camino, dtype=int)
     return camino
 ```
 
@@ -325,7 +333,6 @@ Para esta variante del algoritmo primero se explicará:
 
 #### Montículos de Fibonacci
 
-\
 **Características**
 
 1.  **Árbol binario**: Cada nodo tiene como máximo dos hijos (izquierdo
@@ -446,7 +453,6 @@ Fuente:
     suficientemente grande.
 
 **Desempeño**\
-\
 Aunque las pilas de Fibonacci parecen muy eficientes, tienen los
 siguientes dos inconvenientes:
 
@@ -474,7 +480,6 @@ aplicaciones donde se requiere un acceso rápido al elemento mínimo.
 
 #### Dijkstra
 
-\
 **Características**
 
 1.  **Aplicabilidad**: Funciona en grafos dirigidos y no dirigidos.
@@ -496,9 +501,7 @@ aplicaciones donde se requiere un acceso rápido al elemento mínimo.
 
     -   Selecciona el nodo no visitado con la distancia más pequeña como
         el nodo actual.
-
-    ![Dijkstra 1](imagenes/Step1Dij.png){width="384"}
-
+    ![Dijkstra 1](imagenes/Step1Dij.png){width="380"}\
     Fuente:
     [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)
 
@@ -508,22 +511,18 @@ aplicaciones donde se requiere un acceso rápido al elemento mínimo.
         calcula sus distancias tentativas.
     -   Compara la distancia recién calculada con la distancia actual
         asignada y asigna el menor valor.
-
-    ![Dijkstra 2](imagenes/Step2Dij.png){width="391"}
-
+    ![Dijkstra 2](imagenes/Step2Dij.png){width="380"}\
     Fuente:
-    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)
+    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)\
 
 4.  **Marcar Nodo como Visitado**:
 
     -   Una vez considerados todos los vecinos del nodo actual, marca el
         nodo actual como visitado. Un nodo visitado no será revisado
-        nuevamente.
-
-    ![Dijkstra 3](imagenes/Step3Dij.png){width="390"}
-
+        nuevamente.\
+    ![Dijkstra 3](imagenes/Step3Dij.png){width="380"}\
     Fuente:
-    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)
+    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)\
 
 5.  **Repetición**:
 
@@ -623,7 +622,6 @@ La ruta más corta del Nodo A al C utilizando el Algoritmo Dijkstra es:
 La distancia total es 2 + 3 + 2 = 7.
 
 **Pseudocódigo**\
- \
 **Entrada:**
 
 -   `G`: Grafo dirigido ponderado, donde cada arista tiene un peso
@@ -658,33 +656,33 @@ La distancia total es 2 + 3 + 2 = 7.
         -   Calcula la distancia `d` desde el nodo `s` al nodo `v` a
             través del nodo `u`:
             `d = distancias[u] + peso(arista (u, v))`.
+
         -   Si esta distancia `d` es menor que la distancia conocida
             hasta ahora para el nodo `v`, actualiza:
+
             -   `distancias[v] = d`
             -   `predecesores[v] = u` (actualiza el predecesor del nodo
-                `v` en el camino más corto desde el nodo `s`).
+                `v` en el camino más corto desde el nodo `s`).\
+                **Implementación en Python**\
 
-**Implementación en Python**\
-\
+            ```{python}
+            inicio = timeit.default_timer()
 
-```{python}
-inicio = timeit.default_timer()
+            for i in range(10000):
+              camino = nx.shortest_path(G, source=0, 
+              weight='weight', method='dijkstra')
+              
+              distancia = nx.shortest_path_length(G, source=0, 
+              weight='weight', method='dijkstra')
 
-for i in range(10000):
-  camino = nx.shortest_path(G, source=0, 
-  weight='weight', method='dijkstra')
-  
-  distancia = nx.shortest_path_length(G, source=0, 
-  weight='weight', method='dijkstra')
+            print("Camino más corto: ", camino[13])
 
-print("Camino más corto: ", camino[13])
+            print("Distancia: ", distancia[13])
 
-print("Distancia: ", distancia[13])
-
-fin = timeit.default_timer()
-tiempo = fin - inicio
-print("Tiempo de ejecución: ", tiempo)
-```
+            fin = timeit.default_timer()
+            tiempo = fin - inicio
+            print("Tiempo de ejecución: ", tiempo)
+            ```
 
 #### Implementación de Dijkstra en Montículos de Fibonacci
 
@@ -712,14 +710,9 @@ ofrece varias ventajas:
 \newpage
 
 **Diagrama de Flujo**\
-\
-
 ![](imagenes/Diagrama%20de%20flujo%20Dijkstra%20Fibo.png){style="margin :auto;"
-width="587"}
-
-\
+width="587"}\
 **Pseudocódigo**\
-\
 **Entradas:**
 
 -   `grafo`: el grafo que se desea buscar
@@ -792,16 +785,16 @@ nodos incidentes a cada arista, lo que tiene una complejidad temporal de
 $O(E)$.
 
 **Implementación en Python**\
-\
 
 ```{python}
 from scipy.sparse.csgraph import dijkstra
 
 inicio = timeit.default_timer()
+
 for i in range(10000):
   # Utiliza el algoritmo de Dijkstra a través de scipy
   dist_matrix, predecessors = dijkstra(matriz_adyacencia, directed=False,
-  indices = 0, return_predecessors=True, unweighted=False)
+  indices = 0, return_predecessors=True)
 
 # Ruta del nodo 0 al 13
 camino = trazar_camino(predecessors, 0, 13)
@@ -1170,23 +1163,19 @@ print("Tiempo de ejecución: ", tiempo_ejecución, " segundos")
 
 #### Pasos
 
-1.  **Inicialización**
-    -   Crear una matriz de distancias `dist` donde `dist[i][j]` es la
-        distancia entre el nodo `i` y el nodo `j`. Inicialmente,
-        `dist[i][j]` es el peso de la arista entre `i` y `j` si existe,
-        de lo contrario es infinito. La distancia de un nodo a sí mismo
-        es 0.
-2.  **Iteración**
-    -   Para cada nodo `k`, actualizar la matriz de distancias
-        considerando `k` como un nodo intermedio. Para cada par de nodos
-        `(i, j)`, actualizar `dist[i][j]` como el mínimo entre
-        `dist[i][j]` y `dist[i][k] + dist[k][j]`.
-3.  **Resultado**
-    -   Después de completar las iteraciones, la matriz `dist` contendrá
-        las distancias mínimas entre todos los pares de nodos.
-4.  **Detección de Ciclos Negativos**
-    -   Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el grafo
-        contiene un ciclo de peso negativo.
+\
+1. **Inicialización** - Crear una matriz de distancias `dist` donde
+`dist[i][j]` es la distancia entre el nodo `i` y el nodo `j`.
+Inicialmente, `dist[i][j]` es el peso de la arista entre `i` y `j` si
+existe, de lo contrario es infinito. La distancia de un nodo a sí mismo
+es 0. 2. **Iteración** - Para cada nodo `k`, actualizar la matriz de
+distancias considerando `k` como un nodo intermedio. Para cada par de
+nodos `(i, j)`, actualizar `dist[i][j]` como el mínimo entre
+`dist[i][j]` y `dist[i][k] + dist[k][j]`. 3. **Resultado** - Después de
+completar las iteraciones, la matriz `dist` contendrá las distancias
+mínimas entre todos los pares de nodos. 4. **Detección de Ciclos
+Negativos** - Si `dist[i][i] < 0` para cualquier nodo `i`, entonces el
+grafo contiene un ciclo de peso negativo.
 
 **Ejemplo** \linebreak
 
@@ -1325,7 +1314,7 @@ tiempo_ejecución = round(fin - inicio, 4)
 print("Tiempo de ejecución: ", tiempo_ejecución, " segundos")
 ```
 
-## Conclusión
+### Comparación de algoritmos
 
 Como se ha podido observar cada algoritmo tiene sus ventajas y
 desventajas. Dijkstra es el más eficiente para grafos con pesos
@@ -1358,87 +1347,231 @@ He elegido el algoritmo de `Dijkstra con Monticulos de Fibonacci`.
 
 ## Creación del sistema de rutas
 
+### Objetivo
+
+Crear un sistema de rutas que permita encontrar la ruta más corta entre
+varios destinos en un mapa. El sistema debe ser capaz de calcular la
+distancia total de la ruta y mostrar la secuencia de nodos que componen
+la ruta para poder realizar la entrega de paquetes de la manera más
+eficiente.
+
+#### Trazar camino entre dos nodos
+
+##### Pseudocódigo
+
+\
+
+El procedimiento es el mismo que el agoritmo `trazar_camino` sin añadir
+el nodo destino al final de la lista para evitar duplicidades.
+
+Nombre de la función: `Trazar_camino_intermedio`.
+
+-   **Entrada**:
+    -   `predecesores`: array con los predecesores de cada nodo.
+    -   `nodo_inicio`: int con el nodo de inicio.
+    -   `nodo_fin`: int con el nodo destino.
+-   **Salida**:
+    -   `camino`: array con los nodos que componen la ruta.
+-   **Proceso**:
+    1.  Inicializar `camino` como una lista vacía.
+    2.  Inicializar `nodo_actual` como `nodo_fin`.
+    3.  Mientras `nodo_actual` no sea igual a `nodo_inicio`:
+        1.  Añadir `nodo_actual` a `camino`.
+        2.  Actualizar `nodo_actual` con el predecesor de `nodo_actual`.
+    4.  Devolver `camino`.
+
+##### Diagrama de flujo
+
+\
+![](imagenes/Diagrama%20de%20flujo%20trazar_camino_int.png){width="599"}
+
+#### Trazar el camino más corto que contenga todos los nodos
+
+\
+El procedimiento para crear una ruta que visite varios destinos consiste
+en encontrar y visitar el nodo más cercano al nodo actual con Dijkstra
+hasta que se visiten todos los destinos.
+
+##### Pseudocódigo
+
+\
+Nombre de la función: `Crear_ruta`.
+
+-   **Entrada**:
+    -   `M`: matriz de adyacencia del grafo.
+    -   `inicio`: int con el nodo de inicio.
+    -   `destinos`: array con los nodos destino.
+-   **Salida**:
+    -   `ruta`: array con los nodos que componen la ruta.
+    -   `distancia`: int con la distancia total de la ruta.
+-   **Proceso**:
+    1.  Inicializar `ruta` como un array con el nodo de inicio.
+    2.  Calcular la matriz de distancias y predecesores con Dijkstra.
+    3.  Crear un diccionario con las distancias de cada nodo.
+    4.  Eliminar los nodos con distancia 0 y los nodos que no estén en
+        `destinos`.
+    5.  Encontrar el nodo más cercano al nodo de inicio.
+    6.  Añadir los nodos de la ruta más corta al array `ruta`.
+    7.  Eliminar el nodo más cercano de `destinos`.
+    8.  Mientras haya nodos en `destinos`:
+        1.  Calcular la matriz de distancias y predecesores con
+            Dijkstra.
+        2.  Guardar el nodo anterior.
+        3.  Crear un diccionario con las distancias de cada nodo.
+        4.  Eliminar los nodos con distancia 0 y los nodos que no estén
+            en `destinos`.
+        5.  Encontrar el nodo más cercano al nodo anterior.
+        6.  Añadir los nodos de la ruta más corta al array `ruta`.
+        7.  Sumar la distancia al nodo más cercano a `distancia`.
+    9.  Devolver `ruta` y `distancia`.
+
+##### Diagrama de flujo
+
+\
+![](imagenes/Diagrama%20de%20flujo%20Crear_ruta.png){width="600"}
+
+### Implementación en Python
+
 ```{python}
 
 # Función para trazar la ruta
-def trazar_camino_intermedio(predecesores, nodo_inicio, nodo_fin):
-    camino = []
-    nodo_actual = nodo_fin
-    while nodo_actual != nodo_inicio:
-        camino.append(nodo_actual)
-        nodo_actual = predecesores[nodo_actual]
-    camino.reverse()
-    return camino
-  
+def Trazar_camino_intermedio(predecesores, nodo_inicio, nodo_fin):
+    camino = []                                 
+    nodo_actual = nodo_fin                      
+    
+    while nodo_actual != nodo_inicio:           
+        camino.insert(0, nodo_actual)              
+        nodo_actual = predecesores[nodo_actual] 
+    
+    return camino                                          
 
 # Fución para crea la ruta
-def crear_ruta(M, inicio, destinos):
-  
+def Crear_ruta(M, inicio, destinos):
   # Iniciar la ruta en el nodo inicial
-  ruta = np.array([inicio]) 
+  ruta = np.array([inicio])
+  distancia = 0
   
-  # Utilizar el algoritmo de Dijkstra para encontrar el nodo más cercano al inicio
-  dist_matrix, predecessors = dijkstra(M, directed=True,
-  unweighted= False, indices=inicio, return_predecessors=True)
-  
-  # Crear un diccionario con la distancia de cada nodo
-  dist_dic = {index: value for index, value in enumerate(dist_matrix)}
-  
-  # Eliminar todos los valores que sean 0 y los nodos estén en destinos
-  dist_dic = {key: value for key, value in dist_dic.items() 
-  if value > 0 and key in destinos}
-  
-  min_value = min(dist_dic.values())
-  
-  for key, value in dist_dic.items(): 
-    if value == min_value: 
-      nodo_más_cercano = key 
-      
-      break
-  
-  ruta = np.concatenate((ruta, 
-  np.array(trazar_camino_intermedio(predecessors, inicio, nodo_más_cercano))))
-
-  
+  nodo_más_cercano = inicio
   destinos = np.array(destinos)
-  destinos = destinos[destinos != nodo_más_cercano]
   
-  distancia = dist_dic[nodo_más_cercano]
-  
+  # Mientras queden destinos por visitar
   while len(destinos) > 0:
-    # Utilizar el algoritmo de Dijkstra para 
-    # encontrar la ruta más corta a cada nodo destino
-    
-    dist_matrix, predecessors = dijkstra(M, directed=True,
-    indices=nodo_más_cercano, return_predecessors=True)
+    # Utilizar el algoritmo de Dijkstra para encontrar 
+    # la ruta más corta a cada nodo destino
+    dist_matrix, predecessors= dijkstra(M, directed=True, 
+    indices=nodo_más_cercano, return_predecessors=True, limit=50000)
     
     nodo_anterior = nodo_más_cercano
     
-    # Pasar la matriz a diccionario
+    # Pasar la matriz de distancias a diccionario
     dist_dic = {index: value for index, value in enumerate(dist_matrix)}
   
     # Eliminar todos los valores que sean 0 y los nodos que no estén en destinos
     dist_dic = {key: value for key, value in dist_dic.items() 
     if value != 0 and key in destinos}
     
+    # Encontrar el valor mínimo en el diccionario de distancias
     min_value = min(dist_dic.values())
     
+    # Encontrar el siguiente nodo más cercano
     for key, value in dist_dic.items(): 
       if value == min_value: 
         nodo_más_cercano = key 
-        
         break
     
+    # Actualizar la lista de destinos eliminando el nodo más cercano encontrado
     destinos = destinos[destinos != nodo_más_cercano]
     
+    # Añadir el camino intermedio a la ruta
     ruta = np.concatenate((ruta, 
-    np.array(trazar_camino_intermedio(predecessors,nodo_anterior, nodo_más_cercano))))
+    np.array(Trazar_camino_intermedio(predecessors, nodo_anterior, nodo_más_cercano))))
     
+    # Sumar la distancia al nodo más cercano a la distancia total
     distancia += dist_dic[nodo_más_cercano]
   
+  # Devolver la ruta completa y la distancia total
   return ruta, distancia
 
 ```
+
+#### Análisis de la complejidad temporal
+
+##### Trazar_camino_intermedio
+
+\
+1. **Inicialización de la lista de camino y del nodo actual**: $O(1)$.
+2. **Bucle principal**: - El bucle se ejecuta hasta que el nodo actual
+sea igual al nodo de inicio, lo que puede ser $O(n)$ en el peor caso. -
+Dentro del bucle, se realizan las mismas operaciones en cada iteración,
+cada una con su propia complejidad.
+
+La complejidad temporal total de la función es:\
+$O(1) + O(n) * [O(1) + O(1)] + O(n)$
+
+Simplificando, se obtiene:\
+$O(n)$
+
+##### Crear_ruta
+
+\
+1. **Inicialización de la ruta y cálculo de la matriz de distancias y
+predecesores con Dijkstra**: - La inicialización de la ruta es $O(1)$. -
+La llamada a Dijkstra tiene una complejidad de $O(V log V + E)$.
+
+2.  **Creación del diccionario de distancias y eliminación de valores**:
+
+    -   Crear el diccionario tiene una complejidad de $O(V)$.
+    -   Eliminar valores del diccionario tiene una complejidad de
+        $O(V)$.
+
+3.  **Encontrar el nodo más cercano**:
+
+    -   Encontrar el valor mínimo en el diccionario tiene una
+        complejidad de $O(V)$.
+
+4.  **Añadir el camino intermedio a la ruta**:
+
+    -   La función `trazar_camino_intermedio` tiene una complejidad de
+        $O(n)$, donde $n$ es el número de nodos en el camino.
+    -   Concatenar arrays tiene una complejidad de $O(n)$.
+
+5.  **Actualizar la lista de destinos y la distancia total**:
+
+    -   Actualizar la lista de destinos tiene una complejidad de $O(V)$.
+    -   Sumar la distancia tiene una complejidad de $O(1)$.
+
+6.  **Bucle principal**:
+
+    -   El bucle se ejecuta hasta que se visiten todos los destinos, lo
+        que puede ser $O(V)$ en el peor caso.
+    -   Dentro del bucle, se realizan las mismas operaciones que en los
+        pasos anteriores, cada una con su propia complejidad.
+
+La complejidad temporal total de la función es:\
+$O(V) * [O(V log V + E) + O(V) + O(V) + O(n) + O(n) + O(V) + O(1)]$\
+
+Simplificando,se obtiene:\
+$O(V^2 log V + VE)$
+
+### Ejemplo de uso
+
+\
+Para probar el sistema de rutas, se utilizará un mapa de la ciudad de
+Madrid. Se seleccionarán cinco nodos aleatorios y se calculará la ruta
+más corta que visite todos los nodos. Se mostrará la ruta y la distancia
+total del recorrido.
+
+#### Obtención del mapa de Madrid
+
+\
+Con el objetivo de obtener el mapa de Madrid, se utilizará la librería
+`osmnx` para descargar la red de calles de la ciudad. El grafo
+resultante se guardará en un archivo `GraphML`.
+
+Posteriormente, se cargará el grafo guardado y se calculará el número de
+nodos, aristas y la longitud total de la red de calles.
+
+Finalmente se mostrará el grafo de la red de calles de Madrid.
 
 ```{python}
 # Descargo el mapa de Madrid y lo guardo como grafo
@@ -1449,10 +1582,9 @@ place_name = "Madrid, Spain"
 #G = ox.graph_from_place(place_name, network_type='drive')
   
 # Guardar el grafo en un archivo GraphML
+# El tiempo de descarga es elevado
 #ox.save_graphml(G, filepath='mapa/madrid.graphml')
-```
 
-```{python}
 # Importo el grafo guardado
 madrid = ox.load_graphml('mapa/madrid.graphml')
 
@@ -1465,48 +1597,116 @@ print(f"Número de aristas: {num_aristas}")
  
 # Calcular la longitud de la red de calles 
 longitud = round(sum(nx.get_edge_attributes(madrid, 'length').values()))
+longitud = round(longitud/1000)
+print(f"Longitud total de la red de calles: {longitud} kilometros")
 
-print(f"Longitud total de la red de calles: {longitud} metros")
-```
-
-```{python}
 # Mostrar el grafo de la red de calles de Madrid
-ax = ox.plot_graph(madrid, bgcolor='w', node_color='b', 
-                        node_size=1, edge_color='k',
-                        edge_linewidth=0.5, figsize=(10, 10))
+fig, ax = ox.plot_graph(madrid, bgcolor='none', node_color='b', 
+                        node_size=1.5, edge_color='k',
+                        edge_linewidth=0.1, edge_alpha=0.8,
+                        figsize=(20, 20),show=False)
+
+#plt.savefig('imagenes/mapa_madrid.jpg', dpi=200)
+plt.close()
+```
+
+\newpage
+
+**Visualización del mapa de Madrid**\
+![](imagenes/mapa_madrid.jpg){width="650"}
+
+#### Creación de la ruta más corta
+
+\
+Primero se convierte el grafo de Madrid en una matriz esparsa(csr) de
+adyacencia. Posteriormente se seleccionarán cinco nodos aleatorios en el
+grafo de Madrid y se ejecutará la función `Crear_ruta` que devolverá la
+ruta más corta que visite todos los nodos y su distancia.
+
+```{python}
+# Convertir el grafo de Madrid en una matriz de adyacencia
+#matriz_madrid = csr_matrix(nx.to_numpy_array(madrid, weight='length'))
+
+# Guardar matriz para su posterior uso
+# El tiempo de conversión es un poco elevado
+#sp.save_npz('matriz/matriz_madrid.npz', matriz_madrid)
 ```
 
 ```{python}
-matriz_madrid = csr_matrix(nx.to_numpy_array(madrid, weight='length'))
-```
+# Importar matriz
+matriz_madrid = sp.load_npz('matriz/matriz_madrid.npz')
 
-```{python}
-np.random.seed(270621)
+# Seleccionar cinco nodos aleatorios
+np.random.seed(23)
+nodos_aleatorios = np.random.choice(matriz_madrid.shape[0], size=20, replace=False)
 
-nodos_aleatorios = np.random.choice(matriz_madrid.shape[0], size=5, replace=False)
+# Impresión de los nodos aleatorios seleccionados
+print(f"Nodos aleatorios seleccionados: \n {nodos_aleatorios}\n")
 
-print("Nodos aleatorios seleccionados:")
-for nodo in nodos_aleatorios:
-  print(nodo)
-    
+# El primer nodo es el nodo de inicio y los demás son destinos    
 inicio = nodos_aleatorios[0] 
 destinos = nodos_aleatorios[1:]
-```
 
-```{python}
-# Crear la ruta más corta
 tiempo_inicio = timeit.default_timer()
 
-ruta, distancia = crear_ruta(matriz_madrid, inicio, destinos)
-print(f"La ruta más corta es: \n {ruta}\n")
+# Ejectuar la función Crear_ruta
+ruta, distancia = Crear_ruta(matriz_madrid, inicio, destinos)
+print(f"La ruta más corta es: \n {ruta}\nCon un total de: {len(ruta)} nodos\n")
 
-distancia = round(distancia)
-print(f"La distancia total del recorrido es: {distancia} metros")
+distancia = round(distancia/1000)
+print(f"La distancia total del recorrido es: {distancia} kilometros")
 
 tiempo_fin = timeit.default_timer()
 tiempo_ejecución = round(tiempo_fin - tiempo_inicio, 4)
 print(f"Tiempo de ejecución: {tiempo_ejecución} segundos")
 ```
+
+```{python}
+# Renombrar los nodos de la ruta a nodos existentes del mapa
+ruta_actualizada = []
+for i in ruta:
+    ruta_actualizada.append(list(madrid.nodes)[i])
+
+# Comprobar que los nodos de ruta existen en el grafo de Madrid
+if not all(nodo in madrid.nodes for nodo in ruta_actualizada):
+    print("Al menos 1 nodo de la ruta no existe en el grafo de Madrid.")
+    exit()
+
+# Mostrar la ruta en el mapa de Madrid con el mapa de fondo
+
+fig ,ax = ox.plot_graph(madrid, bgcolor='none', node_color='none',
+                node_size=0, edge_color='k', edge_linewidth=0.05,
+                figsize=(20,20), show=False, close=False)
+
+# Mostrar la ruta en el mapa de Madrid con el mapa de fondo
+ox.plot_graph_route(madrid, ruta_actualizada,ax = ax, bgcolor='none', 
+                    route_color='r', route_linewidth = 4, 
+                    orig_dest_size = 300, show=False, close=False)     
+
+#plt.savefig('imagenes/mapa_ruta_madrid.jpg', dpi=200)
+plt.clf()
+plt.close()
+```
+
+**Visualización de la ruta**\
+![](imagenes/mapa_ruta_madrid.jpg){width="650"}\
+
+## Conclusión
+
+\
+Este proyecto ha permitido implementar y comparar diversos algoritmos de
+caminos más cortos en grafos ponderados.\
+Se ha constatado que cada algoritmo tiene sus ventajas y desventajas
+dependiendo del tipo de grafo y los requisitos específicos del
+problema.\
+Dijkstra con montículos de Fibonacci ha sido seleccionado como el
+algoritmo más adecuado para el sistema de rutas de la empresa
+YoTeLoLlevo S.L. debido a su eficiencia y optimización para grafos de
+pesos positivos. La implementación del sistema de rutas ha sido exitosa,
+permitiendo encontrar la ruta más corta entre varios destinos en un mapa
+de manera eficiente. Este trabajo ha proporcionado una comprensión
+profunda de los algoritmos de caminos más cortos y su aplicación
+práctica en problemas del mundo real.
 
 ## Bibliografía
 
