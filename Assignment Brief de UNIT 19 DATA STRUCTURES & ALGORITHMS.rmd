@@ -500,29 +500,29 @@ aplicaciones donde se requiere un acceso rápido al elemento mínimo.
 2.  **Selección del Nodo Actual**:
 
     -   Selecciona el nodo no visitado con la distancia más pequeña como
-        el nodo actual.
-    ![Dijkstra 1](imagenes/Step1Dij.png){width="380"}\
-    Fuente:
-    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)
+        el nodo actual. ![Dijkstra
+        1](imagenes/Step1Dij.png){width="380"}\
+        Fuente:
+        [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)
 
 3.  **Actualización de Distancias**:
 
     -   Para el nodo actual, considera todos sus vecinos no visitados y
         calcula sus distancias tentativas.
     -   Compara la distancia recién calculada con la distancia actual
-        asignada y asigna el menor valor.
-    ![Dijkstra 2](imagenes/Step2Dij.png){width="380"}\
-    Fuente:
-    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)\
+        asignada y asigna el menor valor. ![Dijkstra
+        2](imagenes/Step2Dij.png){width="380"}\
+        Fuente:
+        [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)\
 
 4.  **Marcar Nodo como Visitado**:
 
     -   Una vez considerados todos los vecinos del nodo actual, marca el
         nodo actual como visitado. Un nodo visitado no será revisado
         nuevamente.\
-    ![Dijkstra 3](imagenes/Step3Dij.png){width="380"}\
-    Fuente:
-    [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)\
+        ![Dijkstra 3](imagenes/Step3Dij.png){width="380"}\
+        Fuente:
+        [Datacamp](https://www.datacamp.com/tutorial/dijkstra-algorithm-in-python)\
 
 5.  **Repetición**:
 
@@ -1579,14 +1579,14 @@ Finalmente se mostrará el grafo de la red de calles de Madrid.
 place_name = "Madrid, Spain"
 
 # Descargar la red de calles del lugar
-#G = ox.graph_from_place(place_name, network_type='drive')
+G = ox.graph_from_place(place_name, network_type='drive', simplified = False)
   
 # Guardar el grafo en un archivo GraphML
 # El tiempo de descarga es elevado
-#ox.save_graphml(G, filepath='mapa/madrid.graphml')
+ox.save_graphml(G, filepath='mapa/madrid2.graphml')
 
 # Importo el grafo guardado
-madrid = ox.load_graphml('mapa/madrid.graphml')
+madrid = ox.load_graphml('mapa/madrid2.graphml')
 
 # Calcular el número de nodos y aristas
 num_nodos = len(madrid.nodes) 
@@ -1604,7 +1604,7 @@ print(f"Longitud total de la red de calles: {longitud} kilometros")
 fig, ax = ox.plot_graph(madrid, bgcolor='none', node_color='b', 
                         node_size=1.5, edge_color='k',
                         edge_linewidth=0.1, edge_alpha=0.8,
-                        figsize=(20, 20),show=False)
+                        figsize=(20, 20),show=True)
 
 #plt.savefig('imagenes/mapa_madrid.jpg', dpi=200)
 plt.close()
